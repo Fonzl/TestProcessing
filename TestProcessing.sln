@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProcessing", "TestProcessing\TestProcessing.csproj", "{71FFD73C-5E3C-4A7E-8539-A63A120E85D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DbModel", "DbModel", "{B57666CA-7F19-4A42-979B-5CED0B50733C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71FFD73C-5E3C-4A7E-8539-A63A120E85D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71FFD73C-5E3C-4A7E-8539-A63A120E85D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71FFD73C-5E3C-4A7E-8539-A63A120E85D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71FFD73C-5E3C-4A7E-8539-A63A120E85D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DF194DF-4BEB-427F-8C96-E7ABAA430AC7}
+	EndGlobalSection
+EndGlobal
