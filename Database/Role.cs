@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Database
 {
-    internal class Role
+    public class Role
     {
+       public short Id { get; set; }
+        public string Name { get; set; }
+        
+
     }
 }

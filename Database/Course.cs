@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Database
 {
-    internal class Course
-    {
+    public class Course
+    { 
+        public short Id { get; set; }
     }
 }
