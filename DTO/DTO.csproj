@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="AnswerDto\" />
+    <Folder Include="CategoryTasksDto\" />
+    <Folder Include="CourseDto\" />
+    <Folder Include="DisciplineDto\" />
+    <Folder Include="GroupDto\" />
+    <Folder Include="QuestDto\" />
+    <Folder Include="ResultTestDto\" />
+    <Folder Include="RoleDto\" />
+    <Folder Include="SpecialityDto\" />
+    <Folder Include="TestDto\" />
+    <Folder Include="UserDto\" />
+  </ItemGroup>
+
+</Project>
