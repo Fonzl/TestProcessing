@@ -112,6 +112,9 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<short>("SpecialitityId")
+                        .HasColumnType("smallint");
+
                     b.Property<short>("SpecialityId")
                         .HasColumnType("smallint");
 
@@ -134,6 +137,9 @@ namespace Repository.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<short>("CaCategoryTasksId")
+                        .HasColumnType("smallint");
 
                     b.Property<int>("CategoryTasksId")
                         .HasColumnType("integer");

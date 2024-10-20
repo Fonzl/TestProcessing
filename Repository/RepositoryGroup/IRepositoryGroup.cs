@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.GroupDto
+namespace Repository.RepositoryGroup
 {
-    public class GroupDto
+    public interface IRepostoryGroup
     {
-
     }
 }

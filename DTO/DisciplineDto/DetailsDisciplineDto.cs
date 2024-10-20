@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.SpecialityDto
+namespace DTO.DisciplineDto
 {
-    public class SpecialityDto
+    public class DetailsDisciplineDto : DisciplineDto
     {
-        public short Id { get; set; }
-        public string Name { get; set; }
+  
         public List<TestDto.DetailsTestDto> Tests { get; set; }
+        public List<UserDto.UserDto> Users { get; set; }
     }
 }

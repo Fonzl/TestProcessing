@@ -10,7 +10,7 @@ namespace DTO.ResultTestDto
     {
         public long Id { get; set; }
         public UserDto.UserDto User { get; set; }
-        public TestDto.TestDto Test { get; set; }
+        public TestDto.DetailsTestDto Test { get; set; }
         public decimal Result { get; set; }
     }
 }

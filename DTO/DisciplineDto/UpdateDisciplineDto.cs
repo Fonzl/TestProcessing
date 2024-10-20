@@ -10,5 +10,7 @@ namespace DTO.DisciplineDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public List<long> Tests { get; set; }
+        public List<long> Users { get; set; }
     }
 }

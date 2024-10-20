@@ -10,13 +10,10 @@
     <Folder Include="AnswerDto\" />
     <Folder Include="CategoryTasksDto\" />
     <Folder Include="CourseDto\" />
-    <Folder Include="DisciplineDto\" />
     <Folder Include="GroupDto\" />
-    <Folder Include="QuestDto\" />
     <Folder Include="ResultTestDto\" />
     <Folder Include="RoleDto\" />
     <Folder Include="SpecialityDto\" />
-    <Folder Include="TestDto\" />
     <Folder Include="UserDto\" />
   </ItemGroup>
 

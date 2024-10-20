@@ -13,6 +13,6 @@ namespace DTO.TestDto
         public short CourseId { get; set; }
         public List<long> Specialties { get; set; }
         public List<long> Quests { get; set; }
-        public short? Discipline { get; set; }
+        public short? DisciplineId { get; set; }
     }
 }

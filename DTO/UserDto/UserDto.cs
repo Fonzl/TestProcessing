@@ -17,9 +17,9 @@ namespace DTO.UserDto
        
         public string LastName { get; set; }
        
-        public GroupDto.GroupDto? Group { get; set; }
+        public GroupDto.DetailsGroupDto? Group { get; set; }
 
-        public List<DisciplineDto.DisciplineDto> Disciplines { get; set; }
+        public List<DisciplineDto.DetailsDisciplineDto> Disciplines { get; set; }
         public RoleDto.RoleDto Role { get; set; }
     }
 }

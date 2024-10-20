@@ -19,9 +19,7 @@ namespace Database
         [Required]
         [MaxLength(30, ErrorMessage = "Максимальное количество знаков 15")]
         public string LastName { get; set; }
-        [Required]
         public Group? Group { get; set; }
-
         public List<Discipline> Disciplines { get; set; }
         public Role Role {  get; set; }
 

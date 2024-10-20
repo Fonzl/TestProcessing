@@ -10,7 +10,8 @@ namespace DTO.AnswerDto
     {
         public long Id { get; set; }
         public string AnswerText { get; set; }
-        public QuestDto.QuesrDto Quest { get; set; }
+        public long QuestId {  get; set; }
+        public QuestDto.QuestDto Quest { get; set; }
         public bool IsCorrectAnswer { get; set; }
 
     }

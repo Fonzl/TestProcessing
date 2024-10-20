@@ -84,6 +84,7 @@ namespace Repository.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Info = table.Column<string>(type: "text", nullable: false),
+                    CaCategoryTasksId = table.Column<short>(type: "smallint", nullable: false),
                     CategoryTasksId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -134,6 +135,7 @@ namespace Repository.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     StartDateOfTraining = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndOfTraining = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SpecialitityId = table.Column<short>(type: "smallint", nullable: false),
                     SpecialityId = table.Column<short>(type: "smallint", nullable: false),
                     CourseId = table.Column<short>(type: "smallint", nullable: false)
                 },

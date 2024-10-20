@@ -12,7 +12,7 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241007130826_Initial")]
+    [Migration("20241020112122_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -115,6 +115,9 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<short>("SpecialitityId")
+                        .HasColumnType("smallint");
+
                     b.Property<short>("SpecialityId")
                         .HasColumnType("smallint");
 
@@ -137,6 +140,9 @@ namespace Repository.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<short>("CaCategoryTasksId")
+                        .HasColumnType("smallint");
 
                     b.Property<int>("CategoryTasksId")
                         .HasColumnType("integer");
