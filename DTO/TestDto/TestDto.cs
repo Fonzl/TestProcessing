@@ -14,6 +14,6 @@ namespace DTO.TestDto
         public CourseDto.CourseDto Course { get; set; }
         public List<SpecialityDto.SpecialityDto> Specialties { get; set; }
         public List<QuestDto.QuesrDto> Quests { get; set; }
-        public DisciplineDto.DisciplineDto Discipline { get; set; }
+        public DisciplineDto.DisciplineDto? Discipline { get; set; }
     }
 }

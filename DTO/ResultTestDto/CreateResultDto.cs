@@ -8,5 +8,9 @@ namespace DTO.ResultTestDto
 {
     internal class CreateResultDto
     {
+        public long Id { get; set; }
+        public long UserId { get; set; }
+        public long TestId { get; set; }
+        public decimal Result { get; set; }
     }
 }

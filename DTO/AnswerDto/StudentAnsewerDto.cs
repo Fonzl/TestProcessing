@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace DTO.AnswerDto
 {
-    public class UpdateAnswerDto
+   public class StudentAnsewerDto
     {
         public long Id { get; set; }
         public string AnswerText { get; set; }
-        public bool IsCorrectAnswer { get; set; }
     }
 }

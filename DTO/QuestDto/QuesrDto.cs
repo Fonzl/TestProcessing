@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace DTO.QuestDto
 {
-    internal class QuesrDto
+    public class QuesrDto
     {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Info { get; set; }
+        public CategoryTasksDto.CategoryTasksDto CategoryTasks { get; set; }
+        public List<TestDto.TestDto> Tests { get; set; }
+        public List<AnswerDto.AnswerDto> Answers { get; set; }
     }
 }

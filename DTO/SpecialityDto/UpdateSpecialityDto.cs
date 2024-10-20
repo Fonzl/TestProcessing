@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DTO.SpecialityDto
 {
-    internal class UpdateSpecialityDto
+    public class UpdateSpecialityDto
     {
+        public short Id { get; set; }
+        public string Name { get; set; }
+        public List<long> Tests { get; set; }
     }
 }

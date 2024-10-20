@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DTO.CategoryTasksDto
 {
-    internal class UpdateCategoryTasksDto
+    public class UpdateCategoryTasksDto
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    internal class UpdateResultTest
+    public class UpdateResultTest
     {
+        public long Id { get; set; }
+        public long UserId { get; set; }
+        public long TestId { get; set; }
+        public decimal Result { get; set; }
     }
 }
