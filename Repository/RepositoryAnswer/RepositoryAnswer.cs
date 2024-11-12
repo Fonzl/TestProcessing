@@ -11,12 +11,19 @@ namespace Repository.RepositoryAnswer
 {
     public class RepositoryAnswer(ApplicationContext context) : IRepositoryAnswer
     {
-        private readonly ApplicationContext _context = context;
-        private DbSet<Answer> _answer = context.Set<Answer>();
+        public AnswerDto Answer(long id)
+        {   var answer = context.Answers.First(a => a.Id == id);
+            return new AnswerDto()
+            {
+                Id = answer.Id,
+                AnswerText = answer.AnswerText,
+                IsCorrectAnswer = answer.IsCorrectAnswer,
+            };
+        }
 
         public List<StudentAnsewerDto> Answers(long id)
         {
-            var answersList = _answer.Where(x => x.Quest.Id == id).ToList();
+            var answersList = context.Answers.Where(x => x.Quest.Id == id).ToList();
             List<StudentAnsewerDto> studentAnsewers = new List<StudentAnsewerDto>();
             foreach( var ansewer in answersList)
             {
@@ -32,9 +39,9 @@ namespace Repository.RepositoryAnswer
 
         public void Delete(long Id)
         {
-            var answer = _answer.SingleOrDefault(x => x.Id == Id);
+            var answer = context.Answers.SingleOrDefault(x => x.Id == Id);
             if (answer == null) return;
-            _answer.Remove(answer);
+            context.Answers.Remove(answer);
             context.SaveChanges();
         }
 
@@ -46,17 +53,33 @@ namespace Repository.RepositoryAnswer
                 IsCorrectAnswer = dto.IsCorrectAnswer,
                 Quest = context.Quests.First(x => x.Id == dto.QuestId)
             };
-            _answer.Add(answer);
+            context.Answers.Add(answer);
             context.SaveChanges();
+        }
+
+        public void InsertList(List<CreateAnswerDto> list)
+        {
+            foreach (var answer in list)
+            {
+                var answerAdd = new Answer
+                {
+                    AnswerText = answer.AnswerText,
+                    IsCorrectAnswer = answer.IsCorrectAnswer,
+                    Quest = context.Quests.First(x => x.Id == answer.QuestId)
+                };
+                context.Answers.Add(answerAdd);
+                context.SaveChanges();
+            }
+
         }
 
         public void Update(UpdateAnswerDto dto)
         {
-            var answer = _answer.SingleOrDefault(x => x.Id == dto.Id);
+            var answer = context.Answers.SingleOrDefault(x => x.Id == dto.Id);
             if (answer == null) return;
             answer.AnswerText = dto.AnswerText;
             answer.IsCorrectAnswer = dto.IsCorrectAnswer;
-            _answer.Update(answer);
+            context.Answers.Update(answer);
             context.SaveChanges();
         }
     }

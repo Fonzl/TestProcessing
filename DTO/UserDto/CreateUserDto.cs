@@ -8,15 +8,12 @@ namespace DTO.UserDto
 {
     public class CreateUserDto
     {
-        public string FirstName { get; set; }
-
-        public string Surname { get; set; }
-
-        public string LastName { get; set; }
+        public string FullName { get; set; }
+        public string Password { get; set; }
 
         public long? Group { get; set; }
 
-        public List<long> Disciplines { get; set; }
+        public List<int>? Disciplines { get; set; }
         public short Role { get; set; }
     }
 }

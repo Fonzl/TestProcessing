@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    internal class CreateResultDto
+    public class UpdateResultTestDto
     {
         public long Id { get; set; }
         public long UserId { get; set; }

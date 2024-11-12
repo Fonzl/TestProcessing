@@ -19,6 +19,7 @@ namespace Repository.RepositoryTest
                 .Include(x => x.Discipline)
                 .Include(x => x.Quests)
                 .Include(x => x.Specialties)
+                .Include(x => x.Course)
                 .SingleOrDefault(x => x.Id == id);
             if (test == null) return null;
             return (new DetailsTestDto
@@ -42,7 +43,7 @@ namespace Repository.RepositoryTest
                     Name= x.Name,
 
                 }).ToList(),
-                Quests = test.Quests.Select(x => new DTO.QuestDto.QuestDto { 
+                Quests = test.Quests.Select(x => new DTO.QuestDto.DetailsQuestDto { 
                     Id=x.Id,
                     Name = x.Name } ).ToList()
             });
@@ -92,10 +93,37 @@ namespace Repository.RepositoryTest
 
         public void Update(UpdateTestDto dto)
         {
-            var test = context.Tests.First(x => x.Id == dto.Idi);
+            var test = context.Tests.First(x => x.Id == dto.Id);
+            test.InfoTest = dto.InfoTest;
+            test.Name = dto.Name;
+            test.Course = context.Courses.First(x => x.Id == dto.CourseId);
+            test.Discipline = context.Disciplines.First(x => x.Id == dto.DisciplineId);
+            test.Quests = context.Quests.Where(x => dto.Quests.Contains(x.Id)).ToList();
+            test.Specialties = context.Specialities.Where(x => dto.Specialties.Contains(x.Id)).ToList();
+            context.Tests.Update(test);
+            context.SaveChanges();
 
         }
+        public List<TestDto> GetTestUser(long id)
+        {
+            var user = context.Users
+                .Include(x => x.Group)
+                .First(x => x.Id == id);
+            var test = context
+                .Tests.Where(x => x.Course == user.Group.Course && x.Specialties.Contains(user.Group.Speciality)).ToList();
+            List<TestDto> list = new List<TestDto>();
+            foreach ( var item in test)
+            {
+                TestDto dto = new TestDto
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                };
+                list.Add(dto);
+            }
+            return list;
+        }
 
-     
+
     }
 }

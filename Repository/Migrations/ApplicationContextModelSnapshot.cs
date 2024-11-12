@@ -17,7 +17,7 @@ namespace Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -112,9 +112,6 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<short>("SpecialitityId")
-                        .HasColumnType("smallint");
-
                     b.Property<short>("SpecialityId")
                         .HasColumnType("smallint");
 
@@ -137,9 +134,6 @@ namespace Repository.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<short>("CaCategoryTasksId")
-                        .HasColumnType("smallint");
 
                     b.Property<int>("CategoryTasksId")
                         .HasColumnType("integer");
@@ -200,6 +194,18 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)2,
+                            Name = "user"
+                        },
+                        new
+                        {
+                            Id = (short)1,
+                            Name = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Database.Speciality", b =>
@@ -258,26 +264,19 @@ namespace Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("GroupId")
+                    b.Property<long?>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasColumnType("text");
 
                     b.Property<short>("RoleId")
                         .HasColumnType("smallint");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
 
                     b.HasKey("Id");
 
@@ -286,6 +285,15 @@ namespace Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            FullName = "admin",
+                            Password = "123",
+                            RoleId = (short)1
+                        });
                 });
 
             modelBuilder.Entity("DisciplineUser", b =>
@@ -415,10 +423,8 @@ namespace Repository.Migrations
             modelBuilder.Entity("Database.User", b =>
                 {
                     b.HasOne("Database.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Users")
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("Database.Role", "Role")
                         .WithMany()
@@ -479,6 +485,11 @@ namespace Repository.Migrations
             modelBuilder.Entity("Database.Discipline", b =>
                 {
                     b.Navigation("Tests");
+                });
+
+            modelBuilder.Entity("Database.Group", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Database.Quest", b =>

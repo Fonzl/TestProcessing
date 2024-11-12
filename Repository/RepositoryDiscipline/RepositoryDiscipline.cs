@@ -49,12 +49,10 @@ namespace Repository.RepositoryDiscipline
                     Id = x.Id,
                     Name = x.Name
                 }).ToList(),
-                Users = dc.Users.Select(x => new DTO.UserDto.UserDto()
+                Users = dc.Users.Select(x => new DTO.UserDto.StudentUserDto()
                 {
                   Id= x.Id,
-                  FirstName = x.FirstName,
-                  Surname = x.Surname,
-                  LastName  = x.LastName
+                FullName = x.FullName,
                 }).ToList(),
             };
             

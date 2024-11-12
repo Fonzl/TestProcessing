@@ -10,6 +10,6 @@ namespace DTO.DisciplineDto
     {
   
         public List<TestDto.DetailsTestDto> Tests { get; set; }
-        public List<UserDto.UserDto> Users { get; set; }
+        public List<UserDto.StudentUserDto> Users { get; set; }
     }
 }

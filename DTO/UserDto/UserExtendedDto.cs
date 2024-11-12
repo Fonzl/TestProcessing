@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.CourseDto
+namespace DTO.UserDto
 {
-    public class UpdateCourseDto
+    public class UserExtendedDto
     {
-        public int Id { get; set; }
     }
 }

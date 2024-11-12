@@ -32,12 +32,10 @@ namespace Repository.RepositoryGroup
                 Name = group.Name,
                 EndOfTraining = group.EndOfTraining,
                 StartDateOfTraining = group.StartDateOfTraining,
-                Users = group.Users.Select(x => new UserDto()
+                Users = group.Users.Select(x => new StudentUserDto()
                 {
                     Id = x.Id,
-                    FirstName = x.FirstName,
-                    Surname = x.Surname,
-                    LastName = x.LastName,
+                  FullName = x.FullName,
                 }).ToList(),
                 Course = new DTO.CourseDto.CourseDto()
                 {

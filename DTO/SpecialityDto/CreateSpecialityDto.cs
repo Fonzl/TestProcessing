@@ -8,7 +8,7 @@ namespace DTO.SpecialityDto
 {
     public class CreateSpecialityDto
     {
-        public short Id { get; set; }
+       
         public string Name { get; set; }
         public List<long> Tests { get; set; }
     }

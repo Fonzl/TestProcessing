@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    public class UpdateResultTest
+    public class CreateResultTestDto
     {
-        public long Id { get; set; }
+
         public long UserId { get; set; }
         public long TestId { get; set; }
         public decimal Result { get; set; }

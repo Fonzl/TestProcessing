@@ -10,11 +10,8 @@
     <Folder Include="AnswerDto\" />
     <Folder Include="CategoryTasksDto\" />
     <Folder Include="CourseDto\" />
-    <Folder Include="GroupDto\" />
-    <Folder Include="ResultTestDto\" />
     <Folder Include="RoleDto\" />
     <Folder Include="SpecialityDto\" />
-    <Folder Include="UserDto\" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@ namespace DTO.GroupDto
 {
     public class GroupDto
     {
-
+        public long Id { get; set; }
+        public string Name { get; set; }
     }
 }

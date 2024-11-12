@@ -12,7 +12,7 @@ namespace DTO.GroupDto
         
         public DateTime StartDateOfTraining { get; set; }
         public DateTime EndOfTraining { get; set; }
-        public List<UserDto.UserDto> Users{ get; set; }
+        public List<UserDto.StudentUserDto> Users{ get; set; }
         public SpecialityDto.SpecialityDto Speciality { get; set; }
         public CourseDto.CourseDto Course { get; set; }
     }
