@@ -1,4 +1,5 @@
 ﻿using DTO.ResultTestDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceResultTest;
@@ -27,12 +28,15 @@ namespace TestProcessing.Controllers
             return Json(service.GetResultTest(id));
         }
 
-        // POST api/<ValuesController>
+        
+        [Authorize(Roles = "student")]
         [HttpPost]
-        [Route("add")]
+        [Route("student")]
         public IActionResult AddResultTest(CreateResultTestDto dto)
         {
-            service.CreateResultTest(dto);
+            var id = User.FindFirst("id")?.Value;
+            AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { AnsweId = dto.AnsweId,StudentId = Convert.ToInt16(id),TestId =dto.TestId};
+            service.CreateResultTest(studentDto);
             return Ok("Done");
         }
 

@@ -35,9 +35,9 @@ namespace Service.ServiceUser
            return repo.GetUsers();
         }
 
-        public string Login(string username)
+        public string Login(string username,string password) // Находим пользователя по данным и делаем jwt token
         {
-            StudentUserDto dto = repo.Login(username);
+            UserDto dto = repo.Login(username,password);
             var claims = new List<Claim> {
                 new Claim("id", dto.Id.ToString()),
                 new Claim(ClaimTypes.Role, dto.Role.Name) };

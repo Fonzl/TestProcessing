@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DTO.UserDto
 {
-    public class UserExtendedDto
+    public class LoginUserDto
     {
+        public string Name {  get; set; }
+        public string Password { get; set; }
     }
 }

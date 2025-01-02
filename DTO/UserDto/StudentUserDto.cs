@@ -12,6 +12,6 @@ namespace DTO.UserDto
         
        
         public GroupDto.DetailsGroupDto? Group { get; set; }
-        public RoleDto.RoleDto Role { get; set; }
+
     }
 }

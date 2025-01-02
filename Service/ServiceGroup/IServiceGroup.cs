@@ -11,6 +11,7 @@ namespace Service.ServiceGroup
     public interface IServiceGroup
     {
         DetailsGroupDto GetGroup(int id);
+        DetailsGroupDto GetGroupUser(long userId);
        List<GroupDto> GetAllGroups();
        void DeleteGroup(int id);
        void UpdateGroup(UpdateGroupDto group);

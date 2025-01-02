@@ -12,8 +12,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241105165053_UpdateDatabase3")]
-    partial class UpdateDatabase3
+    [Migration("20241220155828_CreateDb2")]
+    partial class CreateDb2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,19 +67,6 @@ namespace Repository.Migrations
                     b.ToTable("CategoryTasks");
                 });
 
-            modelBuilder.Entity("Database.Course", b =>
-                {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Courses");
-                });
-
             modelBuilder.Entity("Database.Discipline", b =>
                 {
                     b.Property<int>("Id")
@@ -105,7 +92,7 @@ namespace Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<short>("CourseId")
+                    b.Property<short>("Cours")
                         .HasColumnType("smallint");
 
                     b.Property<DateTime>("EndOfTraining")
@@ -115,17 +102,10 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<short>("SpecialityId")
-                        .HasColumnType("smallint");
-
                     b.Property<DateTime>("StartDateOfTraining")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("SpecialityId");
 
                     b.ToTable("Groups");
                 });
@@ -201,31 +181,19 @@ namespace Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = (short)2,
-                            Name = "user"
+                            Id = (short)1,
+                            Name = "admin"
                         },
                         new
                         {
-                            Id = (short)1,
-                            Name = "admin"
+                            Id = (short)2,
+                            Name = "teacher"
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            Name = "student"
                         });
-                });
-
-            modelBuilder.Entity("Database.Speciality", b =>
-                {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<short>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Specialities");
                 });
 
             modelBuilder.Entity("Database.Test", b =>
@@ -235,9 +203,6 @@ namespace Repository.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<short>("CourseId")
-                        .HasColumnType("smallint");
 
                     b.Property<int>("DisciplineId")
                         .HasColumnType("integer");
@@ -251,8 +216,6 @@ namespace Repository.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
 
                     b.HasIndex("DisciplineId");
 
@@ -294,9 +257,24 @@ namespace Repository.Migrations
                         {
                             Id = 1L,
                             FullName = "admin",
-                            Password = "123",
+                            Password = "202CB962AC59075B964B07152D234B70",
                             RoleId = (short)1
                         });
+                });
+
+            modelBuilder.Entity("DisciplineGroup", b =>
+                {
+                    b.Property<int>("DisciplinesId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("GroupsId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("DisciplinesId", "GroupsId");
+
+                    b.HasIndex("GroupsId");
+
+                    b.ToTable("DisciplineGroup");
                 });
 
             modelBuilder.Entity("DisciplineUser", b =>
@@ -329,19 +307,19 @@ namespace Repository.Migrations
                     b.ToTable("QuestTest");
                 });
 
-            modelBuilder.Entity("SpecialityTest", b =>
+            modelBuilder.Entity("TestUser", b =>
                 {
-                    b.Property<short>("SpecialtiesId")
-                        .HasColumnType("smallint");
-
                     b.Property<long>("TestsId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("SpecialtiesId", "TestsId");
+                    b.Property<long>("UsersId")
+                        .HasColumnType("bigint");
 
-                    b.HasIndex("TestsId");
+                    b.HasKey("TestsId", "UsersId");
 
-                    b.ToTable("SpecialityTest");
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("TestUser");
                 });
 
             modelBuilder.Entity("Database.Answer", b =>
@@ -353,25 +331,6 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Quest");
-                });
-
-            modelBuilder.Entity("Database.Group", b =>
-                {
-                    b.HasOne("Database.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Database.Speciality", "Speciality")
-                        .WithMany()
-                        .HasForeignKey("SpecialityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Speciality");
                 });
 
             modelBuilder.Entity("Database.Quest", b =>
@@ -406,19 +365,11 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Database.Test", b =>
                 {
-                    b.HasOne("Database.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Database.Discipline", "Discipline")
                         .WithMany("Tests")
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Course");
 
                     b.Navigation("Discipline");
                 });
@@ -438,6 +389,21 @@ namespace Repository.Migrations
                     b.Navigation("Group");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("DisciplineGroup", b =>
+                {
+                    b.HasOne("Database.Discipline", null)
+                        .WithMany()
+                        .HasForeignKey("DisciplinesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DisciplineUser", b =>
@@ -470,17 +436,17 @@ namespace Repository.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SpecialityTest", b =>
+            modelBuilder.Entity("TestUser", b =>
                 {
-                    b.HasOne("Database.Speciality", null)
-                        .WithMany()
-                        .HasForeignKey("SpecialtiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Database.Test", null)
                         .WithMany()
                         .HasForeignKey("TestsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -22,12 +22,17 @@ namespace Service.ServiceGroup
 
         public List<GroupDto> GetAllGroups()
         {
-           return repo.GetTestList();
+           return repo.GetGroupList();
         }
 
         public DetailsGroupDto GetGroup(int id)
         {
-           return repo.GetTestDto(id);
+           return repo.GetGroupDto(id);
+        }
+
+        public DetailsGroupDto GetGroupUser(long userId)
+        {
+           return repo.GetGroupUser(userId);
         }
 
         public void UpdateGroup(UpdateGroupDto group)

@@ -4,6 +4,7 @@ using DTO.UserDto;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +20,9 @@ namespace Repository.RepositoryGroup
             context.SaveChanges();
         }
 
-        public DetailsGroupDto GetTestDto(long id)
+        public DetailsGroupDto GetGroupDto(long id)
         {
            var group = context.Groups
-                .Include(x => x.Course)
-                .Include(x => x.Speciality)
                 .Include(x => x.Users)
                 .First(x => x.Id == id);
             return new DetailsGroupDto
@@ -36,20 +35,12 @@ namespace Repository.RepositoryGroup
                 {
                     Id = x.Id,
                   FullName = x.FullName,
-                }).ToList(),
-                Course = new DTO.CourseDto.CourseDto()
-                {
-                    Id = group.Course.Id,
-                },
-                Speciality = new DTO.SpecialityDto.SpecialityDto()
-                {
-                    Id= group.Speciality.Id,
-                    Name= group.Speciality.Name,
-                }
+                }).ToList()
+                
             };
         }
 
-        public List<GroupDto> GetTestList()
+        public List<GroupDto> GetGroupList()
         {
             var groups = context.Groups.ToList();
             var listGroup= new List<GroupDto>();
@@ -64,6 +55,24 @@ namespace Repository.RepositoryGroup
             return listGroup;
         }
 
+        public DetailsGroupDto GetGroupUser(long userId)
+        {
+            var user = context.Users.First(x => x.Id == userId);
+            var group = context.Groups.Where(x => x.Users.Contains(user)).First();
+
+            return new DetailsGroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                EndOfTraining = group.EndOfTraining,
+                StartDateOfTraining = group.StartDateOfTraining,
+                Users = null
+
+            };
+        
+
+        }
+
         public void Insert(CreateGroupDto dto)
         {
             var group = new Group
@@ -71,9 +80,9 @@ namespace Repository.RepositoryGroup
                 Name = dto.Name,
                 EndOfTraining = dto.EndOfTraining,
                 StartDateOfTraining = dto.StartDateOfTraining,
-                Course = context.Courses.First(x => x.Id == dto.CourseId),
-                Speciality = context.Specialities.First(x => x.Id == dto.SpecialityId),
                 Users = context.Users.Where(x => dto.Users.Contains(x.Id)).ToList(),
+                Cours = dto.Cours,
+                Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList()
 
             };
             context.Groups.Add(group);
@@ -86,10 +95,9 @@ namespace Repository.RepositoryGroup
             group.Name = dto.Name;
             group.StartDateOfTraining = dto.StartDateOfTraining;
             group.EndOfTraining = dto.EndOfTraining;
-            group.Course = context.Courses.First(x => x.Id == dto.CourseId);
-            group.Speciality = context.Specialities.First(x => x.Id == dto.SpecialityId);
             group.Users = context.Users.Where(x => dto.Users.Contains(x.Id)).ToList();
-            context.Groups.Add(group);
+            group.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();
+            context.Groups.Update(group);
             context.SaveChanges();
         }
         

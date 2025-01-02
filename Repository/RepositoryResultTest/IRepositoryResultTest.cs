@@ -13,6 +13,6 @@ namespace Repository.RepositoryResultTest
         ResultTestDto GetResult(long id);
         void Update(UpdateResultTestDto dto);
         void Delete(int id);
-        void Insert(CreateResultTestDto dto);
+        void InsertStudent(AddResultTestStudentDto dto);
     }
 }

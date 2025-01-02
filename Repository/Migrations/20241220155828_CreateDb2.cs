@@ -5,24 +5,28 @@
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateDatabase3 : Migration
+    public partial class CreateDb2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.InsertData(
+            migrationBuilder.UpdateData(
                 table: "Users",
-                columns: new[] { "Id", "FullName", "GroupId", "Password", "RoleId" },
-                values: new object[] { 1L, "admin", null, "123", (short)1 });
+                keyColumn: "Id",
+                keyValue: 1L,
+                column: "Password",
+                value: "202CB962AC59075B964B07152D234B70");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
+            migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: 1L);
+                keyValue: 1L,
+                column: "Password",
+                value: "123");
         }
     }
 }

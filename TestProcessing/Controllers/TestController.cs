@@ -23,6 +23,7 @@ namespace TestProcessing.Controllers
         // GET: api/<ValuesController>
         [HttpGet]
         [Route("all")]
+        [Authorize(Roles = "admin")]
 
         public IActionResult GetAllTests(HttpContext context)
         {
@@ -38,12 +39,19 @@ namespace TestProcessing.Controllers
         {
             return Json(service.GetTest(id));
         }
-        [Authorize]
-        [HttpGet("UserTesr")]
-        public IActionResult GetTestUser()
+        [HttpGet("student")]
+        [Authorize(Roles = "student")]
+        public IActionResult GetTestStudent()
         {
             var id = User.FindFirst("id")?.Value;
-           return Json(service.GetTestsListUser(Convert.ToInt16(id)));
+           return Json(service.GetTestsListStudent(Convert.ToInt16(id)));
+        }
+        [HttpGet("teacher/{dis}")]
+        [Authorize(Roles = "teacher")]
+        public IActionResult GetTestTeacher(long dis)
+        {
+            
+            return Json(service.GetTestsListTeacherDiscipline(dis));
         }
         // POST api/<ValuesController>
         [HttpPost]

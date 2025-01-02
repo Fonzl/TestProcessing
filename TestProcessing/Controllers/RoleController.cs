@@ -1,4 +1,5 @@
 ﻿using DTO.RoleDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceRole;
@@ -10,6 +11,7 @@ namespace TestProcessing.Controllers
     public class RoleController(IServiceRole service) : Controller
     {
         [HttpGet]
+        [Authorize(Roles = "admin")]
         [Route("all")]
 
         public IActionResult GetAllRole()
@@ -22,6 +24,7 @@ namespace TestProcessing.Controllers
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult GetRole(short id)
         {
             return Json(service.GetRole(id));
@@ -29,6 +32,7 @@ namespace TestProcessing.Controllers
 
         // POST api/<ValuesController>
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [Route("add")]
         public IActionResult AddRole(CreateRoleDto dto)
         {
@@ -38,6 +42,7 @@ namespace TestProcessing.Controllers
 
         // PUT api/<ValuesController>/5
         [HttpPatch]
+        [Authorize(Roles = "admin")]
         [Route("update")]
         public IActionResult UpdateRole(UpdateRoleDto dto)
         {
@@ -47,6 +52,7 @@ namespace TestProcessing.Controllers
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult DeleteRole(short id)
         {
             service.DeleteRole(id);

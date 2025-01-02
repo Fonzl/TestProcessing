@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,10 @@ namespace DTO.GroupDto
         public string Name { get; set; }
         public DateTime StartDateOfTraining { get; set; }
         public DateTime EndOfTraining { get; set; }
-        public List<long> Users { get; set; }
-        public short SpecialityId { get; set; }
-        public short CourseId { get; set; }
+        public List<long> Disciplines { get; set; }
+        public List<long>? Users { get; set; }
+        [Range(1, 4)]
+        public short Cours { get; set; }
     }
+    public enum Cours { One = 1, Two = 2, Three = 3, Four = 4 };
 }

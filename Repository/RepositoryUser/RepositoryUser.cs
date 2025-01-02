@@ -12,13 +12,12 @@ namespace Repository.RepositoryUser
 {
     public class RepositoryUser(ApplicationContext context) : IRepositoryUser
     {
-        public StudentUserDto Login(string name)
+        public UserDto Login(string name, string password) //Находит юзера и возращает 
         {
             var user = context.Users
                 .Include(x => x.Role)
-                .Include(x => x.Group)
-                .Include(x => x.Disciplines)
-                .First(x => x.FullName == name);
+                .First(x => x.FullName == name && x.Password == Convert.ToHexString(
+                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(password))));
             return (new StudentUserDto
             {
                 Id = user.Id,
@@ -104,7 +103,7 @@ namespace Repository.RepositoryUser
         }
 
         public void Update(UpdateUserDto dto)
-        {
+        {   
             var user = context.Users.First(x => x.Id == dto.Id);
             user.FullName = dto.FullName;
             user.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();

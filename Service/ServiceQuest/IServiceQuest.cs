@@ -11,6 +11,7 @@ namespace Service.ServiceQuest
     {
         DetailsQuestDto GetQuest(int id);
         List<QuestDto> GetAllQuests();
+        List<QuestDto> GetListQuestsStudent(int id);
         void DeleteQuest(int id);
         void UpdateQuest(UpdateQuestDto updateQuest);
         void CreateQuest(CreateQuestDto createQuest);

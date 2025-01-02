@@ -14,8 +14,8 @@ namespace Repository.RepositoryTest
         void Update(UpdateTestDto dto);
         void Delete(long id);
         void Insert(CreateTestDto dto);
-        public List<TestDto> GetTestUser(long id);
-
+        public List<TestDto> GetTestStudent(long id);
+        public List<TestDto> GetTestTeacherDiscipline( long disciplineId);
 
     }
 }
