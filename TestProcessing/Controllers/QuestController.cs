@@ -1,5 +1,6 @@
 ﻿using DTO.AnswerDto;
 using DTO.QuestDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceAnswer;
@@ -35,7 +36,6 @@ namespace TestProcessing.Controllers
         public IActionResult AddAnswer(List<CreateAnswerDto> dto)
         {
             serviceAnswer.AnswerListCreate(dto);
-            
             return Ok("Done");
         }
         [HttpPost]
@@ -63,5 +63,13 @@ namespace TestProcessing.Controllers
             serviceQuest.DeleteQuest(id);
             return Ok("Done");
         }
+        [HttpGet]
+        [Route("student/{id}")]
+        [Authorize(Roles = "student")]
+        public IActionResult GetListQuestStudent(int id)
+        {
+            return Json(serviceQuest.GetListQuestsStudent(id));
+        }
+
     }
 }

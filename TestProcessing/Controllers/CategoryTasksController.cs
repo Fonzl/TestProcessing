@@ -1,4 +1,5 @@
 ﻿using DTO.CategoryTasksDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceCategoryTasks;
@@ -21,6 +22,7 @@ namespace CategoryTasksProcessing.Controllers
 
 
         // GET api/<ValuesController>/5
+        [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
         public IActionResult GetCategoryTasks(int id)
         {
@@ -29,6 +31,7 @@ namespace CategoryTasksProcessing.Controllers
 
         // POST api/<ValuesController>
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [Route("add")]
         public IActionResult AddCategoryTasks(CreateCategoryTasksDto dto)
         {
@@ -38,6 +41,7 @@ namespace CategoryTasksProcessing.Controllers
 
         // PUT api/<ValuesController>/5
         [HttpPatch]
+        [Authorize(Roles = "admin")]
         [Route("update")]
         public IActionResult UpdateCategoryTasks(UpdateCategoryTasksDto dto)
         {
@@ -46,6 +50,7 @@ namespace CategoryTasksProcessing.Controllers
         }
 
         // DELETE api/<ValuesController>/5
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteCategoryTasks(int id)
         {

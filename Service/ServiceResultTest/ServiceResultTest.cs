@@ -10,9 +10,9 @@ namespace Service.ServiceResultTest
 {
     public class ServiceResultTest(IRepositoryResultTest repo) : IServiceResultTest
     {
-        public void CreateResultTest(CreateResultTestDto createResultTest)
+        public void CreateResultTest(AddResultTestStudentDto createResultTest)
         {
-            repo.Insert(createResultTest);
+            repo.InsertStudent(createResultTest);
         }
 
         public void DeleteResultTest(int id)

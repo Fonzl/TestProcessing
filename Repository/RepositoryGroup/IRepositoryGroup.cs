@@ -10,8 +10,9 @@ namespace Repository.RepositoryGroup
 {
     public interface IRepositoryGroup
     {
-        List<GroupDto> GetTestList();
-        DetailsGroupDto GetTestDto(long id);
+        List<GroupDto> GetGroupList();
+        DetailsGroupDto GetGroupDto(long id);
+        DetailsGroupDto GetGroupUser(long userId);
         void Update(UpdateGroupDto dto);
         void Delete(long id);
         void Insert(CreateGroupDto dto);

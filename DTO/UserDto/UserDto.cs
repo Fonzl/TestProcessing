@@ -11,5 +11,6 @@ namespace DTO.UserDto
         public long Id { get; set; }
 
         public string FullName { get; set; }
+        public RoleDto.RoleDto Role { get; set; }
     }
 }

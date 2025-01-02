@@ -30,6 +30,17 @@ namespace Service.ServiceDiscipline
            return repo.Get(id);
         }
 
+        public List<DisciplineDto> StudentGetDiscipline(int id)
+        {
+            return repo.StudentGet(id);
+        }
+
+        public List<DisciplineDto> TeacherGetDiscipline(int id)
+        {
+          return repo.TeacherGet(id);
+
+        }
+
         public void UpdateDiscipline(UpdateDisciplineDto discipline)
         {
             repo.Update(discipline);

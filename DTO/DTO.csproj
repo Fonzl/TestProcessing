@@ -9,9 +9,7 @@
   <ItemGroup>
     <Folder Include="AnswerDto\" />
     <Folder Include="CategoryTasksDto\" />
-    <Folder Include="CourseDto\" />
     <Folder Include="RoleDto\" />
-    <Folder Include="SpecialityDto\" />
   </ItemGroup>
 
 </Project>

@@ -9,7 +9,7 @@ namespace Service.ServiceUser
 {
     public interface IServiceUser
     {   
-        string Login(string username);
+        string Login(string username, string password);
         StudentUserDto GetUser( long id);
         List<UserDto> GetUsers();
         void UpdateUser(UpdateUserDto user);

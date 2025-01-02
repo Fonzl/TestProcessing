@@ -34,12 +34,17 @@ namespace Service.ServiceTest
         {
             repo.Update(updateTestDto);
         }
-        public List<TestDto> GetTestsListUser(long id)
+        public List<TestDto> GetTestsListStudent(long id)
         {
           
 
             
-            return repo.GetTestUser( id);
+            return repo.GetTestStudent( id);
+        }
+
+        public List<TestDto> GetTestsListTeacherDiscipline(long disciplineId)
+        {
+            return repo.GetTestTeacherDiscipline( disciplineId);
         }
     }
 }

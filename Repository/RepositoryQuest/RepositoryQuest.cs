@@ -35,6 +35,28 @@ namespace Repository.RepositoryQuest
             return result;
         }
 
+     
+
+        public List<QuestDto> GetListQuestsStudent(int testId)
+        {
+            var test = context.Tests.First(x => x.Id == testId);
+           var list = context.Quests
+                .Include(x => x.Answers)
+                .Where(x => x.Tests.Contains(test)).ToList();
+            var result = new List<QuestDto>();
+            foreach (var quest in list)
+            {
+                result.Add(new QuestDto
+                {
+                    Id = quest.Id,
+                    Name = quest.Name,
+                    Info = quest.Info
+
+                });
+            }
+            return result;
+        }
+
         public DetailsQuestDto GetQuest(int id)
         {
             

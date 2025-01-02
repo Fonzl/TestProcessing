@@ -3,6 +3,7 @@ using DTO.DisciplineDto;
 using DTO.TestDto;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -76,6 +77,42 @@ namespace Repository.RepositoryDiscipline
             dc .Name = dto.Name;
             dc.Tests = context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList();
             dc.Users = context.Users.Where(x => dto.Tests.Contains(x.Id)).ToList();
+        }
+
+        public List<DisciplineDto> TeacherGet(int id)
+        {
+            var teacher = context.Users
+                .Include(x => x.Disciplines)
+                .First(x => x.Id == id);
+            var list = context.Disciplines.Where(x =>  teacher.Disciplines.Contains(x)).ToList();
+            var dcList = new List<DisciplineDto>();
+            foreach (var d in list)
+            {
+                dcList.Add(new DisciplineDto
+                {
+                    Id = d.Id,
+                    Name = d.Name
+                });
+            }
+            return dcList;
+        }
+
+        public List<DisciplineDto> StudentGet(int id)
+        {
+            var student = context.Users
+                 .Include(x => x.Group.Disciplines)
+                 .First(x => x.Id == id);
+            var list = context.Disciplines.Where(x => student.Group.Disciplines.Contains(x)).ToList();
+            var dcList = new List<DisciplineDto>();
+            foreach (var d in list)
+            {
+                dcList.Add(new DisciplineDto
+                {
+                    Id = d.Id,
+                    Name = d.Name
+                });
+            }
+            return dcList;
         }
     }
 }

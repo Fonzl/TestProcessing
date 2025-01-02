@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.CourseDto
+namespace DTO.ResultTestDto
 {
-    public class CourseDto
+    public class AddResultTestStudentDto : CreateResultTestDto
     {
-        public short Id { get; set; }
+        public long StudentId {  get; set; }
     }
 }

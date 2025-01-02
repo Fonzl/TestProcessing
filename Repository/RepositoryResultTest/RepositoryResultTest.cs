@@ -58,14 +58,17 @@ namespace Repository.RepositoryResultTest
             return listResults;
         }
 
-        public void Insert(CreateResultTestDto dto)// тут надо будет  делать расчёт result
+        public void InsertStudent(AddResultTestStudentDto dto)// тут надо будет  делать расчёт result
         {
+            var answer = context.Answers.Where(x => dto.AnsweId.Contains(x.Id)).ToList();
+            var answerTrue = answer.Where(x => x.IsCorrectAnswer == true).ToList();
+            var resulTest = (Convert.ToDecimal(answerTrue.Count)/ Convert.ToDecimal(answer.Count))*100;
             var result = new ResultTest
             {
                
-                Result = dto.Result,
+                Result = resulTest,
                 Test = context.Tests.First(x => x.Id == dto.TestId),
-                User = context.Users.First(x => x.Id == dto.UserId)
+                User = context.Users.First(x => x.Id == dto.StudentId)
             };
             context.Results.Add(result);
             context.SaveChanges();

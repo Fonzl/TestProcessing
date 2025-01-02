@@ -9,8 +9,8 @@ namespace DTO.ResultTestDto
     public class CreateResultTestDto
     {
 
-        public long UserId { get; set; }
+       
         public long TestId { get; set; }
-        public decimal Result { get; set; }
+        public List<long> AnsweId { get; set; }
     }
 }
