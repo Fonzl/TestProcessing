@@ -11,6 +11,8 @@ namespace Repository.RepositoryResultTest
     {
         List<ResultTestDto> GetResults();
         ResultTestDto GetResult(long id);
+        decimal GetStatisticsDiscipline(ResultStatisticsDto dto);
+        List<ResultTestDto> ResultStudentId(long studentId);
         void Update(UpdateResultTestDto dto);
         void Delete(int id);
         void InsertStudent(AddResultTestStudentDto dto);

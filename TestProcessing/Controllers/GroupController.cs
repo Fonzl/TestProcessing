@@ -24,12 +24,19 @@ namespace GroupProcessing.Controllers
 
 
         // GET api/<ValuesController>/5
+        [Authorize(Roles = "teacher")]
         [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
 
         public IActionResult GetGroup(int id)
         {
             return Json(service.GetGroup(id));
+        }
+        [Authorize(Roles = "teacher")]
+        [HttpGet("Discipline/{id}")]
+        public IActionResult GetDisciplineGroup(int id)
+        {
+            return Json(service.GetDisciplineGroupList(id));
         }
 
         // POST api/<ValuesController>

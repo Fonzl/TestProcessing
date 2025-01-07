@@ -79,7 +79,7 @@ namespace Repository.RepositoryDiscipline
             dc.Users = context.Users.Where(x => dto.Tests.Contains(x.Id)).ToList();
         }
 
-        public List<DisciplineDto> TeacherGet(int id)
+        public List<DisciplineDto> TeacherGet(long id)
         {
             var teacher = context.Users
                 .Include(x => x.Disciplines)
@@ -97,7 +97,7 @@ namespace Repository.RepositoryDiscipline
             return dcList;
         }
 
-        public List<DisciplineDto> StudentGet(int id)
+        public List<DisciplineDto> StudentGet(long id)
         {
             var student = context.Users
                  .Include(x => x.Group.Disciplines)

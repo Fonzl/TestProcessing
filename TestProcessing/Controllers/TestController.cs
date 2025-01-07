@@ -25,7 +25,7 @@ namespace TestProcessing.Controllers
         [Route("all")]
         [Authorize(Roles = "admin")]
 
-        public IActionResult GetAllTests(HttpContext context)
+        public IActionResult GetAllTests()
         {
 
             return Json(service.GetTests());

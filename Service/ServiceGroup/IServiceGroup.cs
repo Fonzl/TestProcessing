@@ -12,7 +12,8 @@ namespace Service.ServiceGroup
     {
         DetailsGroupDto GetGroup(int id);
         DetailsGroupDto GetGroupUser(long userId);
-       List<GroupDto> GetAllGroups();
+        List<GroupDto> GetDisciplineGroupList(long idDiscipline);
+        List<GroupDto> GetAllGroups();
        void DeleteGroup(int id);
        void UpdateGroup(UpdateGroupDto group);
        void CreateGroup(CreateGroupDto group);

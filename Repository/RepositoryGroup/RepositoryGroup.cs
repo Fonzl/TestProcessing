@@ -20,6 +20,23 @@ namespace Repository.RepositoryGroup
             context.SaveChanges();
         }
 
+        public List<GroupDto> GetDisciplineGroupList(long idDiscipline)
+        {
+            var discipline = context.Disciplines.First(x => x.Id == idDiscipline);
+            var groups = context.Groups
+                .Where(x => x.Disciplines.Contains(discipline)).ToList();
+            var listGroup = new List<GroupDto>();
+            foreach (var group in groups)
+            {
+                listGroup.Add(new GroupDto
+                {
+                    Id = group.Id,
+                    Name = group.Name,
+                });
+            }
+            return listGroup;
+        }
+
         public DetailsGroupDto GetGroupDto(long id)
         {
            var group = context.Groups

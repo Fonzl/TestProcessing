@@ -11,6 +11,7 @@ namespace Repository.RepositoryGroup
     public interface IRepositoryGroup
     {
         List<GroupDto> GetGroupList();
+        List<GroupDto> GetDisciplineGroupList(long idDiscipline);
         DetailsGroupDto GetGroupDto(long id);
         DetailsGroupDto GetGroupUser(long userId);
         void Update(UpdateGroupDto dto);

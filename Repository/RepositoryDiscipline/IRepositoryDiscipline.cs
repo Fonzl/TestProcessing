@@ -10,8 +10,8 @@ namespace Repository.RepositoryDiscipline
      public interface IRepositoryDiscipline
     {
         List<DisciplineDto> GetAll();
-        List<DisciplineDto> TeacherGet(int id);
-        List<DisciplineDto> StudentGet(int id);
+        List<DisciplineDto> TeacherGet(long id);
+        List<DisciplineDto> StudentGet(long id);
         DetailsDisciplineDto Get(int id);
         void Insert(CreateDisciplineDto dto);
         void Update(UpdateDisciplineDto dto);

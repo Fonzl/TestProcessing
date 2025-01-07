@@ -1,4 +1,5 @@
-﻿using DTO.ResultTestDto;
+﻿using DTO.GroupDto;
+using DTO.ResultTestDto;
 using Repository.RepositoryResultTest;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,19 @@ namespace Service.ServiceResultTest
         {
             return repo.GetResults();
         }
-
         public ResultTestDto GetResultTest(int id)
         {
            return repo.GetResult(id);
+        }
+
+        public decimal GetStatisticsDiscipline(ResultStatisticsDto dto)
+        {
+            return repo.GetStatisticsDiscipline(dto);
+        }
+
+        public List<ResultTestDto> ResultStudentId(long studentId)
+        {
+            return repo.ResultStudentId(studentId);
         }
 
         public void UpdateResultTest(UpdateResultTestDto updateResultTest)
