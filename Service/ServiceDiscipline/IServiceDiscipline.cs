@@ -10,9 +10,10 @@ namespace Service.ServiceDiscipline
    public interface IServiceDiscipline
     {
         DetailsDisciplineDto GetDiscipline(int id);
+
         List<DisciplineDto> GetAllDiscipline();
-        List<DisciplineDto> TeacherGetDiscipline(int id);
-        List<DisciplineDto> StudentGetDiscipline(int id);
+        List<DisciplineDto> TeacherGetDiscipline(long id);
+        List<DisciplineDto> StudentGetDiscipline(long id);
         void DeleteDiscipline(int id);
         void UpdateDiscipline(UpdateDisciplineDto discipline);
         void CreateDiscipline(CreateDisciplineDto discipline);

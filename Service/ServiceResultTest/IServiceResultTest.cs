@@ -1,4 +1,4 @@
-﻿using DTO.ResultTestDto;
+﻿using DTO.GroupDto;
 using DTO.ResultTestDto;
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,8 @@ namespace Service.ServiceResultTest
     {
         ResultTestDto GetResultTest(int id);
         List<ResultTestDto> GetAllResultTests();
+        decimal GetStatisticsDiscipline(ResultStatisticsDto dto);
+        List<ResultTestDto> ResultStudentId(long studentId);
         void DeleteResultTest(int id);
         void UpdateResultTest(UpdateResultTestDto updateResultTest);
         void CreateResultTest(AddResultTestStudentDto createResultTest);

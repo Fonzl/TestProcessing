@@ -25,6 +25,11 @@ namespace Service.ServiceGroup
            return repo.GetGroupList();
         }
 
+        public List<GroupDto> GetDisciplineGroupList(long idDiscipline)
+        {
+            return repo.GetDisciplineGroupList(idDiscipline);
+        }
+
         public DetailsGroupDto GetGroup(int id)
         {
            return repo.GetGroupDto(id);

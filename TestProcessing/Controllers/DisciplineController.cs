@@ -31,20 +31,26 @@ namespace TestProcessing.Controllers
             return Json(service.GetDiscipline(id));
         }
         [HttpGet("teacher")]
-        [Authorize(Roles = "teacher")]
+        [Authorize(Roles = "teacher")]//обычный выбор дисциплин для учителя
         public IActionResult GetDisciplineTeacher()
         {
             var id = User.FindFirst("id")?.Value;
             return Json(service.TeacherGetDiscipline(Convert.ToInt16(id)));
         }
         [HttpGet("student")]
-        [Authorize(Roles = "student")]
+        [Authorize(Roles = "student")]//обычный выбор дисциплин для студента
         public IActionResult GetDisciplineStudent()
         {
             var id = User.FindFirst("id")?.Value;
             return Json(service.StudentGetDiscipline(Convert.ToInt16(id)));
         }
+        [HttpGet("studentProfilDiscipline/{id}")]//Список дисциплин в профиле ученика для статистики
+        [Authorize(Roles = "teacher")]
+        public IActionResult GetDisciplineStudentProfil(long id)
+        {
 
+            return Json(service.StudentGetDiscipline(id));
+        }
         // POST api/<ValuesController>
         [HttpPost]
         [Authorize(Roles = "admin")]

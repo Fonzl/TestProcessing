@@ -44,21 +44,52 @@ namespace Repository.RepositoryResultTest
 
         public List<ResultTestDto> GetResults()
         {
-           var results = context.Results.ToList();
+           var results = context.Results
+                .Include(x => x.User)
+                .Include(x => x.Test)
+                .ToList();
             var listResults = new List<ResultTestDto>();
             foreach (var result in results)
             {
                 listResults.Add(new ResultTestDto
                 {
                     Id = result.Id,
+                    
                     Result = result.Result,
+                    Test = new DTO.TestDto.DetailsTestDto
+                    {
+                        Id = result.Test.Id,
+                        Name = result.Test.Name,
+                    },
+                    User = new DTO.UserDto.StudentUserDto
+                    {
+                        Id = result.User.Id,
+                        FullName = result.User.FullName,
+                    }
 
                 });
             }
             return listResults;
         }
 
-        public void InsertStudent(AddResultTestStudentDto dto)// тут надо будет  делать расчёт result
+        public decimal GetStatisticsDiscipline(ResultStatisticsDto dto)// тут делаеться расчёт статистики 
+        {
+            var studentResultDiscipline = context.Results
+                                            .Include(x => x.Test.Discipline)
+                                            .Include(x => x.User)
+                                            .Where(x => x.User.Id == dto.StudentId)
+                                            .ToList();
+            var results = studentResultDiscipline.Where(x => x.Test.Discipline.Id == dto.DisciplineId).ToList();
+            decimal sum = 0;
+            foreach (var result in results)
+            {
+                sum += result.Result;
+            }
+            decimal staticstic = sum / results.Count;
+            return staticstic;
+        }
+
+        public void InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
         {
             var answer = context.Answers.Where(x => dto.AnsweId.Contains(x.Id)).ToList();
             var answerTrue = answer.Where(x => x.IsCorrectAnswer == true).ToList();
@@ -72,6 +103,33 @@ namespace Repository.RepositoryResultTest
             };
             context.Results.Add(result);
             context.SaveChanges();
+        }
+
+        public List<ResultTestDto> ResultStudentId(long studentId)
+        {
+            var results = context.Results
+               .Include(x => x.User)
+               .Include(x => x.Test)
+              .Where(x => x.User.Id == studentId).ToList();
+            var studerResults = results.Where(x => x.User.Id == studentId).ToList();
+            var listResults = new List<ResultTestDto>();
+            foreach (var result in results)
+            {
+                listResults.Add(new ResultTestDto
+                {
+                    Id = result.Id,
+
+                    Result = result.Result,
+                    Test = new DTO.TestDto.DetailsTestDto
+                    {
+                        Id = result.Test.Id,
+                        Name = result.Test.Name,
+                    },
+                   
+
+                });
+            }
+           return listResults;
         }
 
         public void Update(UpdateResultTestDto dto)
