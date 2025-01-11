@@ -45,7 +45,7 @@ namespace Service.ServiceUser
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
                     claims: claims,
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)), 
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)), 
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
