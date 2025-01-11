@@ -21,9 +21,6 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpGet]
         [Route("student")]
-
-        // GET api/<ValuesController>/5
-        
         public IActionResult GetResultTest()//результаты тестов студента все
         {
             var id = User.FindFirst("id")?.Value;

@@ -58,7 +58,7 @@ namespace TestProcessing.Controllers
             service.DeleteUser(id);
             return Ok("Done");
         }
-        [HttpGet]
+        [HttpPost]
         [Route("login")]
         public IActionResult Login(LoginUserDto dto)
         {
