@@ -20,8 +20,14 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult GetAllUsers()
         {
-
-            return Json(service.GetUsers());
+            try
+            {
+                return Json(service.GetUsers());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
         // GET api/<ValuesController>/5
         [Authorize(Roles = "admin")]
@@ -29,7 +35,14 @@ namespace TestProcessing.Controllers
         
         public IActionResult GetUser(int id)
         {
-            return Json(service.GetUser(id));
+            try
+            {
+                return Json(service.GetUser(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
         // POST api/<ValuesController>
         [HttpPost]
@@ -37,8 +50,16 @@ namespace TestProcessing.Controllers
         [Route("add")]
         public IActionResult AddUser(CreateUserDto dto)
         {
-            service.CreateUser(dto);
-            return Ok("Done");
+            try
+            {
+                service.CreateUser(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+
         }
 
         // PUT api/<ValuesController>/5
@@ -47,22 +68,47 @@ namespace TestProcessing.Controllers
         [Route("update")]
         public IActionResult UpdateUser(UpdateUserDto dto)
         {
-            service.UpdateUser(dto);
-            return Ok("Done");
+            try
+            {
+                service.UpdateUser(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+
         }
         [Authorize(Roles = "admin")]
         // DELETE api/<ValuesController>/5
         [HttpDelete("delete/{id}")]
         public IActionResult DeleteUser(int id)
         {
-            service.DeleteUser(id);
-            return Ok("Done");
+            try
+            {
+                service.DeleteUser(id);
+                return StatusCode(200, "Deletion was successful");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+
         }
         [HttpPost]
         [Route("login")]
         public IActionResult Login(LoginUserDto dto)
         {
-            return Json(service.Login(dto.Name, dto.Password));
+            try
+            {
+                return Json(service.Login(dto.Name, dto.Password));
+               
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404,ex.Message);
+            }
+
         }
     }
 }

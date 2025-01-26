@@ -12,7 +12,7 @@ namespace DTO.AnswerDto
         public string AnswerText { get; set; }
         public long QuestId {  get; set; }
         public QuestDto.DetailsQuestDto Quest { get; set; }
-        public bool IsCorrectAnswer { get; set; }
+        public bool IsCorrectAnswer { get; set; } = false;
 
     }
 }

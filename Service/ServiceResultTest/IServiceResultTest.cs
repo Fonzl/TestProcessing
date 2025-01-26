@@ -16,6 +16,7 @@ namespace Service.ServiceResultTest
         List<ResultTestDto> ResultStudentId(long studentId);
         void DeleteResultTest(int id);
         void UpdateResultTest(UpdateResultTestDto updateResultTest);
-        void CreateResultTest(AddResultTestStudentDto createResultTest);
+        ReturnResultAndRespone CreateResultTest(AddResultTestStudentDto createResultTest);
+        ReturnResultAndRespone ReturnResultDetails(long idResultTest);
     }
 }

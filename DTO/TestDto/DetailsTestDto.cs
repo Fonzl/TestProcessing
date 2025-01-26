@@ -10,7 +10,7 @@ namespace DTO.TestDto
     {
         public string InfoTest { get; set; }    
 
-        public List<QuestDto.DetailsQuestDto> Quests { get; set; }
+       
         public DisciplineDto.DetailsDisciplineDto? Discipline { get; set; }
     }
 }

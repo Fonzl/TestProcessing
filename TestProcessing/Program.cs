@@ -21,6 +21,8 @@ using Service.ServiceRole;
 using Service.ServiceTest;
 using Service.ServiceUser;
 using Microsoft.AspNetCore.HttpOverrides;
+using Repository.RepositoryDirection;
+using Service.ServiceDirection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,8 @@ builder.Services
     .AddTransient<IRepositoryTest, RepositoryTest>()
     .AddTransient<IRepositoryUser, RepositoryUser>()
     .AddTransient<IRepositoryRole, RepositoryRole>()
+    .AddTransient<IRepositoryDirection, RepositoryDirection>()
+     .AddScoped<IServiceDirection, ServiceDirection>()
     .AddScoped<IServiceAnswer, ServiceAnswer>()
     .AddScoped<IServiceCategoryTasks, ServiceCategoryTasks>()
     .AddScoped<IServiceDiscipline, ServiceDiscipline>()

@@ -13,21 +13,35 @@ namespace TestProcessing.Controllers
     public class QuestController(IServiceQuest serviceQuest,IServiceAnswer serviceAnswer) : Controller
     {
         [HttpGet]
+        [Authorize(Roles = "teacher,admin")]
         [Route("all")]
 
         public IActionResult GetAllQuests()
         {
-
-            return Json(serviceQuest.GetAllQuests());
+            try
+            {
+                return Json(serviceQuest.GetAllQuests());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
 
-
+        [Authorize(Roles = "teacher,student")]
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public IActionResult GetQuest(int id)
         {
-            return Json(serviceQuest.GetQuest(id));
+            try
+            {
+                return Json(serviceQuest.GetQuest(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // POST api/<ValuesController>
@@ -35,40 +49,78 @@ namespace TestProcessing.Controllers
         [Route("addAnswer")]
         public IActionResult AddAnswer(List<CreateAnswerDto> dto)
         {
-            serviceAnswer.AnswerListCreate(dto);
-            return Ok("Done");
+            try
+            {
+                serviceAnswer.AnswerListCreate(dto);
+                return Ok("Done");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
         [HttpPost]
+        [Authorize(Roles = "teacher,admin")]
         [Route("add")]
         public IActionResult AddQuest(CreateQuestDto dto)
         {
-            serviceQuest.CreateQuest(dto);
+            try
+            {
+                serviceQuest.CreateQuest(dto);
 
-            return Ok("Done");
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // PUT api/<ValuesController>/5
+        [Authorize(Roles = "teacher,admin")]
         [HttpPatch]
         [Route("update")]
         public IActionResult UpdateQuest(UpdateQuestDto dto)
         {
-            serviceQuest.UpdateQuest(dto);
-            return Ok("Done");
+            try
+            {
+                serviceQuest.UpdateQuest(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // DELETE api/<ValuesController>/5
+        [Authorize(Roles = "teacher,admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteQuest(int id)
         {
-            serviceQuest.DeleteQuest(id);
-            return Ok("Done");
+            try
+            {
+                serviceQuest.DeleteQuest(id);
+                return StatusCode(200, "Deletion was successful");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
         [HttpGet]
-        [Route("student/{id}")]
-        [Authorize(Roles = "student")]
-        public IActionResult GetListQuestStudent(int id)
+        [Route("getListQuests/{id}")]
+        [Authorize(Roles = "teacher,student")]
+        public IActionResult GetListQuest(int id)//по id test
         {
-            return Json(serviceQuest.GetListQuestsStudent(id));
+            try
+            {
+                return Json(serviceQuest.GetListQuests(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
     }

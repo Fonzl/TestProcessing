@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDb : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,22 +41,6 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Groups",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    StartDateOfTraining = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndOfTraining = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Cours = table.Column<short>(type: "smallint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Groups", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -67,6 +51,18 @@ namespace Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Schedules",
+                columns: table => new
+                {
+                    Direction = table.Column<int>(type: "integer", nullable: false),
+                    Cours = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Schedules", x => new { x.Cours, x.Direction });
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +94,8 @@ namespace Repository.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     InfoTest = table.Column<string>(type: "text", nullable: false),
-                    DisciplineId = table.Column<int>(type: "integer", nullable: false)
+                    DisciplineId = table.Column<int>(type: "integer", nullable: false),
+                    TimeInMinutes = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -107,6 +104,100 @@ namespace Repository.Migrations
                         name: "FK_Tests_Disciplines_DisciplineId",
                         column: x => x.DisciplineId,
                         principalTable: "Disciplines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DisciplineSchedule",
+                columns: table => new
+                {
+                    DisciplinesId = table.Column<int>(type: "integer", nullable: false),
+                    SchedulesCours = table.Column<int>(type: "integer", nullable: false),
+                    SchedulesDirection = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DisciplineSchedule", x => new { x.DisciplinesId, x.SchedulesCours, x.SchedulesDirection });
+                    table.ForeignKey(
+                        name: "FK_DisciplineSchedule_Disciplines_DisciplinesId",
+                        column: x => x.DisciplinesId,
+                        principalTable: "Disciplines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DisciplineSchedule_Schedules_SchedulesCours_SchedulesDirect~",
+                        columns: x => new { x.SchedulesCours, x.SchedulesDirection },
+                        principalTable: "Schedules",
+                        principalColumns: new[] { "Cours", "Direction" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    StartDateOfTraining = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndOfTraining = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Cours = table.Column<int>(type: "integer", nullable: false),
+                    Direction = table.Column<int>(type: "integer", nullable: false),
+                    intDirection = table.Column<int>(name: "(int)Direction", type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Groups_Schedules_(int)Direction_Cours",
+                        columns: x => new { x.intDirection, x.Cours },
+                        principalTable: "Schedules",
+                        principalColumns: new[] { "Cours", "Direction" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Answers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AnswerText = table.Column<string>(type: "text", nullable: false),
+                    QuestId = table.Column<long>(type: "bigint", nullable: false),
+                    IsCorrectAnswer = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Answers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Answers_Quests_QuestId",
+                        column: x => x.QuestId,
+                        principalTable: "Quests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuestTest",
+                columns: table => new
+                {
+                    QuestsId = table.Column<long>(type: "bigint", nullable: false),
+                    TestsId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestTest", x => new { x.QuestsId, x.TestsId });
+                    table.ForeignKey(
+                        name: "FK_QuestTest_Quests_QuestsId",
+                        column: x => x.QuestsId,
+                        principalTable: "Quests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuestTest_Tests_TestsId",
+                        column: x => x.TestsId,
+                        principalTable: "Tests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -158,51 +249,6 @@ namespace Repository.Migrations
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Answers",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AnswerText = table.Column<string>(type: "text", nullable: false),
-                    QuestId = table.Column<long>(type: "bigint", nullable: false),
-                    IsCorrectAnswer = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Answers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Answers_Quests_QuestId",
-                        column: x => x.QuestId,
-                        principalTable: "Quests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "QuestTest",
-                columns: table => new
-                {
-                    QuestsId = table.Column<long>(type: "bigint", nullable: false),
-                    TestsId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuestTest", x => new { x.QuestsId, x.TestsId });
-                    table.ForeignKey(
-                        name: "FK_QuestTest_Quests_QuestsId",
-                        column: x => x.QuestsId,
-                        principalTable: "Quests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_QuestTest_Tests_TestsId",
-                        column: x => x.TestsId,
-                        principalTable: "Tests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -295,7 +341,12 @@ namespace Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "FullName", "GroupId", "Password", "RoleId" },
-                values: new object[] { 1L, "admin", null, "123", (short)1 });
+                values: new object[,]
+                {
+                    { 1L, "admin", null, "9A15B2F417C1F2409FBB424BE8D39AAA", (short)1 },
+                    { 2L, "thecher", null, "9A15B2F417C1F2409FBB424BE8D39AAA", (short)2 },
+                    { 3L, "student", null, "9A15B2F417C1F2409FBB424BE8D39AAA", (short)3 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestId",
@@ -308,9 +359,19 @@ namespace Repository.Migrations
                 column: "GroupsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DisciplineSchedule_SchedulesCours_SchedulesDirection",
+                table: "DisciplineSchedule",
+                columns: new[] { "SchedulesCours", "SchedulesDirection" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DisciplineUser_UsersId",
                 table: "DisciplineUser",
                 column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_(int)Direction_Cours",
+                table: "Groups",
+                columns: new[] { "(int)Direction", "Cours" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Quests_CategoryTasksId",
@@ -363,6 +424,9 @@ namespace Repository.Migrations
                 name: "DisciplineGroup");
 
             migrationBuilder.DropTable(
+                name: "DisciplineSchedule");
+
+            migrationBuilder.DropTable(
                 name: "DisciplineUser");
 
             migrationBuilder.DropTable(
@@ -394,6 +458,9 @@ namespace Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Schedules");
         }
     }
 }

@@ -14,6 +14,6 @@ namespace Repository.RepositoryCategoryTasks
         List<CategoryTasksDto> GetAll();
         void Insert(CreateCategoryTasksDto dto);
         void Update(UpdateCategoryTasksDto dto);
-        void Delete(long id);
+        void Delete(int id);
     }
 }

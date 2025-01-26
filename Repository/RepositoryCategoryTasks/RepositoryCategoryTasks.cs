@@ -14,7 +14,7 @@ namespace Repository.RepositoryCategoryTasks
 
      
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
            var category = context.CategoryTasks.SingleOrDefault(c => c.Id == id);
             if (category == null) return;

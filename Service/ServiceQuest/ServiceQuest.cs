@@ -25,9 +25,9 @@ namespace Service.ServiceQuest
             return repo.GetAll();
         }
 
-        public List<QuestDto> GetListQuestsStudent(int id)
+        public List<QuestDto> GetListQuests(int id)
         {
-            return repo.GetListQuestsStudent(id);
+            return repo.GetListQuests(id);
         }
 
         public DetailsQuestDto GetQuest(int id)

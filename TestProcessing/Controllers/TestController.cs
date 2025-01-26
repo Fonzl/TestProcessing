@@ -27,39 +27,73 @@ namespace TestProcessing.Controllers
 
         public IActionResult GetAllTests()
         {
-
-            return Json(service.GetTests());
+            try
+            {
+                return Json(service.GetTests());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
 
-
-        // GET api/<ValuesController>/5
+        //Тесты юзеров по дисциплине 
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetTest(int id)
         {
-            return Json(service.GetTest(id));
+            try
+            {
+                return Json(service.GetTest(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
-        [HttpGet("student")]
-        [Authorize(Roles = "student")]
-        public IActionResult GetTestStudent()
+        //[HttpGet("student")]
+        //[Authorize(Roles = "student")]
+        //public IActionResult GetTestStudent()
+        //{
+        //    try
+        //    {
+        //        var id = User.FindFirst("id")?.Value;
+        //        return Json(service.GetTestsListStudent(Convert.ToInt16(id)));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
+        //}
+
+        [HttpGet("GetListTestDiscipline/{dis}")]
+        [Authorize(Roles = "teacher,student")]
+        public IActionResult GetListTestDiscipline(long dis)
         {
-            var id = User.FindFirst("id")?.Value;
-           return Json(service.GetTestsListStudent(Convert.ToInt16(id)));
-        }
-        [HttpGet("teacher/{dis}")]
-        [Authorize(Roles = "teacher")]
-        public IActionResult GetTestTeacher(long dis)
-        {
-            
-            return Json(service.GetTestsListTeacherDiscipline(dis));
+         try
+            {
+                return Json(service.GetTestsListDiscipline(dis));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
         // POST api/<ValuesController>
         [HttpPost]
         [Route("add")]
         public IActionResult AddTest(CreateTestDto dto)
         {
-            service.CreateTest(dto);
-            return Ok("Done");
+            try
+            {
+                service.CreateTest(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // PUT api/<ValuesController>/5
@@ -67,16 +101,32 @@ namespace TestProcessing.Controllers
         [Route("update")]
         public IActionResult UpdateTest(UpdateTestDto dto)
         {
-            service.UpdateTest(dto);
-            return Ok("Done");
+            try
+            {
+                service.UpdateTest(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+            
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public IActionResult DeleteTest(int id)
         {
-            service.DeleteTest(id);
-            return Ok("Done");
+        
+            try
+            {
+                service.DeleteTest(id);
+                return StatusCode(200, "Deletion was successful");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
     }
 }
