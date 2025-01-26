@@ -22,9 +22,12 @@ namespace Repository.RepositoryGroup
 
         public List<GroupDto> GetDisciplineGroupList(long idDiscipline)
         {
-            var discipline = context.Disciplines.First(x => x.Id == idDiscipline);
+            
+            var discipline = context.Disciplines
+                .Include(x => x.Schedules)
+                .First(x => x.Id == idDiscipline);
             var groups = context.Groups
-                .Where(x => x.Disciplines.Contains(discipline)).ToList();
+                .Where(x => discipline.Schedules.Contains(x.Schedule)).ToList();
             var listGroup = new List<GroupDto>();
             foreach (var group in groups)
             {
@@ -35,6 +38,7 @@ namespace Repository.RepositoryGroup
                 });
             }
             return listGroup;
+            return null;
         }
 
         public DetailsGroupDto GetGroupDto(long id)
@@ -52,7 +56,9 @@ namespace Repository.RepositoryGroup
                 {
                     Id = x.Id,
                   FullName = x.FullName,
-                }).ToList()
+                }).ToList(),
+                Direction = group.Direction.ToString(),
+               
                 
             };
         }
@@ -83,6 +89,7 @@ namespace Repository.RepositoryGroup
                 Name = group.Name,
                 EndOfTraining = group.EndOfTraining,
                 StartDateOfTraining = group.StartDateOfTraining,
+                Direction = group.Direction.ToString(),
                 Users = null
 
             };
@@ -99,7 +106,9 @@ namespace Repository.RepositoryGroup
                 StartDateOfTraining = dto.StartDateOfTraining,
                 Users = context.Users.Where(x => dto.Users.Contains(x.Id)).ToList(),
                 Cours = dto.Cours,
-                Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList()
+                Schedule = (Schedule)context.Schedules.Where(x => x.Cours == dto.Cours && x.DirectionId == dto.Direction),
+               
+                
 
             };
             context.Groups.Add(group);
@@ -113,7 +122,7 @@ namespace Repository.RepositoryGroup
             group.StartDateOfTraining = dto.StartDateOfTraining;
             group.EndOfTraining = dto.EndOfTraining;
             group.Users = context.Users.Where(x => dto.Users.Contains(x.Id)).ToList();
-            group.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();
+            group.Schedule = context.Schedules.FirstOrDefault(x => x.Cours == dto.Cours && x.DirectionId == dto.Direction);
             context.Groups.Update(group);
             context.SaveChanges();
         }

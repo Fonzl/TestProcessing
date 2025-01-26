@@ -9,5 +9,6 @@ namespace DTO.ResultTestDto
     public class AddResultTestStudentDto : CreateResultTestDto
     {
         public long StudentId {  get; set; }
+        
     }
 }

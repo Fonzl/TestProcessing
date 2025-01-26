@@ -12,8 +12,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241220152441_CreateDb")]
-    partial class CreateDb
+    [Migration("20250116153959_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,8 +92,14 @@ namespace Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<short>("Cours")
-                        .HasColumnType("smallint");
+                    b.Property<int>("(int)Direction")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Cours")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Direction")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("EndOfTraining")
                         .HasColumnType("timestamp with time zone");
@@ -106,6 +112,8 @@ namespace Repository.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("(int)Direction", "Cours");
 
                     b.ToTable("Groups");
                 });
@@ -196,6 +204,19 @@ namespace Repository.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Database.Schedule", b =>
+                {
+                    b.Property<int>("Cours")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Direction")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Cours", "Direction");
+
+                    b.ToTable("Schedules");
+                });
+
             modelBuilder.Entity("Database.Test", b =>
                 {
                     b.Property<long>("Id")
@@ -214,6 +235,9 @@ namespace Repository.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<long?>("TimeInMinutes")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -257,8 +281,22 @@ namespace Repository.Migrations
                         {
                             Id = 1L,
                             FullName = "admin",
-                            Password = "123",
+                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
                             RoleId = (short)1
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            FullName = "thecher",
+                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
+                            RoleId = (short)2
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            FullName = "student",
+                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
+                            RoleId = (short)3
                         });
                 });
 
@@ -275,6 +313,24 @@ namespace Repository.Migrations
                     b.HasIndex("GroupsId");
 
                     b.ToTable("DisciplineGroup");
+                });
+
+            modelBuilder.Entity("DisciplineSchedule", b =>
+                {
+                    b.Property<int>("DisciplinesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SchedulesCours")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SchedulesDirection")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DisciplinesId", "SchedulesCours", "SchedulesDirection");
+
+                    b.HasIndex("SchedulesCours", "SchedulesDirection");
+
+                    b.ToTable("DisciplineSchedule");
                 });
 
             modelBuilder.Entity("DisciplineUser", b =>
@@ -331,6 +387,17 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Quest");
+                });
+
+            modelBuilder.Entity("Database.Group", b =>
+                {
+                    b.HasOne("Database.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("(int)Direction", "Cours")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("Database.Quest", b =>
@@ -402,6 +469,21 @@ namespace Repository.Migrations
                     b.HasOne("Database.Group", null)
                         .WithMany()
                         .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DisciplineSchedule", b =>
+                {
+                    b.HasOne("Database.Discipline", null)
+                        .WithMany()
+                        .HasForeignKey("DisciplinesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Schedule", null)
+                        .WithMany()
+                        .HasForeignKey("SchedulesCours", "SchedulesDirection")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

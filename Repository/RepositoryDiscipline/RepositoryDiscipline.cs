@@ -100,9 +100,11 @@ namespace Repository.RepositoryDiscipline
         public List<DisciplineDto> StudentGet(long id)
         {
             var student = context.Users
-                 .Include(x => x.Group.Disciplines)
+                 .Include(x => x.Group.Schedule)
                  .First(x => x.Id == id);
-            var list = context.Disciplines.Where(x => student.Group.Disciplines.Contains(x)).ToList();
+           
+            var list = context.Disciplines.Include(x => x.Schedules )
+                .Where(x =>  x.Schedules.Contains(student.Group.Schedule)).ToList();
             var dcList = new List<DisciplineDto>();
             foreach (var d in list)
             {

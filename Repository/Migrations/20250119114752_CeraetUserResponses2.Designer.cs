@@ -12,8 +12,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241220155828_CreateDb2")]
-    partial class CreateDb2
+    [Migration("20250119114752_CeraetUserResponses2")]
+    partial class CeraetUserResponses2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,23 @@ namespace Repository.Migrations
                     b.ToTable("CategoryTasks");
                 });
 
+            modelBuilder.Entity("Database.Direction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Directions");
+                });
+
             modelBuilder.Entity("Database.Discipline", b =>
                 {
                     b.Property<int>("Id")
@@ -92,8 +109,11 @@ namespace Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<short>("Cours")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Cours")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DirectionId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("EndOfTraining")
                         .HasColumnType("timestamp with time zone");
@@ -106,6 +126,10 @@ namespace Repository.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DirectionId");
+
+                    b.HasIndex("Cours", "DirectionId");
 
                     b.ToTable("Groups");
                 });
@@ -139,13 +163,7 @@ namespace Repository.Migrations
             modelBuilder.Entity("Database.ResultTest", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<decimal>("Result")
-                        .HasColumnType("numeric");
 
                     b.Property<long>("TestId")
                         .HasColumnType("bigint");
@@ -196,6 +214,21 @@ namespace Repository.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Database.Schedule", b =>
+                {
+                    b.Property<int>("Cours")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DirectionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Cours", "DirectionId");
+
+                    b.HasIndex("DirectionId");
+
+                    b.ToTable("Schedules");
+                });
+
             modelBuilder.Entity("Database.Test", b =>
                 {
                     b.Property<long>("Id")
@@ -214,6 +247,9 @@ namespace Repository.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<long?>("TimeInMinutes")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -257,9 +293,43 @@ namespace Repository.Migrations
                         {
                             Id = 1L,
                             FullName = "admin",
-                            Password = "202CB962AC59075B964B07152D234B70",
+                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
                             RoleId = (short)1
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            FullName = "thecher",
+                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
+                            RoleId = (short)2
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            FullName = "student",
+                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
+                            RoleId = (short)3
                         });
+                });
+
+            modelBuilder.Entity("Database.UserResponses", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ListUserResponses")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Result")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserResponses");
                 });
 
             modelBuilder.Entity("DisciplineGroup", b =>
@@ -275,6 +345,24 @@ namespace Repository.Migrations
                     b.HasIndex("GroupsId");
 
                     b.ToTable("DisciplineGroup");
+                });
+
+            modelBuilder.Entity("DisciplineSchedule", b =>
+                {
+                    b.Property<int>("DisciplinesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SchedulesCours")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SchedulesDirectionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DisciplinesId", "SchedulesCours", "SchedulesDirectionId");
+
+                    b.HasIndex("SchedulesCours", "SchedulesDirectionId");
+
+                    b.ToTable("DisciplineSchedule");
                 });
 
             modelBuilder.Entity("DisciplineUser", b =>
@@ -333,6 +421,25 @@ namespace Repository.Migrations
                     b.Navigation("Quest");
                 });
 
+            modelBuilder.Entity("Database.Group", b =>
+                {
+                    b.HasOne("Database.Direction", "Direction")
+                        .WithMany("Groups")
+                        .HasForeignKey("DirectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("Cours", "DirectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Direction");
+
+                    b.Navigation("Schedule");
+                });
+
             modelBuilder.Entity("Database.Quest", b =>
                 {
                     b.HasOne("Database.CategoryTasks", "CategoryTasks")
@@ -346,6 +453,12 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Database.ResultTest", b =>
                 {
+                    b.HasOne("Database.UserResponses", "Responses")
+                        .WithOne("ResultTest")
+                        .HasForeignKey("Database.ResultTest", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Database.Test", "Test")
                         .WithMany()
                         .HasForeignKey("TestId")
@@ -358,9 +471,22 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Responses");
+
                     b.Navigation("Test");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Database.Schedule", b =>
+                {
+                    b.HasOne("Database.Direction", "Direction")
+                        .WithMany("Schedule")
+                        .HasForeignKey("DirectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Direction");
                 });
 
             modelBuilder.Entity("Database.Test", b =>
@@ -402,6 +528,21 @@ namespace Repository.Migrations
                     b.HasOne("Database.Group", null)
                         .WithMany()
                         .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DisciplineSchedule", b =>
+                {
+                    b.HasOne("Database.Discipline", null)
+                        .WithMany()
+                        .HasForeignKey("DisciplinesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Schedule", null)
+                        .WithMany()
+                        .HasForeignKey("SchedulesCours", "SchedulesDirectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -451,6 +592,13 @@ namespace Repository.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Database.Direction", b =>
+                {
+                    b.Navigation("Groups");
+
+                    b.Navigation("Schedule");
+                });
+
             modelBuilder.Entity("Database.Discipline", b =>
                 {
                     b.Navigation("Tests");
@@ -464,6 +612,12 @@ namespace Repository.Migrations
             modelBuilder.Entity("Database.Quest", b =>
                 {
                     b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Database.UserResponses", b =>
+                {
+                    b.Navigation("ResultTest")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

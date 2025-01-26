@@ -15,8 +15,14 @@ namespace CategoryTasksProcessing.Controllers
 
         public IActionResult GetAllCategoryTaskss()
         {
-
-            return Json(service.GetCategoryTasks());
+            try
+            {
+                return Json(service.GetCategoryTasks());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
 
@@ -26,7 +32,14 @@ namespace CategoryTasksProcessing.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCategoryTasks(int id)
         {
-            return Json(service.GetCategory(id));
+            try
+            {
+                return Json(service.GetCategory(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // POST api/<ValuesController>
@@ -35,8 +48,15 @@ namespace CategoryTasksProcessing.Controllers
         [Route("add")]
         public IActionResult AddCategoryTasks(CreateCategoryTasksDto dto)
         {
-            service.CreateCategory(dto);
-            return Ok("Done");
+            try
+            {
+                service.CreateCategory(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // PUT api/<ValuesController>/5
@@ -45,8 +65,15 @@ namespace CategoryTasksProcessing.Controllers
         [Route("update")]
         public IActionResult UpdateCategoryTasks(UpdateCategoryTasksDto dto)
         {
-            service.UpdateCategory(dto);
-            return Ok("Done");
+            try
+            {
+                service.UpdateCategory(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // DELETE api/<ValuesController>/5
@@ -54,8 +81,15 @@ namespace CategoryTasksProcessing.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteCategoryTasks(int id)
         {
-            service.DeleteCategory(id);
-            return Ok("Done");
+            try
+            {
+                service.DeleteCategory(id);
+                return StatusCode(200, "Deletion was successful");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Repository.RepositoryQuest
 
      
 
-        public List<QuestDto> GetListQuestsStudent(int testId)
+        public List<QuestDto> GetListQuests(int testId)
         {
             var test = context.Tests.First(x => x.Id == testId);
            var list = context.Quests

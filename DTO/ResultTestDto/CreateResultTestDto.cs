@@ -11,6 +11,7 @@ namespace DTO.ResultTestDto
 
        
         public long TestId { get; set; }
-        public List<long> AnsweId { get; set; }
+        public List<UserRespone> UserRespones { get; set; }
+        
     }
 }

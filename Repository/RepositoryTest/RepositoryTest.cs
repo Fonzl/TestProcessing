@@ -32,9 +32,7 @@ namespace Repository.RepositoryTest
                     
                 },
                 
-                Quests = test.Quests.Select(x => new DTO.QuestDto.DetailsQuestDto { 
-                    Id=x.Id,
-                    Name = x.Name } ).ToList()
+             
             });
             
 
@@ -89,30 +87,31 @@ namespace Repository.RepositoryTest
             context.SaveChanges();
 
         }
-        public List<TestDto> GetTestStudent(long id)
-        {
-            var user = context.Users
-                .Include(x => x.Group)
-                .Include(x => x.Group.Disciplines)
-                .First(x => x.Id == id);
-            var tes = context
-                .Tests
-                .Include(x => x.Discipline);
-            var test = tes.Where(x => user.Group.Disciplines.Contains(x.Discipline)).ToList();
-            List<TestDto> list = new List<TestDto>();
-            foreach ( var item in test)
-            {
-                TestDto dto = new TestDto
-                {
-                    Id = item.Id,
-                    Name = item.Name
-                };
-                list.Add(dto);
-            }
-            return list;
-        }
+        //public List<TestDto> GetTestStudent(long id)
+        //{
+        //    var user = context.Users
+        //        .Include(x => x.Group)
+        //        .Include(x => x.Group.Disciplines)
+        //        .First(x => x.Id == id);
+        //    var tes = context
+        //        .Tests
+        //        .Include(x => x.Discipline);
+        //    var test = tes.Where(x => user.Group.Disciplines.Contains(x.Discipline)).ToList();
+        //    List<TestDto> list = new List<TestDto>();
+        //    foreach (var item in test)
+        //    {
+        //        TestDto dto = new TestDto
+        //        {
+        //            Id = item.Id,
+        //            Name = item.Name
+        //        };
+        //        list.Add(dto);
+        //    }
+        //    return list;
+           
+        //}
 
-        public List<TestDto> GetTestTeacherDiscipline(long disciplineId)//Получаем тесты по всё дисциплине.
+        public List<TestDto> GetTestDiscipline(long disciplineId)//Получаем тесты по всё дисциплине.
         {
             var testList = context.Tests.Where(x => x.Discipline.Id == disciplineId).ToList();
             

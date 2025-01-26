@@ -14,24 +14,28 @@ namespace Repository.RepositoryUser
     {
         public UserDto Login(string name, string password) //Находит юзера и возращает 
         {
-            var user = context.Users
-                .Include(x => x.Role)
-                .First(x => x.FullName == name && x.Password == Convert.ToHexString(
-                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(password))));
-            return (new StudentUserDto
-            {
-                Id = user.Id,
-                FullName = user.FullName,
-                
-                Role = new DTO.RoleDto.RoleDto
+            
+            
+                var user = context.Users
+                    .Include(x => x.Role)
+                    .First(x => x.FullName == name && x.Password == Convert.ToHexString(
+                        MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(password))));
+                return (new StudentUserDto
                 {
-                    Id = context.Roles.First(x => x.Id == user.RoleId).Id,
-                    Name = context.Roles.First(x => x.Id == user.RoleId).Name,
-                }
+                    Id = user.Id,
+                    FullName = user.FullName,
+
+                    Role = new DTO.RoleDto.RoleDto
+                    {
+                        Id = context.Roles.First(x => x.Id == user.RoleId).Id,
+                        Name = context.Roles.First(x => x.Id == user.RoleId).Name,
+                    }
 
 
 
-            });
+                });
+            
+           
         }
 
         public void Delete(long id)

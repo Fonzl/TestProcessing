@@ -17,26 +17,46 @@ namespace GroupProcessing.Controllers
 
         public IActionResult GetAllGroups()
         {
-
-            return Json(service.GetAllGroups());
+            try
+            {
+                return Json(service.GetAllGroups());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
 
 
         // GET api/<ValuesController>/5
-        [Authorize(Roles = "teacher")]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "teacher")]
+        [Authorize(Roles = "admin,teacher")]
         [HttpGet("{id}")]
 
         public IActionResult GetGroup(int id)
         {
-            return Json(service.GetGroup(id));
+            try
+            {
+                return Json(service.GetGroup(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
         [Authorize(Roles = "teacher")]
         [HttpGet("Discipline/{id}")]
         public IActionResult GetDisciplineGroup(int id)
         {
-            return Json(service.GetDisciplineGroupList(id));
+            try
+            {
+                return Json(service.GetDisciplineGroupList(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // POST api/<ValuesController>
@@ -45,8 +65,15 @@ namespace GroupProcessing.Controllers
         [Route("add")]
         public IActionResult AddGroup(CreateGroupDto dto)
         {
-            service.CreateGroup(dto);
-            return Ok("Done");
+            try
+            {
+                service.CreateGroup(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // PUT api/<ValuesController>/5
@@ -55,8 +82,15 @@ namespace GroupProcessing.Controllers
         [Route("update")]
         public IActionResult UpdateGroup(UpdateGroupDto dto)
         {
-            service.UpdateGroup(dto);
-            return Ok("Done");
+            try
+            {
+                service.UpdateGroup(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // DELETE api/<ValuesController>/5
@@ -64,16 +98,30 @@ namespace GroupProcessing.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult DeleteGroup(int id)
         {
-            service.DeleteGroup(id);
-            return Ok("Done");
+            try
+            {
+                service.DeleteGroup(id);
+                return StatusCode(200, "Deletion was successful");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
         [HttpGet]
         [Route("student")]
         [Authorize(Roles = "student")]
         public IActionResult GetGroupStudent()
         {
-            var id = User.FindFirst("id")?.Value;
-            return Json(service.GetGroupUser(Convert.ToInt16(id)));
+            try
+            {
+                var id = User.FindFirst("id")?.Value;
+                return Json(service.GetGroupUser(Convert.ToInt16(id)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
     }
 }

@@ -9,12 +9,15 @@ using Microsoft.EntityFrameworkCore;
 using Database;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
+using System.Reflection.Emit;
+
 
 namespace Repository
 {
     public class ApplicationContext : DbContext
     {
       
+        public DbSet<Direction> Directions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<CategoryTasks> CategoryTasks { get; set; }
@@ -24,8 +27,10 @@ namespace Repository
         public DbSet<Quest> Quests { get; set; }
         public DbSet<ResultTest> Results { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
        // public DbSet<Speciality> Specialities { get; set; }
         public DbSet<Test> Tests { get; set; }
+        public DbSet<UserResponses> UserResponses { get; set; }
        
 
 
@@ -35,7 +40,8 @@ namespace Repository
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
+            
+           builder.Entity<Schedule>().HasKey(u => new { u.Cours, u.DirectionId  });
             builder.Entity<Role>().HasData(new Role { Id = 1, Name = "admin" });
             builder.Entity<Role>().HasData(
                 new Role { Id = 2, Name = "teacher" }
@@ -53,13 +59,40 @@ namespace Repository
                     Id = 1,
                     FullName = "admin",
                     Password = Convert.ToHexString(
-                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123"))),
+                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123456As"))),
                     Disciplines = null,
                     Group = null,
                     Tests = null,
                     RoleId = 1,
 
                 });
+         
+            builder.Entity<User>().HasData(
+               new User
+               {
+                   Id = 2,
+                   FullName = "teacher",
+                   Password = Convert.ToHexString(
+                   MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123456As"))),
+                   Disciplines = null,
+                   Group = null,
+                   Tests = null,
+                   RoleId = 2
+
+               });
+            builder.Entity<User>().HasData(new User
+            {
+                Id = 3,
+                FullName = "student",
+                Password = Convert.ToHexString(
+                   MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123456As"))),
+                Disciplines = null,
+                Group = null,
+                Tests = null,
+                RoleId = 3,
+
+            });
+        
 
             base.OnModelCreating(builder);
         }

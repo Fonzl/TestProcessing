@@ -11,9 +11,9 @@ namespace Service.ServiceResultTest
 {
     public class ServiceResultTest(IRepositoryResultTest repo) : IServiceResultTest
     {
-        public void CreateResultTest(AddResultTestStudentDto createResultTest)
+        public ReturnResultAndRespone CreateResultTest(AddResultTestStudentDto createResultTest)
         {
-            repo.InsertStudent(createResultTest);
+           return repo.InsertStudent(createResultTest);
         }
 
         public void DeleteResultTest(int id)
@@ -38,6 +38,11 @@ namespace Service.ServiceResultTest
         public List<ResultTestDto> ResultStudentId(long studentId)
         {
             return repo.ResultStudentId(studentId);
+        }
+
+        public ReturnResultAndRespone ReturnResultDetails(long idResultTest)
+        {
+            return repo.returnResultDetails(idResultTest);
         }
 
         public void UpdateResultTest(UpdateResultTestDto updateResultTest)

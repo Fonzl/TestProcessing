@@ -16,8 +16,14 @@ namespace TestProcessing.Controllers
 
         public IActionResult GetAllRole()
         {
-
-            return Json(service.GetAllRoles());
+            try
+            {
+                return Json(service.GetAllRoles());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
 
@@ -27,7 +33,14 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult GetRole(short id)
         {
-            return Json(service.GetRole(id));
+            try
+            {
+                return Json(service.GetRole(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // POST api/<ValuesController>
@@ -36,8 +49,15 @@ namespace TestProcessing.Controllers
         [Route("add")]
         public IActionResult AddRole(CreateRoleDto dto)
         {
-            service.CreateRole(dto);
-            return Ok("Done");
+            try
+            {
+                service.CreateRole(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
 
         // PUT api/<ValuesController>/5
@@ -46,8 +66,15 @@ namespace TestProcessing.Controllers
         [Route("update")]
         public IActionResult UpdateRole(UpdateRoleDto dto)
         {
-            service.UpdateRole(dto);
-            return Ok("Done");
+            try
+            {
+                service.UpdateRole(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
        
         
@@ -56,8 +83,15 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult DeleteRole(short id)
         {
-            service.DeleteRole(id);
-            return Ok("Done");
+            try
+            {
+                service.DeleteRole(id);
+                return StatusCode(200, "Deletion was successful");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
         }
     }
 }

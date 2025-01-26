@@ -5,7 +5,7 @@
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDb1 : Migration
+    public partial class CreateDb2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
