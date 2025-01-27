@@ -10,7 +10,7 @@ namespace Repository.RepositoryQuest
     public interface IRepositoryQuest
     {
         List<QuestDto> GetAll();
-        List<QuestDto> GetListQuests(int testId);
+        List<DetailsQuestDto> GetListQuests(int testId);
         DetailsQuestDto GetQuest(int id);
         void Update(UpdateQuestDto dto);
         void Insert(CreateQuestDto dto);
