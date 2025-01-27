@@ -37,20 +37,39 @@ namespace Repository.RepositoryQuest
 
      
 
-        public List<QuestDto> GetListQuests(int testId)
+        public List<DetailsQuestDto> GetListQuests(int testId)
         {
             var test = context.Tests.First(x => x.Id == testId);
            var list = context.Quests
                 .Include(x => x.Answers)
+                .Include(x => x.CategoryTasks)
                 .Where(x => x.Tests.Contains(test)).ToList();
-            var result = new List<QuestDto>();
+            
+            
+            var result = new List<DetailsQuestDto>();
             foreach (var quest in list)
             {
-                result.Add(new QuestDto
+                var listAnswer = new List<AnswerDto>();
+                quest.Answers.ForEach(x =>  listAnswer.Add(new AnswerDto {
+                    Id = x.Id,
+                    AnswerText = x.AnswerText,
+                })
+                );
+                result.Add(new DetailsQuestDto
                 {
                     Id = quest.Id,
                     Name = quest.Name,
-                    Info = quest.Info
+                    Info = quest.Info,
+                    Answers = listAnswer,
+                    CategoryTasks = new DTO.CategoryTasksDto.CategoryTasksDto
+                    {
+                        Id = quest.CategoryTasks.Id,
+                        Name = quest.CategoryTasks.Name,
+                    },
+                   
+
+
+
 
                 });
             }

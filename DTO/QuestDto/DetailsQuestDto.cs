@@ -10,7 +10,7 @@ namespace DTO.QuestDto
     {
 
         public CategoryTasksDto.CategoryTasksDto CategoryTasks { get; set; }
-        public List<TestDto.DetailsTestDto> Tests { get; set; }
+        public TestDto.DetailsTestDto Tests { get; set; }
         public List<AnswerDto.AnswerDto> Answers { get; set; }
     }
 }

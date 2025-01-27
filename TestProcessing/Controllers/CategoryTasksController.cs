@@ -10,6 +10,7 @@ namespace CategoryTasksProcessing.Controllers
     [ApiController]
     public class CategoryTasksController(IServiceCategoryTasks service) : Controller
     {
+        [Authorize]
         [HttpGet]
         [Route("all")]
 
