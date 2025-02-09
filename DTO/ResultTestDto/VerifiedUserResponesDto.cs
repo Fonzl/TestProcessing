@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    public class VerifiedUserRespones
+    public class VerifiedUserResponesDto
 
     {
         public DTO.QuestDto.QuestDto QuestDto { get; set; }
-        public List<string> UserRespones { get; set; }
-        public bool IsCorrectAnswer { get; set; }
+        public List<AnswerDto.AnswerVerfiedDto> UserRespones { get; set; }
+        public bool IsCorrectQuest { get; set; }
     }
 }

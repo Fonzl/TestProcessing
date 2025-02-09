@@ -12,5 +12,6 @@ namespace DTO.ResultTestDto
         public UserDto.StudentUserDto User { get; set; }
         public TestDto.DetailsTestDto Test { get; set; }
         public decimal Result { get; set; }
+        public string? EvaluationName { get; set; }
     }
 }

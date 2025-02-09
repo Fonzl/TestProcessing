@@ -8,7 +8,11 @@ namespace DTO.ResultTestDto
 {
     public class ReturnResultAndRespone
     {
+       
         public decimal Result { get; set; }
-        public List<VerifiedUserRespones> Respones { get; set; }
+        public string? EvaluationName { get; set; }
+        public List<VerifiedUserResponesDto> ListRespones { get; set; }
+        public int Attempts { get; set; }
+
     }
 }

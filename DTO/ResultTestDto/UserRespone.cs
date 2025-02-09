@@ -8,7 +8,7 @@ namespace DTO.ResultTestDto
 {
     public class UserRespone
     {
-        public int QuestId { get; set; }
+        public long QuestId { get; set; }
         public List<string> UserRespones {  get; set; }
 
     }
