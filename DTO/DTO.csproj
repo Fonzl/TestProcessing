@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AnswerDto\" />
     <Folder Include="CategoryTasksDto\" />
     <Folder Include="RoleDto\" />
   </ItemGroup>

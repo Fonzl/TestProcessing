@@ -43,7 +43,7 @@ namespace TestProcessing.Controllers
 
         [Authorize(Roles = "student")]
         [HttpPost]
-        [Route("student")]
+        [Route("studentPassedTest")]
         public IActionResult AddResultTest(CreateResultTestDto dto)//Расчёт результата теста
         {
             try
@@ -135,7 +135,7 @@ namespace TestProcessing.Controllers
 
         }
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         [Route("resultDetails/{id}")]
         public IActionResult GetResultTestDetails(long id)
         {

@@ -40,7 +40,7 @@ namespace Service.ServiceResultTest
             return repo.ResultStudentId(studentId);
         }
 
-        public ReturnResultAndRespone ReturnResultDetails(long idResultTest)
+        public List<VerifiedUserResponesDto> ReturnResultDetails(long idResultTest)
         {
             return repo.returnResultDetails(idResultTest);
         }

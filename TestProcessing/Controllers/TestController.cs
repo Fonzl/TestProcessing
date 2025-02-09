@@ -82,6 +82,7 @@ namespace TestProcessing.Controllers
         }
         // POST api/<ValuesController>
         [HttpPost]
+        [Authorize(Roles = "teacher,admin")]
         [Route("add")]
         public IActionResult AddTest(CreateTestDto dto)
         {

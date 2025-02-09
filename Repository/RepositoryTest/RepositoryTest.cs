@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Repository.RepositoryTest
@@ -19,20 +20,23 @@ namespace Repository.RepositoryTest
                 .Include(x => x.Quests)
                 .SingleOrDefault(x => x.Id == id);
             if (test == null) return null;
+            
             return (new DetailsTestDto
             {
                 Id = test.Id,
                 InfoTest = test.InfoTest,
                 Name = test.Name,
-              
+
                 Discipline = new DTO.DisciplineDto.DetailsDisciplineDto
                 {
                     Id = test.Discipline.Id,
-                    Name= test.Discipline.Name
-                    
+                    Name = test.Discipline.Name
+
                 },
-                
-             
+                Time = test.TimeInMinutes,
+                EvaluationDtos = JsonSerializer.Deserialize<List<EvaluationDto>>(test.Evaluations),
+                IsCheck = test.IsCheck,
+
             });
             
 
@@ -70,7 +74,12 @@ namespace Repository.RepositoryTest
                 Name = dto.Name,
                 InfoTest = dto.InfoTest,
                 Quests = context.Quests.Where(x => dto.Quests.Contains(x.Id)).ToList(),
-                Discipline = context.Disciplines.First(x => x.Id == dto.DisciplineId)
+                Discipline = context.Disciplines.First(x => x.Id == dto.DisciplineId),
+                TimeInMinutes = dto.Time,
+                Evaluations = JsonSerializer.Serialize(dto.EvaluationDtos),
+                IsCheck = dto.IsCheck, 
+                
+                
             };
             context.Tests.Add(test);
             context.SaveChanges();
