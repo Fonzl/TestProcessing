@@ -92,7 +92,23 @@ namespace Repository
                 RoleId = 3,
 
             });
-        
+            builder.Entity<CategoryTasks>().HasData(new CategoryTasks
+            {
+                Id = 1,
+                Name = "Обычный вопрос",
+
+            });
+            builder.Entity<CategoryTasks>().HasData(new CategoryTasks
+            {
+                Id = 2,
+                Name = "Вопрос с множеством ответов",
+
+            });
+            builder.Entity<CategoryTasks>().HasData(new CategoryTasks
+            {
+                Id = 3,
+                Name = "Вопрос с ответом пользователя",
+            });
 
             base.OnModelCreating(builder);
         }

@@ -12,7 +12,7 @@ namespace Database
         public long Id { get; set; }
         public User User { get; set; }
         public Test Test { get; set; }
-        [ForeignKey("Id")]
-        public UserResponses Responses { get; set; }
+       
+        public List<UserResponses> Responses { get; set; }
     }
 }

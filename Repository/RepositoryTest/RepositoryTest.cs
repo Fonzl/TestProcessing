@@ -1,4 +1,5 @@
 ﻿using Database;
+using DTO.QuestDto;
 using DTO.TestDto;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,7 +35,6 @@ namespace Repository.RepositoryTest
 
                 },
                 Time = test.TimeInMinutes,
-                EvaluationDtos = JsonSerializer.Deserialize<List<EvaluationDto>>(test.Evaluations),
                 IsCheck = test.IsCheck,
 
             });
@@ -69,12 +69,36 @@ namespace Repository.RepositoryTest
 
         public void Insert(CreateTestDto dto)
         {
+            List<Quest> list = new List<Quest>();
+            foreach (var item in dto.Quests)
+            {
+                List<Answer> listAnswer = new List<Answer>();
+                foreach(var answer in item.answerList)
+                {
+                    listAnswer.Add(new Answer
+                    {
+                        AnswerText = answer.AnswerText,
+                        IsCorrectAnswer = answer.IsCorrectAnswer,
+
+                    });
+                }
+                list.Add(new Quest
+                {
+
+                    Answers = listAnswer,
+                    CategoryTasks = context.CategoryTasks.First(x => x.Id == item.questDto.CategoryTaskId),
+                    Info = item.questDto.Info,
+                    Name = item.questDto.Name,
+                    
+                });
+
+            }
             var test = new Test
             {
                 Name = dto.Name,
                 InfoTest = dto.InfoTest,
-                Quests = context.Quests.Where(x => dto.Quests.Contains(x.Id)).ToList(),
-                Discipline = context.Disciplines.First(x => x.Id == dto.DisciplineId),
+                Quests = list,
+                Discipline  = context.Disciplines.First(x => x.Id == dto.DisciplineId),
                 TimeInMinutes = dto.Time,
                 Evaluations = JsonSerializer.Serialize(dto.EvaluationDtos),
                 IsCheck = dto.IsCheck, 
@@ -134,7 +158,7 @@ namespace Repository.RepositoryTest
                 };
                 list.Add(dto);
             }
-            return list;
+            return list.OrderBy(x => x.Id).ToList();
         }
     }
 }
