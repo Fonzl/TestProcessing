@@ -122,6 +122,21 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
+        [HttpPost]
+        [Route("postQuestImg")]
+       
+        public IActionResult GetListQu(Microsoft.AspNetCore.Http.IFormFile file)//по id test
+        {
+            try
+            {
+                return Json(serviceQuest.QuestImg(file));
+                
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
 
     }
 }

@@ -49,7 +49,7 @@ namespace TestProcessing.Controllers
             try
             {
                 var id = User.FindFirst("id")?.Value;
-                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserRespones = dto.UserRespones };
+                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserResponesTest = dto.UserResponesTest };
 
                 return Json(service.CreateResultTest(studentDto));
             }

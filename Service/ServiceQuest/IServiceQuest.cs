@@ -15,5 +15,6 @@ namespace Service.ServiceQuest
         void DeleteQuest(int id);
         void UpdateQuest(UpdateQuestDto updateQuest);
         void CreateQuest(CreateQuestDto createQuest);
+        string QuestImg(Microsoft.AspNetCore.Http.IFormFile file);
     }
 }

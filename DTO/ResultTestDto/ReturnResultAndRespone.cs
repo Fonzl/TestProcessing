@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    public class ReturnResultAndRespone
+    public class ReturnResultAndRespone : ResultOfAttemptsDTO// Класс с подробной информацией о попытке 
     {
        
-        public decimal Result { get; set; }
-        public string? EvaluationName { get; set; }
+    
         public List<VerifiedUserResponesDto> ListRespones { get; set; }
-        public int Attempts { get; set; }
+       
 
     }
 }
