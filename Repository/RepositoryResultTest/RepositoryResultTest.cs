@@ -219,7 +219,7 @@ namespace Repository.RepositoryResultTest
                              answerVerfiedUser3 = new AnswerVerfiedDto()
                             {
                                 Id = answerQuestDto.Id,
-                                AnswerText = answerQuestDto.AnswerText,
+                                AnswerText = responses.FirstOrDefault(x => x.QuestId == Quest.Id).UserRespones.FirstOrDefault(),
                                 IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
                                 IsResponeUser = false,
                             };
@@ -230,7 +230,7 @@ namespace Repository.RepositoryResultTest
                              answerVerfiedUser3 = new AnswerVerfiedDto()
                             {
                                 Id = answerQuestDto.Id,
-                                AnswerText = answerQuestDto.AnswerText,
+                                AnswerText = responses.FirstOrDefault(x=> x.QuestId == Quest.Id).UserRespones.First().ToString(),
                                 IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
                                 IsResponeUser = answerQuestDto.AnswerText.ToLower().Split(";").Any(x => responses.First(x => x.QuestId == Quest.Id).UserRespones
                                 .Select(s => s.ToLower()).ToArray().Contains(x)),
@@ -291,7 +291,7 @@ namespace Repository.RepositoryResultTest
             }
             else
             {
-                var result = context.Results.FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.StudentId);
+                var result = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId);
                 result.Responses.Add(userResponses);
                 context.Results.Update(result);
                 context.SaveChanges();
