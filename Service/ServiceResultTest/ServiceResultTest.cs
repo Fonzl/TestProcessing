@@ -11,7 +11,7 @@ namespace Service.ServiceResultTest
 {
     public class ServiceResultTest(IRepositoryResultTest repo) : IServiceResultTest
     {
-        public ReturnResultAndRespone CreateResultTest(AddResultTestStudentDto createResultTest)
+        public ResultOfAttemptsDTO CreateResultTest(AddResultTestStudentDto createResultTest)
         {
            return repo.InsertStudent(createResultTest);
         }

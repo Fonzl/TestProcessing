@@ -11,7 +11,7 @@ namespace DTO.TestDto
         public string InfoTest { get; set; }    
 
        
-        public DisciplineDto.DetailsDisciplineDto? Discipline { get; set; }
+        public DisciplineDto.DisciplineDto? Discipline { get; set; }
         public long? Time {  get; set; }
         public bool IsCheck { get; set; }
 

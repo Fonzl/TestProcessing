@@ -28,7 +28,7 @@ namespace Repository.RepositoryTest
                 InfoTest = test.InfoTest,
                 Name = test.Name,
 
-                Discipline = new DTO.DisciplineDto.DetailsDisciplineDto
+                Discipline = new DTO.DisciplineDto.DisciplineDto
                 {
                     Id = test.Discipline.Id,
                     Name = test.Discipline.Name
