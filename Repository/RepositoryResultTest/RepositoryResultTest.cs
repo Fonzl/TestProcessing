@@ -246,7 +246,7 @@ namespace Repository.RepositoryResultTest
                                 Name = Quest.Name
                             },
                             IsCorrectQuest = answerVerfiedUser3.IsResponeUser,
-                            tasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
+                            CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
                             {
                                 Id = Quest.CategoryTasks.Id,
                                 Name = Quest.CategoryTasks.Name,
@@ -330,7 +330,7 @@ namespace Repository.RepositoryResultTest
             var answersUser = context.Answers.Where(x => answer.Contains(x.Id)).ToList();
            
             var listVerifiedRespouns = new List<VerifiedUserResponesDto>();
-            var ListQuest = context.Quests.Where(x => x.Tests.Contains(respons.ResultTest.Test)).Include(x => x.Answers).ToList();
+            var ListQuest = context.Quests.Where(x => x.Tests.Contains(respons.ResultTest.Test)).Include(x => x.Answers).Include(x => x.CategoryTasks).ToList();
             foreach (var Quest in ListQuest)
             {
                 switch (Quest.CategoryTasks.Id)
@@ -366,6 +366,11 @@ namespace Repository.RepositoryResultTest
                                 Name = Quest.Name
                             },
                             IsCorrectQuest = correctdefault,
+                            CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
+                            {
+                                Id = Quest.CategoryTasks.Id,
+                                Name = Quest.CategoryTasks.Name,
+                            }           
                         });
                         break;
                     case 3:
@@ -377,7 +382,7 @@ namespace Repository.RepositoryResultTest
                             answerVerfiedUser3 = new AnswerVerfiedDto()
                             {
                                 Id = answerQuestDto.Id,
-                                AnswerText = answerQuestDto.AnswerText,
+                                AnswerText = listUserRespons.FirstOrDefault( x => x.QuestId == Quest.Id).UserRespones.FirstOrDefault(),
                                 IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
                                 IsResponeUser = false,
                             };
@@ -388,7 +393,7 @@ namespace Repository.RepositoryResultTest
                             answerVerfiedUser3 = new AnswerVerfiedDto()
                             {
                                 Id = answerQuestDto.Id,
-                                AnswerText = answerQuestDto.AnswerText,
+                                AnswerText = listUserRespons.FirstOrDefault(x => x.QuestId == Quest.Id).UserRespones.FirstOrDefault() ,
                                 IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
                                 IsResponeUser = answerQuestDto.AnswerText.ToLower().Split(";").Any(x => listUserRespons.FirstOrDefault(x => x.QuestId == Quest.Id).UserRespones
                                 .Select(s => s.ToLower()).ToArray().Contains(x)),
@@ -404,7 +409,7 @@ namespace Repository.RepositoryResultTest
                                 Name = Quest.Name
                             },
                             IsCorrectQuest = answerVerfiedUser3.IsResponeUser,
-                            tasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
+                            CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
                             {
                                 Id = Quest.CategoryTasks.Id,
                                 Name = Quest.CategoryTasks.Name,
