@@ -13,6 +13,6 @@ namespace DTO.ResultTestDto
         public DTO.QuestDto.QuestDto QuestDto { get; set; }
         public List<AnswerDto.AnswerVerfiedDto> UserRespones { get; set; }
         public bool IsCorrectQuest { get; set; }
-        public DTO.CategoryTasksDto.CategoryTasksDto tasksDto { get; set; }
+        public DTO.CategoryTasksDto.CategoryTasksDto CategoryTasksDto { get; set; }
     }
 }
