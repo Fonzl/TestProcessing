@@ -6,16 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+
 using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Service.ServiceUser
 {
     public class ServiceUser(IRepositoryUser repo) : IServiceUser
     {
+        
         public void CreateUser(CreateUserDto user)
         {
            repo.Insert(user);
@@ -38,16 +42,21 @@ namespace Service.ServiceUser
 
         public ReturnLoginUser Login(string username,string password) // Находим пользователя по данным и делаем jwt token
         {
+
             UserDto dto = repo.Login(username,password);
             var claims = new List<Claim> {
                 new Claim("id", dto.Id.ToString()),
                 new Claim(ClaimTypes.Role, dto.Role.Name) };
             var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    claims: claims,
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)), 
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+               issuer: AuthOptions.ISSUER,
+               audience: AuthOptions.AUDIENCE,
+               claims: claims,
+               expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // время действия 2 минуты
+               signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+            //claims: claims,
+            //expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)), 
+            //        signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["KEY"])), SecurityAlgorithms.HmacSha256));
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             
            return new ReturnLoginUser { jwt = token ,IdUser = dto.Id,UserName = dto.FullName, RoleDto = dto.Role};

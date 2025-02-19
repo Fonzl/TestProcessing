@@ -23,6 +23,8 @@ using Service.ServiceUser;
 using Microsoft.AspNetCore.HttpOverrides;
 using Repository.RepositoryDirection;
 using Service.ServiceDirection;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +54,8 @@ builder.Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+var tokenSettings = builder.Configuration.GetSection("Token");
+var secretKey = Environment.GetEnvironmentVariable("KEY");
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -60,11 +63,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = Service.AuthOptions.ISSUER,
+            ValidIssuer = tokenSettings["ISSUER"],
             ValidateAudience = true,
-            ValidAudience = Service.AuthOptions.AUDIENCE,
+            ValidAudience = tokenSettings["AUDIENCE"],
             ValidateLifetime = true,
-            IssuerSigningKey = Service.AuthOptions.GetSymmetricSecurityKey(),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings["KEY"])),
             ValidateIssuerSigningKey = true,
         };
     });
