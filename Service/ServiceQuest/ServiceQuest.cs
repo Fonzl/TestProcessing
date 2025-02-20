@@ -9,10 +9,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Service.ServiceQuest
 {
-    public class ServiceQuest(IRepositoryQuest repo, IWebHostEnvironment appEnvironment) : IServiceQuest
+    public class ServiceQuest(IRepositoryQuest repo, IWebHostEnvironment appEnvironment,IConfiguration configuration) : IServiceQuest
     {
         public void CreateQuest(CreateQuestDto createQuest)
         {
@@ -41,11 +42,11 @@ namespace Service.ServiceQuest
 
         public string QuestImg(Microsoft.AspNetCore.Http.IFormFile uploadedFile)
         {
-            
-            
 
-                // путь к папке Files
-                string path = "\\FileTest\\QuestImg\\" + uploadedFile.FileName;
+            var tokenSettings =configuration.GetSection("ConnectkingString");//
+
+            // путь к папке Files
+            string path = tokenSettings["ServerConnectkingString"]+ "\\img\\" + uploadedFile.FileName;
                 // сохраняем файл в папку Files в каталоге wwwroot
                 using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
                 {

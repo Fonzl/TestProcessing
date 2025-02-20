@@ -55,7 +55,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var tokenSettings = builder.Configuration.GetSection("Token");
-var secretKey = Environment.GetEnvironmentVariable("KEY");
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
