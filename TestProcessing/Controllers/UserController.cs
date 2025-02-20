@@ -4,6 +4,7 @@ using Service.ServiceUser;
 using System.Security.Claims;
 using DTO.UserDto;
 using Database;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,6 +14,7 @@ namespace TestProcessing.Controllers
     [Route("User")]
     public class UserController(IServiceUser service) : Controller
     {
+        
         // GET: api/<ValuesController>
         
         [HttpGet]
@@ -70,6 +72,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
+               
                 service.UpdateUser(dto);
                 return StatusCode(200, "The content has been changed");
             }
@@ -101,6 +104,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
+             
                 return Json(service.Login(dto.Name, dto.Password));
                
             }
