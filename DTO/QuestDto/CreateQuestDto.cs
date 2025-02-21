@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DTO.AnswerDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace DTO.QuestDto
         public string Info { get; set; }
         public short CategoryTaskId { get; set; }
         public List<long> Tests { get; set; }
-        public List<long> Answers { get; set; }
+        public List<CreateAnswerDto> Answers { get; set; }
+        public List<string>? PathPhotos { get; set; }
     }
-}
+} 

@@ -14,7 +14,7 @@ namespace Service.ServiceQuest
         List<DetailsQuestDto> GetListQuests(int id);
         void DeleteQuest(int id);
         void UpdateQuest(UpdateQuestDto updateQuest);
-        void CreateQuest(CreateQuestDto createQuest);
-        string QuestImg(Microsoft.AspNetCore.Http.IFormFile file);
+        void CreateQuest(CreateQuestDto createQuest, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile);
+        List<string> QuestImg(Microsoft.AspNetCore.Http.IFormFileCollection? file);
     }
 }

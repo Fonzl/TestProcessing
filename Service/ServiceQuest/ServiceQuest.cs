@@ -15,9 +15,25 @@ namespace Service.ServiceQuest
 {
     public class ServiceQuest(IRepositoryQuest repo, IWebHostEnvironment appEnvironment,IConfiguration configuration) : IServiceQuest
     {
-        public void CreateQuest(CreateQuestDto createQuest)
+        public void CreateQuest(CreateQuestDto createQuest, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
-            repo.Insert(createQuest);
+            var tokenSettings = configuration.GetSection("ConnectionStrings");//
+            foreach (var file in uploadedFile)
+            {
+                var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
+                                                            // путь к папке Files
+                string path = tokenSettings["FilePatch"] + myUniqueFileName + file.FileName;// myUniqueFileName+"."+uploadedFile.ContentType;
+                                                                                                    // сохраняем файл в папку Files 
+                using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    file.CopyToAsync(fileStream);
+                }
+
+                string FotoPath = path;
+                createQuest.PathPhotos.Add(path);
+            }
+                repo.Insert(createQuest);
+            
         }
 
         public void DeleteQuest(int id)
@@ -40,20 +56,24 @@ namespace Service.ServiceQuest
           return  repo.GetQuest(id);
         }
 
-        public string QuestImg(Microsoft.AspNetCore.Http.IFormFile uploadedFile)
+        public List< string> QuestImg(Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
-
-            var tokenSettings =configuration.GetSection("ConnectkingString");//
-
-            // путь к папке Files
-            string path = tokenSettings["ServerConnectkingString"]+ "\\img\\" + uploadedFile.FileName;
-                // сохраняем файл в папку Files в каталоге wwwroot
+            List<string> list = new List<string>();
+            var tokenSettings = configuration.GetSection("ConnectionStrings");//
+            foreach (var file in uploadedFile)
+            {
+                var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
+                                                            // путь к папке Files
+                string path = tokenSettings["FilePatch"] + myUniqueFileName + file.FileName;// myUniqueFileName+"."+uploadedFile.ContentType;
+                                                                                            // сохраняем файл в папку Files 
                 using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
                 {
-                     uploadedFile.CopyToAsync(fileStream);
+                    file.CopyToAsync(fileStream);
                 }
-              string  FotoPath  =   path ;
-               return FotoPath;
+
+                list.Add(path);
+            }
+                return list;
             
             
         }
