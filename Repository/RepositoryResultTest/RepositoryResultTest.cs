@@ -35,7 +35,7 @@ namespace Repository.RepositoryResultTest
             {
                 ListAttempts.Add(new ResultOfAttemptsDTO
                 {
-                    IdAttempts = x.Id,
+                    IdUserRespones = x.Id,
                     Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                     EvaluationName = x.EvaluationName,
                     Result = x.Result
@@ -127,7 +127,7 @@ namespace Repository.RepositoryResultTest
                 {
                     ListAttempts.Add(new ResultOfAttemptsDTO
                     {
-                        IdAttempts = x.Id,
+                        IdUserRespones = x.Id,
                         Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                         EvaluationName = x.EvaluationName,
                         Result = x.Result
@@ -173,7 +173,7 @@ namespace Repository.RepositoryResultTest
 
 
 
-                var listVerifiedRespouns = new List<VerifiedUserResponesDto>();
+                var listVerifiedRespons = new List<VerifiedUserResponesDto>();
                 var ListQuest = context.Quests.Where(x => responses.Select(y => y.QuestId).ToList().Contains(x.Id)).Include(x => x.Answers).Include(y => y.CategoryTasks).ToList();
                 foreach (var Quest in ListQuest)
                 {
@@ -201,7 +201,7 @@ namespace Repository.RepositoryResultTest
                             {
                                 correctdefault = true;
                             }
-                            listVerifiedRespouns.Add(new VerifiedUserResponesDto
+                            listVerifiedRespons.Add(new VerifiedUserResponesDto
                             {
                                 UserRespones = answerVerfiedUser.Cast<AnswerVerfiedDto>().ToList(),
                                 QuestDto = new QuestDto
@@ -239,7 +239,7 @@ namespace Repository.RepositoryResultTest
                                     .Select(s => s.ToLower()).ToArray().Contains(x)),
                                 };
                             }
-                            listVerifiedRespouns.Add(new VerifiedUserResponesDto
+                            listVerifiedRespons.Add(new VerifiedUserResponesDto
                             {
                                 UserRespones = new List<AnswerVerfiedDto>() { answerVerfiedUser3 },
                                 QuestDto = new QuestDto
@@ -261,7 +261,7 @@ namespace Repository.RepositoryResultTest
 
                     
                 }
-                var resulTest = (Convert.ToDecimal(listVerifiedRespouns.Where(x => x.IsCorrectQuest == true).ToList().Count) / Convert.ToDecimal(listVerifiedRespouns.Count)) * 100;// результат в процентах 
+                var resulTest = (Convert.ToDecimal(listVerifiedRespons.Where(x => x.IsCorrectQuest == true).ToList().Count) / Convert.ToDecimal(listVerifiedRespons.Count)) * 100;// результат в процентах 
                 string evaluationName = "";
                 var listTestEvaluationName = new List<DTO.TestDto.EvaluationDto>();
                 var test = context.Tests.FirstOrDefault(x => x.Id == dto.TestId);
@@ -304,7 +304,7 @@ namespace Repository.RepositoryResultTest
 
                 return new ResultOfAttemptsDTO
                 {
-                    IdAttempts = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId).Responses.Last().Id,
+                    IdUserRespones = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId).Responses.Last().Id,
                     Result = resulTest,
                     EvaluationName = evaluationName,
                     Attempts = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.Test.Id == dto.TestId && x.User.Id == dto.StudentId).Responses.Count(),

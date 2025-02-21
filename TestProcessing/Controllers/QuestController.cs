@@ -125,11 +125,11 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Route("postQuestImg")]
        
-        public IActionResult GetListQu(Microsoft.AspNetCore.Http.IFormFile file)//по id test
+        public IActionResult GetListQu(IFormFile Photo)//по id test
         {
             try
             {
-                return Json(serviceQuest.QuestImg(file));
+                return Json(serviceQuest.QuestImg(Photo));
                 
             }
             catch (Exception ex)
