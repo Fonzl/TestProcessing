@@ -62,11 +62,11 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]
         [Route("add")]
-        public IActionResult AddQuest(CreateQuestDto dto)
+        public IActionResult AddQuest([FromForm] CreateQuestDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
             try
             {
-                serviceQuest.CreateQuest(dto);
+                serviceQuest.CreateQuest(dto, uploadedFile);
 
                 return StatusCode(201);
             }
@@ -125,7 +125,7 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Route("postQuestImg")]
        
-        public IActionResult GetListQu(IFormFile Photo)//по id test
+        public IActionResult GetListQu(Microsoft.AspNetCore.Http.IFormFileCollection? Photo)//по id test
         {
             try
             {

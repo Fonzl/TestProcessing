@@ -105,12 +105,24 @@ namespace Repository.RepositoryQuest
 
         public void Insert(CreateQuestDto dto)
         {
+            var listAnswer = new List<Answer>();
+            dto.Answers.ForEach(x =>
+            {
+                listAnswer.Add(new Answer
+                {
+                    AnswerText = x.AnswerText,
+                    IsCorrectAnswer = x.IsCorrectAnswer,
+                    PathToImage = x.PathToImg,
+                    
+                });
+            });
             var quest = new Quest
             {
                 
+                
                 Name = dto.Name,
                 Info = dto.Info,
-                Answers = context.Answers.Where(x => dto.Answers.Contains(x.Id)).ToList(),
+                Answers = listAnswer,
                 CategoryTasks = context.CategoryTasks.First(x => x.Id == dto.CategoryTaskId),
                 Tests= context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList()
 
