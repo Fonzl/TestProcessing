@@ -38,7 +38,7 @@ namespace Repository.RepositoryResultTest
                     IdUserRespones = x.Id,
                     Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                     EvaluationName = x.EvaluationName,
-                    Result = x.Result
+                    Result = x.Result,
                 });
                 
             });
@@ -104,8 +104,12 @@ namespace Repository.RepositoryResultTest
             var results = studentResultDiscipline.Where(x => x.Test.Discipline.Id == dto.DisciplineId).ToList();
             decimal sum = 0;
             foreach (var result in results)
-            {
-                sum += result.Responses.Last().Result;
+            { if (result.Responses.Last().Result == null)
+                {
+                    sum += 0;
+                }
+             else
+                { sum += (decimal)result.Responses.Last().Result; }
             }
             decimal staticstic = sum / results.Count;
             return staticstic;
@@ -150,7 +154,7 @@ namespace Repository.RepositoryResultTest
             }
             return listResults;
         }
-        public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
+        public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto,long idResult)// тут  расчёт result
         {
             if (context.Tests.Include(x => x.Quests)
                 .FirstOrDefault(x => x.Id == dto.TestId).Quests.Count == dto.UserResponesTest.Count) {
@@ -272,32 +276,34 @@ namespace Repository.RepositoryResultTest
                 }
                 var userResponses = new UserResponses
                 {
+                    Id = idResult,
                     ListUserResponses = JsonSerializer.Serialize(responses),
                     Result = resulTest,
                     EvaluationName = evaluationName,
 
                 };
-                if (context.Results.FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId) == null)
+                //if (context.Results.FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId) == null)
+                //{
+
+                //    var result = new ResultTest
+                //    {
+
+                //        Responses = new List<UserResponses>() { userResponses },
+                //        Test = context.Tests.First(x => x.Id == dto.TestId),
+                //        User = context.Users.First(x => x.Id == dto.StudentId),
+
+                //    };
+
+                //    context.Results.Add(result);
+                //    context.SaveChanges();
+                //}
+                //else
                 {
-
-                    var result = new ResultTest
-                    {
-
-                        Responses = new List<UserResponses>() { userResponses },
-                        Test = context.Tests.First(x => x.Id == dto.TestId),
-                        User = context.Users.First(x => x.Id == dto.StudentId),
-
-                    };
-
-                    context.Results.Add(result);
+                    context.Update(userResponses);
                     context.SaveChanges();
-                }
-                else
-                {
-                    var result = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId);
-                    result.Responses.Add(userResponses);
-                    context.Results.Update(result);
-                    context.SaveChanges();
+                    //var result = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId);
+                    //context.Results.Update(result);
+                    //context.SaveChanges();
 
                 }
 
@@ -442,6 +448,24 @@ namespace Repository.RepositoryResultTest
                 context.Results.Update(result);
                 context.SaveChanges();
             }
+
+        public ResultOfAttemptsDTO? CheckingStudentResult(long testId, long studentId)
+        {
+            var result =context.Results
+                .Include(x => x.User)
+                .Include(x => x.Test)
+                .Include(x => x.Responses)
+                .FirstOrDefault(x => x.Test.Id == testId && x.User.Id == studentId);
+            if (result.Responses.FirstOrDefault(x => x.IsFinish == false) == null )
+            {
+                return null;
+            }
+           if (null == result.Responses.FirstOrDefault(y => y.IsFinish == false).dateTime.AddMinutes((double)result.Test.TimeInMinutes))
+            {
+                
+            }
+            
         }
+    }
     }
 

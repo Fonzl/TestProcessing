@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Img\AnswerImg\" />
+    <Folder Include="Img\QuestImg\" />
   </ItemGroup>
 
 </Project>
