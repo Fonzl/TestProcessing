@@ -16,7 +16,6 @@ namespace Repository.RepositoryResultTest
         void Update(UpdateResultTestDto dto);
         void Delete(int id);
         ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto);
-        ResultOfAttemptsDTO InsertStudent(long testId,long studentId);
         List<VerifiedUserResponesDto> returnResultDetails(long idResulTest);
     }
 }

@@ -353,9 +353,6 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsFinish")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("ListUserResponses")
                         .IsRequired()
                         .HasColumnType("text");
@@ -365,9 +362,6 @@ namespace Repository.Migrations
 
                     b.Property<long>("ResultTestId")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime>("StartdateTime")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
