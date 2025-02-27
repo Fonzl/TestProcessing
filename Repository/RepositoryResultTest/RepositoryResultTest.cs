@@ -38,7 +38,7 @@ namespace Repository.RepositoryResultTest
                     IdUserRespones = x.Id,
                     Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                     EvaluationName = x.EvaluationName,
-                    Result = x.Result,
+                    Result = (decimal)x.Result,
                 });
                 
             });
@@ -134,7 +134,7 @@ namespace Repository.RepositoryResultTest
                         IdUserRespones = x.Id,
                         Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                         EvaluationName = x.EvaluationName,
-                        Result = x.Result
+                        Result = (decimal)x.Result
                     });
 
                 });
@@ -449,20 +449,37 @@ namespace Repository.RepositoryResultTest
                 context.SaveChanges();
             }
 
-        public ResultOfAttemptsDTO? CheckingStudentResult(long testId, long studentId)
+        public ReturnAttemptDto?  CheckingStudentResult(long testId, long studentId)
         {
             var result =context.Results
                 .Include(x => x.User)
                 .Include(x => x.Test)
                 .Include(x => x.Responses)
                 .FirstOrDefault(x => x.Test.Id == testId && x.User.Id == studentId);
-            if (result.Responses.FirstOrDefault(x => x.IsFinish == false) == null )
+            var attempt = result.Responses.FirstOrDefault(x => x.IsFinish == false);
+            if (attempt == null )
             {
                 return null;
             }
-           if (null == result.Responses.FirstOrDefault(y => y.IsFinish == false).dateTime.AddMinutes((double)result.Test.TimeInMinutes))
+           if (null == result.Test.TimeInMinutes)
             {
-                
+
+                return new ReturnAttemptDto
+                {
+                    TestId = testId,
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespone>>(attempt.ListUserResponses),
+                    Minutes = null
+
+                };
+            }
+            else
+            {
+                return new ReturnAttemptDto
+                {
+                    TestId = testId,
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespone>>(attempt.ListUserResponses),
+                    Minutes = ()attempt.dateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now)
+                };
             }
             
         }
