@@ -1,4 +1,5 @@
-﻿using DTO.ResultTestDto;
+﻿using Database;
+using DTO.ResultTestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,14 +45,14 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpPost]
         [Route("studentPassedTest")]
-        public IActionResult AddResultTest(CreateResultTestDto dto)//Расчёт результата теста
+        public IActionResult AddResultTest(CreateResultTestDto dto,long attempt)//Расчёт результата теста
         {
             try
             {
                 var id = User.FindFirst("id")?.Value;
                 AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserResponesTest = dto.UserResponesTest };
 
-                return Json(service.CreateResultTest(studentDto));
+                return Json(service.CreateResultTest(studentDto,attempt));
             }
             catch (Exception ex)
             {
@@ -142,6 +143,21 @@ namespace TestProcessing.Controllers
             try
             {
                 return Json(service.ReturnResultDetails(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
+        [Authorize(Roles = "student")]
+        [HttpGet]
+        [Route("createAttempt/{idTest}")]
+        public IActionResult CreateAttempt(long idTest)
+        {
+            try
+            {
+                var studentId = User.FindFirst("id")?.Value;
+                return Json(service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId)));
             }
             catch (Exception ex)
             {

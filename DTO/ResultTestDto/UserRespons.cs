@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    public class UserRespone
+    public class UserRespons
     {
         public long QuestId { get; set; }
-        public List<string> UserRespones {  get; set; }
+        public List<string>? UserRespones {  get; set; }
 
     }
 }
