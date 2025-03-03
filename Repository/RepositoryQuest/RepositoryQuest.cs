@@ -49,10 +49,12 @@ namespace Repository.RepositoryQuest
             var result = new List<DetailsQuestDto>();
             foreach (var quest in list)
             {
-                var listAnswer = new List<AnswerDto>();
-                quest.Answers.ForEach(x =>  listAnswer.Add(new AnswerDto {
+                var listAnswer = new List<AnswerShortDto>();
+                quest.Answers.ForEach(x => listAnswer.Add(new AnswerShortDto
+                {
                     Id = x.Id,
                     AnswerText = x.AnswerText,
+                    PathPhoto = x.PathToImage
                 })
                 );
                 result.Add(new DetailsQuestDto
@@ -66,7 +68,7 @@ namespace Repository.RepositoryQuest
                         Id = quest.CategoryTasks.Id,
                         Name = quest.CategoryTasks.Name,
                     },
-                   
+                    PathToImg = quest.PathToImage
 
 
 
@@ -89,46 +91,43 @@ namespace Repository.RepositoryQuest
                 Id = quest.Id,
                 Name = quest.Name,
                 Info = quest.Info,
-                Answers = quest.Answers.Select(x => new AnswerDto
+                Answers = quest.Answers.Select(x => new AnswerShortDto
                 {
                     Id = x.Id,
-                    AnswerText = x.AnswerText
+                    AnswerText = x.AnswerText,
+                    PathPhoto = x.PathToImage,
+
                 }).ToList(),
                 CategoryTasks = new DTO.CategoryTasksDto.CategoryTasksDto
                 {
                     Id = quest.CategoryTasks.Id,
                     Name = quest.CategoryTasks.Name,
                 },
+                PathToImg = quest.PathToImage
             };
             
         }
 
-        public void Insert(CreateQuestDto dto)
+        public long Insert(CreateQuestDto dto)
         {
             var listAnswer = new List<Answer>();
-            dto.Answers.ForEach(x =>
-            {
-                listAnswer.Add(new Answer
-                {
-                    AnswerText = x.AnswerText,
-                    IsCorrectAnswer = x.IsCorrectAnswer,
-                    PathToImage = x.PathToImg,
-                    
-                });
-            });
+
             var quest = new Quest
             {
-                
-                
+
+
                 Name = dto.Name,
                 Info = dto.Info,
                 Answers = listAnswer,
                 CategoryTasks = context.CategoryTasks.First(x => x.Id == dto.CategoryTaskId),
-                Tests= context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList()
+                Tests = context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList(),
+                PathToImage = dto.PathPhotos
+
 
             }; 
             context.Quests.Add(quest);
             context.SaveChanges();
+            return quest.Id;
         }
 
         public void Update(UpdateQuestDto dto)

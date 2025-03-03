@@ -18,6 +18,7 @@ namespace Repository.RepositoryAnswer
                 Id = answer.Id,
                 AnswerText = answer.AnswerText,
                 IsCorrectAnswer = answer.IsCorrectAnswer,
+                PathPhoto = answer.PathToImage
             };
         }
 
@@ -51,7 +52,9 @@ namespace Repository.RepositoryAnswer
             {
                 AnswerText = dto.AnswerText,
                 IsCorrectAnswer = dto.IsCorrectAnswer,
-                Quest = context.Quests.First(x => x.Id == dto.QuestId)
+                Quest = context.Quests.First(x => x.Id == dto.QuestId),
+                PathToImage = dto.PathToImg,
+
             };
             context.Answers.Add(answer);
             context.SaveChanges();

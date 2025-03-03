@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repository;
@@ -12,9 +13,11 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250226140413_QuestAnswer")]
+    partial class QuestAnswer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,23 +353,18 @@ namespace Repository.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("EvaluationName")
+                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsFinish")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("ListUserResponses")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("Result")
+                    b.Property<decimal>("Result")
                         .HasColumnType("numeric");
 
                     b.Property<long>("ResultTestId")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime>("StartdateTime")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

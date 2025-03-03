@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -38,7 +39,7 @@ namespace Repository.RepositoryResultTest
                     IdUserRespones = x.Id,
                     Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                     EvaluationName = x.EvaluationName,
-                    Result = x.Result
+                    Result = (decimal)x.Result,
                 });
                 
             });
@@ -104,8 +105,12 @@ namespace Repository.RepositoryResultTest
             var results = studentResultDiscipline.Where(x => x.Test.Discipline.Id == dto.DisciplineId).ToList();
             decimal sum = 0;
             foreach (var result in results)
-            {
-                sum += result.Responses.Last().Result;
+            { if (result.Responses.Last().Result == null)
+                {
+                    sum += 0;
+                }
+             else
+                { sum += (decimal)result.Responses.Last().Result; }
             }
             decimal staticstic = sum / results.Count;
             return staticstic;
@@ -130,7 +135,7 @@ namespace Repository.RepositoryResultTest
                         IdUserRespones = x.Id,
                         Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                         EvaluationName = x.EvaluationName,
-                        Result = x.Result
+                        Result = (decimal)x.Result
                     });
 
                 });
@@ -150,7 +155,7 @@ namespace Repository.RepositoryResultTest
             }
             return listResults;
         }
-        public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
+        public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto,long idResult)// тут  расчёт result
         {
             if (context.Tests.Include(x => x.Quests)
                 .FirstOrDefault(x => x.Id == dto.TestId).Quests.Count == dto.UserResponesTest.Count) {
@@ -159,7 +164,7 @@ namespace Repository.RepositoryResultTest
 
                 //};
 
-                List<UserRespone> responses = dto.UserResponesTest.ToList();
+                List<UserRespons> responses = dto.UserResponesTest.ToList();
 
                 //foreach (var response in responses) {
                 //    foreach (var r in response.UserRespones)
@@ -186,13 +191,23 @@ namespace Repository.RepositoryResultTest
                             List<AnswerVerfiedDto> answerVerfiedUser = new List<AnswerVerfiedDto>();
                             Quest.Answers.ForEach(x =>
                             {
+                                bool isResponeUser;
+                            
+                                if (responses.First(x => x.QuestId == Quest.Id).UserRespones == null )
+                                {
+                                    isResponeUser = false;
+                                }
+                                else
+                                {
+                                    isResponeUser = responses.First(x => x.QuestId == Quest.Id).UserRespones.Select(y => (long)Convert.ToDouble(y))
+                                    .ToList().Contains(x.Id);
+                                }
                                 answerVerfiedUser.Add(new AnswerVerfiedDto()
                                 {
                                     Id = x.Id,
                                     AnswerText = x.AnswerText,
                                     IsCorrectAnswer = x.IsCorrectAnswer,
-                                    IsResponeUser = responses.First(x => x.QuestId == Quest.Id).UserRespones.Select(y => (long)Convert.ToDouble(y))
-                                    .ToList().Contains(x.Id)
+                                    IsResponeUser = isResponeUser
 
                                 });
                             });
@@ -270,34 +285,39 @@ namespace Repository.RepositoryResultTest
                     listTestEvaluationName = JsonSerializer.Deserialize<List<DTO.TestDto.EvaluationDto>>(test.Evaluations);
                     evaluationName = listTestEvaluationName.Where(x => x.Percent <= resulTest).ToList().Max(x => x.EvaluationName);
                 }
-                var userResponses = new UserResponses
+                var userResponses = context.UserResponses.First(x => x.Id == idResult);
+
+
+                userResponses.ListUserResponses = JsonSerializer.Serialize(responses);
+                userResponses.Result = resulTest;
+                userResponses.EvaluationName = evaluationName;
+                userResponses.IsFinish = true;
+
+                    
+
+                
+                //if (context.Results.FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId) == null)
+                //{
+
+                //    var result = new ResultTest
+                //    {
+
+                //        Responses = new List<UserResponses>() { userResponses },
+                //        Test = context.Tests.First(x => x.Id == dto.TestId),
+                //        User = context.Users.First(x => x.Id == dto.StudentId),
+
+                //    };
+
+                //    context.Results.Add(result);
+                //    context.SaveChanges();
+                //}
+                //else
                 {
-                    ListUserResponses = JsonSerializer.Serialize(responses),
-                    Result = resulTest,
-                    EvaluationName = evaluationName,
-
-                };
-                if (context.Results.FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId) == null)
-                {
-
-                    var result = new ResultTest
-                    {
-
-                        Responses = new List<UserResponses>() { userResponses },
-                        Test = context.Tests.First(x => x.Id == dto.TestId),
-                        User = context.Users.First(x => x.Id == dto.StudentId),
-
-                    };
-
-                    context.Results.Add(result);
+                    context.Update(userResponses);
                     context.SaveChanges();
-                }
-                else
-                {
-                    var result = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId);
-                    result.Responses.Add(userResponses);
-                    context.Results.Update(result);
-                    context.SaveChanges();
+                    //var result = context.Results.Include(x => x.Responses).FirstOrDefault(x => x.User.Id == dto.StudentId && x.Test.Id == dto.TestId);
+                    //context.Results.Update(result);
+                    //context.SaveChanges();
 
                 }
 
@@ -323,7 +343,7 @@ namespace Repository.RepositoryResultTest
             var respons = context.UserResponses
                 .Include(x => x.ResultTest.Test)
                 .FirstOrDefault(x => x.Id == idResulTest);
-            List<UserRespone> listUserRespons = JsonSerializer.Deserialize<List<UserRespone>>(respons.ListUserResponses);
+            List<UserRespons> listUserRespons = JsonSerializer.Deserialize<List<UserRespons>>(respons.ListUserResponses);
             List<long> answer = new List<long>();
             List<string> d = new List<string>();
             listUserRespons.ForEach(x => {
@@ -442,6 +462,132 @@ namespace Repository.RepositoryResultTest
                 context.Results.Update(result);
                 context.SaveChanges();
             }
-        }
-    }
 
+        public ReturnAttemptDto?  CheckingStudentResult(long testId, long studentId)
+        {
+            var result =context.Results
+                .Include(x => x.User)
+                .Include(x => x.Test)
+                .Include(x => x.Responses)
+                .FirstOrDefault(x => x.Test.Id == testId && x.User.Id == studentId);
+            var attempt = result.Responses.FirstOrDefault(x => x.IsFinish == false);
+            if (attempt == null )
+            {
+                return null;
+            }
+           if (null == result.Test.TimeInMinutes)
+            {
+
+                return new ReturnAttemptDto
+                { IdResult = attempt.Id,
+                    TestId = testId,
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
+                    Minutes = null
+
+                };
+            }
+           if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalMinutes <= 0)
+            {
+
+           
+                return new ReturnAttemptDto
+                {
+                    IdResult = attempt.Id,
+                    TestId = testId,
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
+                    Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalMinutes,
+                    Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalSeconds
+
+                };
+            }
+            else{ 
+                return new ReturnAttemptDto
+                {
+                    IdResult = attempt.Id,
+                    TestId = testId,
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
+                    Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Minutes,
+                     Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Seconds
+                };
+            }
+            
+        }
+
+        public long CreatResultAndAttempt(long testId, long studentId)
+        {
+
+        if(context.Results.Include(x => x.Test )
+                .Include(x => x.User)
+                .FirstOrDefault(x => x.User.Id == studentId && x.Test.Id == testId) == null)
+            {
+                var listResponses = new List<UserRespons>();
+                context.Tests.Include(x => x.Quests).First(x => x.Id == testId).Quests.ForEach(x =>
+                {
+                    listResponses.Add(new UserRespons
+                    {
+                        QuestId = x.Id,
+                        UserRespones = null
+                    });
+                }
+                );
+
+                var attempt = new UserResponses {
+                    StartdateTime = DateTime.UtcNow,
+                    IsFinish = false,
+                    ListUserResponses = JsonSerializer.Serialize(listResponses)
+
+                };
+
+                context.Results.Add(new ResultTest
+                {
+                    Test = context.Tests.First(x => x.Id == testId),
+                    Responses = new List<UserResponses>() { attempt },
+                    User = context.Users.First(x => x.Id == studentId)
+
+
+                });
+                context.UserResponses.Add(attempt);
+                context.SaveChanges();
+                return attempt.Id;
+            }
+            else
+            {
+                var listResponses = new List<UserRespons>();
+                context.Tests.Include(x => x.Quests).First(x => x.Id == testId).Quests.ForEach(x =>
+                {
+                    listResponses.Add(new UserRespons
+                    {
+                        QuestId = x.Id,
+                        UserRespones = null
+                    });
+                }
+                );
+                 context.Results.First(x => x.Test.Id == testId && x.User.Id == studentId);
+                var attempt = new UserResponses
+                {
+                    ResultTest = context.Results.First(x => x.Test.Id == testId && x.User.Id == studentId),
+                    StartdateTime = DateTime.UtcNow,
+                    IsFinish = false,
+                    ListUserResponses = JsonSerializer.Serialize(listResponses)
+                    
+                };
+               
+
+                context.UserResponses.Add(attempt);
+                context.SaveChanges();
+                return attempt.Id;
+            }
+        
+        }
+
+        public void UpdateRespones(AddResultTestStudentDto dto, long idResult)
+        {
+           var respones = context.UserResponses.First(x => x.Id == idResult);
+            respones.ListUserResponses = JsonSerializer.Serialize(dto.UserResponesTest);
+            context.UserResponses.Update(respones);
+            context.SaveChanges();
+        }
+        
+    }
+    }
+    

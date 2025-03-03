@@ -13,7 +13,7 @@ namespace Repository.RepositoryQuest
         List<DetailsQuestDto> GetListQuests(int testId);
         DetailsQuestDto GetQuest(int id);
         void Update(UpdateQuestDto dto);
-        void Insert(CreateQuestDto dto);
+        long Insert(CreateQuestDto dto);
         void Delete(int id);
     }
 }
