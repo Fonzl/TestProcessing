@@ -19,7 +19,7 @@ namespace TestProcessing.Controllers
         
         [HttpGet]
         [Authorize]
-        [Route("Answer/{id}")]
+        [Route("QuestIdAnswer/{id}")]
 
         public IActionResult GetQuestAnswers(long id)
         {
@@ -34,7 +34,7 @@ namespace TestProcessing.Controllers
         }
 
 
-       
+        [Authorize(Roles = "teacher,admin")]
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public IActionResult GetAnswer(int id)

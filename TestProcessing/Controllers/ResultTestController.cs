@@ -164,5 +164,53 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
+        [Authorize(Roles = "student")]
+        [HttpGet]
+        [Route("checkingAttempt/{idTest}")]
+        public IActionResult CheckingAttempt(long idTest)
+        {
+            try
+            {
+                var studentId = User.FindFirst("id")?.Value;
+                var result = service.CheckingStudentResult(idTest, Convert.ToInt16(studentId));
+                if(result == null)
+                {
+                    return StatusCode(200);
+                }
+                if (result.Minutes <= 0)
+                {
+                    return Json(service.CreateResultTest(new AddResultTestStudentDto
+                    {
+                        StudentId = Convert.ToInt16(studentId),
+                        TestId = result.TestId,
+                        UserResponesTest = result.UserResponesTest
+                    }, result.IdResult));
+                }
+                else
+                {
+                    return Json(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
+            [Authorize(Roles = "student")]
+            [HttpPatch]
+            [Route("Attempt/update")]
+             public IActionResult UpdateAttemptTest(AddResultTestStudentDto dto, long idResult)
+            {
+                try
+                {
+                    service.UpdateRespones(dto,idResult);
+                    return StatusCode(200, "The content has been changed");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(520, ex.Message);
+                }
+            }
+        }
     }
-}
+

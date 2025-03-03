@@ -54,5 +54,14 @@ namespace Service.ServiceResultTest
         {
             return repo.CreatResultAndAttempt(testId, studentId);
         }
+
+        public ReturnAttemptDto? CheckingStudentResult(long testId, long studentId)
+        { 
+         return  repo.CheckingStudentResult(testId, studentId);
+        }
+            public void UpdateRespones(AddResultTestStudentDto dto, long idResult)
+        {
+            repo.UpdateRespones(dto, idResult);
+        }
     }
 }

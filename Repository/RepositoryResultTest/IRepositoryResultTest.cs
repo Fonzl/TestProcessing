@@ -19,5 +19,6 @@ namespace Repository.RepositoryResultTest
         ReturnAttemptDto? CheckingStudentResult(long testId,long studentId);
         long CreatResultAndAttempt(long testId, long studentId);
         List<VerifiedUserResponesDto> returnResultDetails(long idResulTest);
+        void UpdateRespones (AddResultTestStudentDto dto, long idResult);
     }
 }
