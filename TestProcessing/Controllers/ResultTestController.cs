@@ -157,7 +157,9 @@ namespace TestProcessing.Controllers
             try
             {
                 var studentId = User.FindFirst("id")?.Value;
-                return Json(service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId)));
+                return Json(new IdAttemptDto { 
+                 Id = service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId))
+                }) ;
             }
             catch (Exception ex)
             {
@@ -171,11 +173,12 @@ namespace TestProcessing.Controllers
         {
             try
             {
+          
                 var studentId = User.FindFirst("id")?.Value;
                 var result = service.CheckingStudentResult(idTest, Convert.ToInt16(studentId));
                 if(result == null)
                 {
-                    return StatusCode(200);
+                    return Json(new AttemptTrueStartDto());
                 }
                 if (result.Minutes <= 0)
                 {
