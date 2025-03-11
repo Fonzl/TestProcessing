@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    public class AttemptTrueStarDto
+    public class AttemptTrueDto
     {
-        public bool IsAttemptTrue = true;
+        public bool IsAttempt = true;
     }
 }

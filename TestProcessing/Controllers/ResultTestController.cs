@@ -178,7 +178,7 @@ namespace TestProcessing.Controllers
                 var result = service.CheckingStudentResult(idTest, Convert.ToInt16(studentId));
                 if(result == null)
                 {
-                    return Json(new AttemptTrueStartDto());
+                    return Json(new AttemptTrueDto());
                 }
                 if (result.Minutes <= 0)
                 {
