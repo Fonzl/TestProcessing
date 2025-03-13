@@ -45,14 +45,14 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpPost]
         [Route("studentPassedTest")]
-        public IActionResult AddResultTest(CreateResultTestDto dto,long attempt)//Расчёт результата теста
+        public IActionResult AddResultTest(CreateResultTestDto dto)//Расчёт результата теста
         {
             try
             {
                 var id = User.FindFirst("id")?.Value;
-                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserResponesTest = dto.UserResponesTest };
+                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserResponesTest = dto.UserResponesTest , idResult = dto.idResult};
 
-                return Json(service.CreateResultTest(studentDto,attempt));
+                return Json(service.CreateResultTest(studentDto));
             }
             catch (Exception ex)
             {
@@ -190,8 +190,10 @@ namespace TestProcessing.Controllers
                     {
                         StudentId = Convert.ToInt16(studentId),
                         TestId = result.TestId,
-                        UserResponesTest = result.UserResponesTest
-                    }, result.IdResult));
+                        UserResponesTest = result.UserResponesTest,
+                        idResult = result.IdResult
+
+                    }));
                 }
                 else
                 {
@@ -206,11 +208,11 @@ namespace TestProcessing.Controllers
             [Authorize(Roles = "student")]
             [HttpPatch]
             [Route("Attempt/update")]
-             public IActionResult UpdateAttemptTest(AddResultTestStudentDto dto, long idResult)
+             public IActionResult UpdateAttemptTest(AddResultTestStudentDto dto)
             {
                 try
                 {
-                    service.UpdateRespones(dto,idResult);
+                    service.UpdateRespones(dto);
                     return StatusCode(200, "The content has been changed");
                 }
                 catch (Exception ex)
