@@ -10,6 +10,6 @@ namespace DTO.ResultTestDto
     {
         public long? Second { get; set; }
         public long? Minutes { get; set; }
-        public long IdResult { get; set; }
+        
     }
 }

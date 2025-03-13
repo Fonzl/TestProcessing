@@ -559,7 +559,7 @@ namespace Repository.RepositoryResultTest
             {
 
                 return new ReturnAttemptDto
-                { IdResult = attempt.Id,
+                { idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
                     Minutes = null
@@ -572,7 +572,7 @@ namespace Repository.RepositoryResultTest
            
                 return new ReturnAttemptDto
                 {
-                    IdResult = attempt.Id,
+                    idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
                     Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalMinutes,
@@ -583,7 +583,7 @@ namespace Repository.RepositoryResultTest
             else{ 
                 return new ReturnAttemptDto
                 {
-                    IdResult = attempt.Id,
+                    idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
                     Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Minutes,

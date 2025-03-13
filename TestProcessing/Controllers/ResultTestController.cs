@@ -191,7 +191,7 @@ namespace TestProcessing.Controllers
                         StudentId = Convert.ToInt16(studentId),
                         TestId = result.TestId,
                         UserResponesTest = result.UserResponesTest,
-                        idResult = result.IdResult
+                        idResult = result.idResult,
 
                     }));
                 }
