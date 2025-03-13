@@ -566,7 +566,7 @@ namespace Repository.RepositoryResultTest
 
                 };
             }
-           if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalMinutes <= 0)
+           if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Seconds <= 0 )
             {
 
            
@@ -580,7 +580,8 @@ namespace Repository.RepositoryResultTest
 
                 };
             }
-            else{ 
+            else{
+                
                 return new ReturnAttemptDto
                 {
                     idResult = attempt.Id,

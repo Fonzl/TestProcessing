@@ -184,7 +184,7 @@ namespace TestProcessing.Controllers
                 {
                     return Json(w);
                 }
-                if (result.Minutes <= 0)
+                if (result.Second <= 0)
                 {
                     return Json(service.CreateResultTest(new AddResultTestStudentDto
                     {
