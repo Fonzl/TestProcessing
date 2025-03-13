@@ -155,7 +155,7 @@ namespace Repository.RepositoryResultTest
             }
             return listResults;
         }
-        public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto,long idResult)// тут  расчёт result
+        public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
         {
             if (context.Tests.Include(x => x.Quests)
                 .FirstOrDefault(x => x.Id == dto.TestId).Quests.Count == dto.UserResponesTest.Count) {
@@ -211,7 +211,6 @@ namespace Repository.RepositoryResultTest
 
                                 });
                             });
-
                             if (Quest.Answers.Where(x => x.IsCorrectAnswer == true).All(x => answerVerfiedUser.Where(y => y.IsResponeUser == true).Select(y => y.Id).Contains(x.Id)))
                             {
                                 correctdefault = true;
@@ -226,6 +225,49 @@ namespace Repository.RepositoryResultTest
                                     Name = Quest.Name
                                 },
                                 IsCorrectQuest = correctdefault,
+                            });
+                            break;
+                        case 2:
+                            bool correctdefault2 = false;
+
+
+                            List<AnswerVerfiedDto> answerVerfiedUser2 = new List<AnswerVerfiedDto>();
+                            Quest.Answers.ForEach(x =>
+                            {
+                                bool isResponeUser;
+
+                                if (responses.First(x => x.QuestId == Quest.Id).UserRespones == null)
+                                {
+                                    isResponeUser = false;
+                                }
+                                else
+                                {
+                                    isResponeUser = responses.First(x => x.QuestId == Quest.Id).UserRespones.Select(y => (long)Convert.ToDouble(y))
+                                    .ToList().Contains(x.Id);
+                                }
+                                answerVerfiedUser2.Add(new AnswerVerfiedDto()
+                                {
+                                    Id = x.Id,
+                                    AnswerText = x.AnswerText,
+                                    IsCorrectAnswer = x.IsCorrectAnswer,
+                                    IsResponeUser = isResponeUser
+
+                                });
+                            });
+                            if (Quest.Answers.Where(x => x.IsCorrectAnswer == true).All(x => answerVerfiedUser2.Where(y => y.IsResponeUser == true).Select(y => y.Id).Contains(x.Id)))
+                            {
+                                correctdefault = true;
+                            }
+                            listVerifiedRespons.Add(new VerifiedUserResponesDto
+                            {
+                                UserRespones = answerVerfiedUser2.Cast<AnswerVerfiedDto>().ToList(),
+                                QuestDto = new QuestDto
+                                {
+                                    Id = Quest.Id,
+                                    Info = Quest.Info,
+                                    Name = Quest.Name
+                                },
+                                IsCorrectQuest = correctdefault2,
                             });
                             break;
                         case 3:
@@ -285,7 +327,7 @@ namespace Repository.RepositoryResultTest
                     listTestEvaluationName = JsonSerializer.Deserialize<List<DTO.TestDto.EvaluationDto>>(test.Evaluations);
                     evaluationName = listTestEvaluationName.Where(x => x.Percent <= resulTest).ToList().Max(x => x.EvaluationName);
                 }
-                var userResponses = context.UserResponses.First(x => x.Id == idResult);
+                var userResponses = context.UserResponses.First(x => x.Id == dto.idResult);
 
 
                 userResponses.ListUserResponses = JsonSerializer.Serialize(responses);
@@ -397,6 +439,44 @@ namespace Repository.RepositoryResultTest
                                 Id = Quest.CategoryTasks.Id,
                                 Name = Quest.CategoryTasks.Name,
                             }           
+                        });
+                        break;
+                    case 2:
+                        bool correctdefault2 = false;
+
+
+                        List<AnswerVerfiedDto> answerVerfiedUser2 = new List<AnswerVerfiedDto>();
+                        Quest.Answers.ForEach(x =>
+                        {
+                            answerVerfiedUser2.Add(new AnswerVerfiedDto()
+                            {
+                                Id = x.Id,
+                                AnswerText = x.AnswerText,
+                                IsCorrectAnswer = x.IsCorrectAnswer,
+                                IsResponeUser = answersUser.Contains(x)
+
+                            });
+                        });
+
+                        if (Quest.Answers.Where(x => x.IsCorrectAnswer == true).All(x => answerVerfiedUser2.Where(y => y.IsResponeUser == true).Select(y => y.Id).Contains(x.Id)))
+                        {
+                            correctdefault = true;
+                        }
+                        listVerifiedRespouns.Add(new VerifiedUserResponesDto
+                        {
+                            UserRespones = answerVerfiedUser2.Cast<AnswerVerfiedDto>().ToList(),
+                            QuestDto = new QuestDto
+                            {
+                                Id = Quest.Id,
+                                Info = Quest.Info,
+                                Name = Quest.Name
+                            },
+                            IsCorrectQuest = correctdefault2,
+                            CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
+                            {
+                                Id = Quest.CategoryTasks.Id,
+                                Name = Quest.CategoryTasks.Name,
+                            }
                         });
                         break;
                     case 3:
@@ -580,9 +660,9 @@ namespace Repository.RepositoryResultTest
         
         }
 
-        public void UpdateRespones(AddResultTestStudentDto dto, long idResult)
+        public void UpdateRespones(AddResultTestStudentDto dto)
         {
-           var respones = context.UserResponses.First(x => x.Id == idResult);
+           var respones = context.UserResponses.First(x => x.Id == dto.idResult);
             respones.ListUserResponses = JsonSerializer.Serialize(dto.UserResponesTest);
             context.UserResponses.Update(respones);
             context.SaveChanges();

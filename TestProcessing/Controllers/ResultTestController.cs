@@ -173,12 +173,16 @@ namespace TestProcessing.Controllers
         {
             try
             {
-          
+
+                AttemptTrueDto w = new AttemptTrueDto()
+                {
+                    IsAttempt = true,
+                };
                 var studentId = User.FindFirst("id")?.Value;
                 var result = service.CheckingStudentResult(idTest, Convert.ToInt16(studentId));
                 if(result == null)
                 {
-                    return Json(new AttemptTrueDto());
+                    return Json(w);
                 }
                 if (result.Minutes <= 0)
                 {

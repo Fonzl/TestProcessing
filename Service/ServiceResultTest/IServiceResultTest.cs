@@ -16,10 +16,10 @@ namespace Service.ServiceResultTest
         List<ResultTestDto> ResultStudentId(long studentId);
         void DeleteResultTest(int id);
         void UpdateResultTest(UpdateResultTestDto updateResultTest);
-        ResultOfAttemptsDTO CreateResultTest(AddResultTestStudentDto createResultTest,long attemptId);
+        ResultOfAttemptsDTO CreateResultTest(AddResultTestStudentDto createResultTest);
         List<DTO.ResultTestDto.VerifiedUserResponesDto> ReturnResultDetails(long idResultTest);
         long CreatResultAndAttempt(long testId, long studentId);
         ReturnAttemptDto? CheckingStudentResult(long testId, long studentId);
-        void UpdateRespones(AddResultTestStudentDto dto, long idResult);
+        void UpdateRespones(AddResultTestStudentDto dto);
     }
 }
