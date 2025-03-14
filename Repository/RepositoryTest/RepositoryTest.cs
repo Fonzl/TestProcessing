@@ -144,21 +144,66 @@ namespace Repository.RepositoryTest
            
         //}
 
-        public List<TestDto> GetTestDiscipline(long disciplineId)//Получаем тесты по всё дисциплине.
+        public List<TestDto> GetTestDiscipline(long disciplineId, long IdUsser)//Получаем тесты по всё дисциплине.
         {
-            var testList = context.Tests.Where(x => x.Discipline.Id == disciplineId).ToList();
-            
-            List<TestDto> list = new List<TestDto>();
-            foreach (var test in testList)
+            var user = context.Users.First(x => x.Id == IdUsser);
+           var result = context.Results
+                .Include(x => x.Responses)
+                .Include(x => x.Test)
+                .Where(x => x.Id == IdUsser).ToList();
+       
+            if (user.RoleId == 3)
             {
-                TestDto dto = new TestDto
+
+                var List = new List<Test>();
+
+                context.Tests
+             .Where(x => x.Discipline.Id == disciplineId).ToList().ForEach(x =>
+             {
+                 if (x.NumberOfAttempts == null)
+                 {
+                     List.Add(x);
+                 }
+                 else
+                 {
+                     if(x.NumberOfAttempts <= result.First(y =>
+                     y.Test.Id == x.Id && y.User.Id == user.Id ).Responses.Count)
+                     {
+                         List.Add(x);
+                     }
+                 }
+
+             }
+
+
+                    );
+                List<TestDto> list = new List<TestDto>();
+                foreach (var test in List)
                 {
-                    Id = test.Id,
-                    Name = test.Name
-                };
-                list.Add(dto);
+                    TestDto dto = new TestDto
+                    {
+                        Id = test.Id,
+                        Name = test.Name
+                    };
+                    list.Add(dto);
+                }
+                return list.OrderBy(x => x.Id).ToList();
             }
-            return list.OrderBy(x => x.Id).ToList();
+            else {
+                var List = context.Tests
+                .Where(x => x.Discipline.Id == disciplineId).ToList();
+                List <TestDto> list = new List<TestDto>();
+                foreach (var test in List)
+                {
+                    TestDto dto = new TestDto
+                    {
+                        Id = test.Id,
+                        Name = test.Name
+                    };
+                    list.Add(dto);
+                }
+                return list.OrderBy(x => x.Id).ToList();
+            }
         }
     }
 }

@@ -104,8 +104,14 @@ namespace TestProcessing.Controllers
         {
             try
             {
-             
-                return Json(service.Login(dto.Name, dto.Password));
+                var user = service.Login(dto.Name, dto.Password);
+                if (user == null)
+                {
+                    return StatusCode(404, "Пользователь не найден");
+                }
+
+
+                return Json(user);
                
             }
             catch (Exception ex)

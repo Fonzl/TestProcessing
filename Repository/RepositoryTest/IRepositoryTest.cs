@@ -15,7 +15,7 @@ namespace Repository.RepositoryTest
         void Delete(long id);
         void Insert(CreateTestDto dto);
         //public List<TestDto> GetTestStudent(long id);
-        public List<TestDto> GetTestDiscipline( long disciplineId);
+        public List<TestDto> GetTestDiscipline( long disciplineId, long IdUsser);
 
     }
 }

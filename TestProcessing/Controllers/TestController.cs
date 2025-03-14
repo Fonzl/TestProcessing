@@ -73,13 +73,15 @@ namespace TestProcessing.Controllers
         {
          try
             {
-                return Json(service.GetTestsListDiscipline(dis));
+                var UserId = User.FindFirst("id")?.Value;
+                return Json(service.GetTestsListDiscipline(dis,Convert.ToInt64( UserId)));
             }
             catch (Exception ex)
             {
                 return StatusCode(520, ex.Message);
             }
         }
+
         // POST api/<ValuesController>
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]

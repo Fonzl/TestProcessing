@@ -15,6 +15,7 @@ namespace Repository.RepositoryResultTest
         List<ResultTestDto> ResultStudentId(long studentId);
         void Update(UpdateResultTestDto dto);
         void Delete(int id);
+        bool CheckingForAccess();
         ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto);
         ReturnAttemptDto? CheckingStudentResult(long testId,long studentId);
         long CreatResultAndAttempt(long testId, long studentId);

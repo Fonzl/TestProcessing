@@ -16,5 +16,6 @@ namespace DTO.UserDto
         [RegularExpression(@"^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{6,}$")]
 
         public string Password { get; set; }
+
     }   
 }

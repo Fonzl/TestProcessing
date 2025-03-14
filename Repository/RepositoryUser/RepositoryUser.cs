@@ -12,15 +12,21 @@ namespace Repository.RepositoryUser
 {
     public class RepositoryUser(ApplicationContext context) : IRepositoryUser
     {
-        public UserDto Login(string name, string password) //Находит юзера и возращает 
+        public UserDto? Login(string name, string password) //Находит юзера и возращает 
         {
             
             
                 var user = context.Users
                     .Include(x => x.Role)
-                    .First(x => x.FullName == name && x.Password == Convert.ToHexString(
+                    .FirstOrDefault(x => x.FullName == name && x.Password == Convert.ToHexString(
                         MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(password))));
-                return (new StudentUserDto
+            if (user == null)
+            {
+                return null;
+            }
+            else
+            {
+                return (new UserDto
                 {
                     Id = user.Id,
                     FullName = user.FullName,
@@ -30,10 +36,12 @@ namespace Repository.RepositoryUser
                         Id = context.Roles.First(x => x.Id == user.RoleId).Id,
                         Name = context.Roles.First(x => x.Id == user.RoleId).Name,
                     }
+                 
 
 
 
                 });
+            }
             
            
         }

@@ -18,6 +18,7 @@ namespace Database
         public List<User>? Users { get; set; }
         public string? Evaluations { get; set; }
         public bool IsCheck {  get; set; } 
+        public long? NumberOfAttempts { get; set; }
     }
 }
     

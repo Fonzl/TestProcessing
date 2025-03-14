@@ -43,7 +43,11 @@ namespace Service.ServiceUser
         public ReturnLoginUser Login(string username,string password) // Находим пользователя по данным и делаем jwt token
         {
 
-            UserDto dto = repo.Login(username,password);
+           var dto = repo.Login(username,password);
+            if(dto == null)
+            {
+                return null;
+            }
             var claims = new List<Claim> {
                 new Claim("id", dto.Id.ToString()),
                 new Claim(ClaimTypes.Role, dto.Role.Name) };

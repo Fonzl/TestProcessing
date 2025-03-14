@@ -105,12 +105,12 @@ namespace Repository.RepositoryResultTest
             var results = studentResultDiscipline.Where(x => x.Test.Discipline.Id == dto.DisciplineId).ToList();
             decimal sum = 0;
             foreach (var result in results)
-            { if (result.Responses.Last().Result == null)
+            { if (result.Responses.OrderByDescending(x => x.Result).First().Result == null)
                 {
                     sum += 0;
                 }
              else
-                { sum += (decimal)result.Responses.Last().Result; }
+                { sum += (decimal)result.Responses.OrderByDescending(x => x.Result).First().Result; }
             }
             decimal staticstic = sum / results.Count;
             return staticstic;
@@ -163,8 +163,17 @@ namespace Repository.RepositoryResultTest
                 //{
 
                 //};
-
-                List<UserRespons> responses = dto.UserResponesTest.ToList();
+                List<UserRespons> responses = new List<UserRespons>();
+                if (dto.UserResponesTest.ToList() == null)
+                {
+                     responses = JsonSerializer.Deserialize<List<UserRespons>>(
+                        context.UserResponses.First(x => x.Id == dto.idResult).ListUserResponses
+                    );
+                }
+                else
+                {
+                     responses = dto.UserResponesTest.ToList();
+                }
 
                 //foreach (var response in responses) {
                 //    foreach (var r in response.UserRespones)
@@ -550,6 +559,11 @@ namespace Repository.RepositoryResultTest
                 .Include(x => x.Test)
                 .Include(x => x.Responses)
                 .FirstOrDefault(x => x.Test.Id == testId && x.User.Id == studentId);
+           
+            if (result == null)
+            {
+                return null;
+            }
             var attempt = result.Responses.FirstOrDefault(x => x.IsFinish == false);
             if (attempt == null )
             {
@@ -668,7 +682,11 @@ namespace Repository.RepositoryResultTest
             context.UserResponses.Update(respones);
             context.SaveChanges();
         }
-        
+
+        public bool CheckingForAccess()
+        {
+            throw new NotImplementedException();
+        }
     }
     }
     

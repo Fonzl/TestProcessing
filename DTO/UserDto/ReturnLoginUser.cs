@@ -16,5 +16,6 @@ namespace DTO.UserDto
         public string UserName { get; set; }
         public RoleDto.RoleDto RoleDto { get; set; }
         
+
     }
 }
