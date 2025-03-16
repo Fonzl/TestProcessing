@@ -124,7 +124,26 @@ namespace Repository.RepositoryUser
             context.Users.Update(user);
             context.SaveChanges();
         }
-      
 
+        public List<ShortUserDto> GetStudentIdGroup(long idGroup)
+        {
+           var listStudent = context.Users
+                .Include(x => x.Group)
+                .Where(x =>  x.Group.Id == idGroup).ToList();
+            var listUserDto = new List<ShortUserDto>();
+            listStudent.ForEach(x =>
+            {
+                listUserDto.Add(new UserDto
+                {
+                    Id = x.Id,
+                    FullName = x.FullName,
+
+
+
+                });
+                
+            });
+            return listUserDto;
+        }
     }
 }

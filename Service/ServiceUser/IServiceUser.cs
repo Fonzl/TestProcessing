@@ -15,5 +15,6 @@ namespace Service.ServiceUser
         void UpdateUser(UpdateUserDto user);
         void DeleteUser(int id);
         void CreateUser(CreateUserDto user);
+        public List<ShortUserDto> GetStudentIdGroup(long idGroup);
     }
 }

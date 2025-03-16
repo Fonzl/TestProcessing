@@ -38,7 +38,7 @@ namespace Repository.RepositoryGroup
                 });
             }
             return listGroup;
-            return null;
+          
         }
 
         public DetailsGroupDto GetGroupDto(long id)

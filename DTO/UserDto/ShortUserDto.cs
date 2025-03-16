@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace DTO.UserDto
 {
-    public class UserDto : ShortUserDto
+    public class ShortUserDto
     {
+        public long Id { get; set; }
 
-        public RoleDto.RoleDto Role { get; set; }
+        public string FullName { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace Repository.RepositoryUser
         void Update(UpdateUserDto dto);
         void Delete(long id);
         void Insert(CreateUserDto dto);
+        public List<ShortUserDto> GetStudentIdGroup(long idGroup);// Выыод студентов группы
     }
 }

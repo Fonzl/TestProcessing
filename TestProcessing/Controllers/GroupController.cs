@@ -46,7 +46,7 @@ namespace GroupProcessing.Controllers
             }
         }
         [Authorize(Roles = "teacher")]
-        [HttpGet("Discipline/{id}")]
+        [HttpGet("Discipline/{id}")]//Возрает список групп по дисцилине
         public IActionResult GetDisciplineGroup(int id)
         {
             try

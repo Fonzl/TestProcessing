@@ -17,5 +17,6 @@ namespace Repository.RepositoryGroup
         void Update(UpdateGroupDto dto);
         void Delete(long id);
         void Insert(CreateGroupDto dto);
+     
     }
 }

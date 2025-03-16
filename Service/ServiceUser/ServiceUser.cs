@@ -30,6 +30,11 @@ namespace Service.ServiceUser
             repo.Delete(id);
         }
 
+        public List<ShortUserDto> GetStudentIdGroup(long idGroup)
+        {
+            return repo.GetStudentIdGroup(idGroup);
+        }
+
         public StudentUserDto GetUser(long id)
         {
             return  repo.GetUser(id);
