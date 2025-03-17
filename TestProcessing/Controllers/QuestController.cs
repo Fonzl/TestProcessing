@@ -44,7 +44,23 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                return Json(serviceQuest.GetQuest(id));
+                var StringSettings = configuration.GetSection("ConnectionStrings");
+                var s = StringSettings["ServerConnectkingString"];
+                var listPath = new List<string>(); 
+
+               var quest = serviceQuest.GetQuest(id);
+                quest.PathToImg.ForEach(x =>
+                {
+
+                 listPath.Add( s + "/Quest/postQuestImg/" + x);
+                    
+                });
+                quest.PathToImg.Clear();
+                listPath.ForEach(x =>
+                {
+                    quest.PathToImg.Add(x);
+                });
+                return Json(quest);
             }
             catch (Exception ex)
             {
@@ -89,7 +105,7 @@ namespace TestProcessing.Controllers
                     }
 
                     var s = StringSettings["ServerConnectkingString"];
-                    dto.PathPhotos.Add(s  + "/Quest/postQuestImg/" + myUniqueFileName + file.FileName);
+                    dto.PathPhotos.Add( myUniqueFileName + file.FileName);
                 }
                
                 
@@ -162,6 +178,32 @@ namespace TestProcessing.Controllers
                 string type;
                 new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
                 return File(mas,type );
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
+        [HttpDelete]
+        [Route("DeleteQuestImg/{nameImg}")]
+
+        public IActionResult DeletePhoto(string nameImg)//по id test
+        {
+            var tokenSettings = configuration.GetSection("ConnectionStrings");
+            try
+            {
+                var appPath = appEnvironment.ContentRootPath;
+                string path = appPath + tokenSettings["FilePatchShortQuest"] + "\\" + nameImg;
+                FileInfo fileInf = new FileInfo(path);
+                if (fileInf.Exists)
+                {
+                    fileInf.Delete();
+                    // альтернатива с помощью класса File
+                    // File.Delete(path);
+                }
+
+                return StatusCode(200, "Deletion was successful");
 
             }
             catch (Exception ex)

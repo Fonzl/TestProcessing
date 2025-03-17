@@ -145,5 +145,30 @@ namespace Repository.RepositoryUser
             });
             return listUserDto;
         }
+
+        public List<StudentAttemptResultDto> GetStudentAttempt(long idGroup, long idTest)
+        {
+            var listStudent = context.Users
+                .Include(x => x.Group)
+                .Where(x => x.Group.Id == idGroup).ToList();//Вытащили все студентов группы
+            var resultsStudents = context.Results
+                .Include(x => x.Responses)
+                .Include(x => x.User.Group)
+                .Include(x => x.Test)
+                .Where(x => x.Test.Id == idTest && listStudent.Select(y => y.Id).ToList().Contains(x.User.Id)).ToList();//Находит все результаты студентов по листу студентов и тесту
+            var listStudentAttempt = new List<StudentAttemptResultDto>();
+            resultsStudents.ForEach(x =>
+            {
+                listStudentAttempt.Add(new StudentAttemptResultDto
+                {
+                    Id= x.User.Id,
+                    FullName = x.User.FullName,
+                    IdAttempt = x.Responses.OrderByDescending(x => x.Result).First().Id,
+                    Result = x.Responses.OrderByDescending(x => x.Result).FirstOrDefault().Result
+                });
+            });
+            return listStudentAttempt;
+
+        }
     }
 }

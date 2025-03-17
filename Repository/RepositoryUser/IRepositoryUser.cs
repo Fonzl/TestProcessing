@@ -18,5 +18,6 @@ namespace Repository.RepositoryUser
         void Delete(long id);
         void Insert(CreateUserDto dto);
         public List<ShortUserDto> GetStudentIdGroup(long idGroup);// Выыод студентов группы
+        public List<StudentAttemptResultDto> GetStudentAttempt(long idGroup,long idTest);
     }
 }

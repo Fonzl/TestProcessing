@@ -45,6 +45,20 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
+        [HttpGet]
+        [Route("ListStudent/Group/{idGroup}/Test/{idTest}")]
+        [Authorize(Roles = "admin,teacher")]
+        public IActionResult GetListStusentAttemptIdGroup(long idGroup, long idTest)//Отдаёт список студентов и их выший бал на тестирование
+        {
+            try
+            {
+                return Json(service.GetStudentAttempt(idGroup,idTest));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
         // GET api/<ValuesController>/5
         [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
