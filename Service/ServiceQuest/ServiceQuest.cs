@@ -44,9 +44,9 @@ namespace Service.ServiceQuest
 
         
         
-        public void UpdateQuest(UpdateQuestDto updateQuest)
+        public List<string>? UpdateQuest(UpdateQuestDto updateQuest)
         {
-            repo.Update(updateQuest);
+           return repo.Update(updateQuest);
         }
     }
 }

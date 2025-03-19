@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.StaticFiles;
 using static System.Net.WebRequestMethods;
 using Microsoft.Extensions.Configuration;
 using Service.ServiceQuest;
+using System.IO;
+using System.Diagnostics.Tracing;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace TestProcessing.Controllers
 {
@@ -44,23 +47,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                var StringSettings = configuration.GetSection("ConnectionStrings");
-                var s = StringSettings["ServerConnectkingString"];
-                var listPath = new List<string>(); 
-
-               var quest = serviceQuest.GetQuest(id);
-                quest.PathToImg.ForEach(x =>
-                {
-
-                 listPath.Add( s + "/Quest/postQuestImg/" + x);
-                    
-                });
-                quest.PathToImg.Clear();
-                listPath.ForEach(x =>
-                {
-                    quest.PathToImg.Add(x);
-                });
-                return Json(quest);
+                return Json(serviceQuest.GetQuest(id));
             }
             catch (Exception ex)
             {
@@ -86,9 +73,9 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]
         [Route("add")]
-        public IActionResult AddQuest([FromForm] CreateQuestDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile, IWebHostEnvironment env)
+        public IActionResult AddQuest([FromForm] CreateQuestDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
-            dto.PathPhotos = new List<string>();
+
             try
             {
                 List<string> list = new List<string>();
@@ -97,20 +84,22 @@ namespace TestProcessing.Controllers
                 {
                     var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
                                                                 // путь к папке Files
-                    string path = appEnvironment.ContentRootPath + StringSettings["FilePatchShortQuest"] + myUniqueFileName + file.FileName;// myUniqueFileName+"."+uploadedFile.ContentType;
-                                                                                                // сохраняем файл в папку Files 
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    string path = appEnvironment.ContentRootPath + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
+                                                                                                                                            // сохраняем файл в папку Files 
                     using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
-
-                    var s = StringSettings["ServerConnectkingString"];
-                    dto.PathPhotos.Add( myUniqueFileName + file.FileName);
+                    list.Add(StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension);
                 }
-               
-                
 
-                return Json( serviceQuest.CreateQuest(dto));
+                list.ForEach(x =>
+                {
+                    dto.PathPhotos.Add(x);
+                });
+
+                return Json(serviceQuest.CreateQuest(dto));
             }
             catch (Exception ex)
             {
@@ -122,12 +111,53 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]
         [HttpPatch]
         [Route("update")]
-        public IActionResult UpdateQuest(UpdateQuestDto dto)
+        public IActionResult UpdateQuest([FromForm] UpdateQuestDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
             try
             {
-                serviceQuest.UpdateQuest(dto);
-                return StatusCode(200, "The content has been changed");
+                dto.PathPhotos = new List<string>();
+                List<string> list = new List<string>();
+                var StringSettings = configuration.GetSection("ConnectionStrings");//
+                foreach (var file in uploadedFile)
+                {
+                    var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
+                                                                // путь к папке Files
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    string path = appEnvironment.ContentRootPath + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
+                                                                                                                                            // сохраняем файл в папку Files 
+                    using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    list.Add(StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension);
+                }
+                list.ForEach(x =>
+                {
+                    dto.PathPhotos.Add(x);
+                });
+                var listDelete = serviceQuest.UpdateQuest(dto);
+                if (listDelete == null)
+                {
+                    return StatusCode(200, "The content has been changed");
+                }
+                else
+                {
+                    foreach (var item in listDelete)
+                    {
+                        var appPath = appEnvironment.ContentRootPath;
+                        FileInfo fileInf = new FileInfo(appPath + item);
+                        if (fileInf.Exists)
+                        {
+                            fileInf.Delete();
+                            // альтернатива с помощью класса File
+                            // File.Delete(path);
+                        }
+
+
+                    }
+                    return StatusCode(200, "The content has been changed");
+                }
+
             }
             catch (Exception ex)
             {
@@ -165,19 +195,19 @@ namespace TestProcessing.Controllers
             }
         }
         [HttpGet]
-        [Route("postQuestImg/{nameImg}")] 
+        [Route("postQuestImg/{nameImg}")]
 
-        public IActionResult RetunPhoto(string nameImg)//по id test
+        public IActionResult ReturnPhoto(string nameImg)//по id test
         {
             var tokenSettings = configuration.GetSection("ConnectionStrings");
             try
             {
-               var appPath = appEnvironment.ContentRootPath;
-                string path = appPath+ tokenSettings["FilePatchShortQuest"]  + "\\"+ nameImg;
+                var appPath = appEnvironment.ContentRootPath;
+                string path = appPath + tokenSettings["FilePatchShortQuest"] + "\\" + nameImg;
                 byte[] mas = System.IO.File.ReadAllBytes(path);
                 string type;
                 new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
-                return File(mas,type );
+                return File(mas, type);
 
             }
             catch (Exception ex)
@@ -186,7 +216,7 @@ namespace TestProcessing.Controllers
             }
         }
         [HttpDelete]
-        [Route("DeleteQuestImg/{nameImg}")]
+        [Route("DeleteQuestImg")]
 
         public IActionResult DeletePhoto(string nameImg)//по id test
         {
@@ -210,6 +240,28 @@ namespace TestProcessing.Controllers
             {
                 return StatusCode(520, ex.Message);
             }
+
         }
+
+        //public List<string> SaveFile(Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
+        //{
+        //    List<string> list = new List<string>();
+        //    var StringSettings = configuration.GetSection("ConnectionStrings");//
+        //    foreach (var file in uploadedFile)
+        //    {
+        //        var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
+        //                                                    // путь к папке Files
+        //        var fileExtension = Path.GetExtension(file.FileName);
+        //        string path = appEnvironment.ContentRootPath + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
+        //                                                                                                                                // сохраняем файл в папку Files 
+        //        using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+        //        {
+        //            file.CopyTo(fileStream);
+        //        }
+        //        list.Add(StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension);
+        //    }
+        //    return list;
+        //}
+
     }
 }

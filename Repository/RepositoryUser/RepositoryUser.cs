@@ -14,12 +14,12 @@ namespace Repository.RepositoryUser
     {
         public UserDto? Login(string name, string password) //Находит юзера и возращает 
         {
-            
-            
-                var user = context.Users
-                    .Include(x => x.Role)
-                    .FirstOrDefault(x => x.FullName == name && x.Password == Convert.ToHexString(
-                        MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(password))));
+
+
+            var user = context.Users
+                .Include(x => x.Role)
+                .FirstOrDefault(x => x.FullName == name && x.Password == Convert.ToHexString(
+                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(password))));
             if (user == null)
             {
                 return null;
@@ -36,14 +36,10 @@ namespace Repository.RepositoryUser
                         Id = context.Roles.First(x => x.Id == user.RoleId).Id,
                         Name = context.Roles.First(x => x.Id == user.RoleId).Name,
                     }
-                 
-
-
-
                 });
             }
-            
-           
+
+
         }
 
         public void Delete(long id)
@@ -74,11 +70,11 @@ namespace Repository.RepositoryUser
                 },
                 Role = new DTO.RoleDto.RoleDto
                 {
-                    Id=user.Role.Id,
+                    Id = user.Role.Id,
                     Name = user.Role.Name,
                 }
-     
-                
+
+
             });
 
         }
@@ -92,7 +88,7 @@ namespace Repository.RepositoryUser
                 users.Add(new UserDto
                 {
                     Id = user.Id,
-                   FullName= user.FullName,
+                    FullName = user.FullName,
                 });
             }
             return users;
@@ -102,8 +98,8 @@ namespace Repository.RepositoryUser
         {
             var user = new User
             {
-               FullName = dto.FullName,
-               Password = Convert.ToHexString(
+                FullName = dto.FullName,
+                Password = Convert.ToHexString(
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(dto.Password))),
                 Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList(),
                 Group = context.Groups.FirstOrDefault(x => x.Id == dto.Group),
@@ -115,21 +111,21 @@ namespace Repository.RepositoryUser
         }
 
         public void Update(UpdateUserDto dto)
-        {   
+        {
             var user = context.Users.First(x => x.Id == dto.Id);
             user.FullName = dto.FullName;
             user.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();
             user.Group = context.Groups.FirstOrDefault(x => x.Id == dto.Group);
-            user.Role = context.Roles.First(x => x.Id == dto.Role); 
+            user.Role = context.Roles.First(x => x.Id == dto.Role);
             context.Users.Update(user);
             context.SaveChanges();
         }
 
         public List<ShortUserDto> GetStudentIdGroup(long idGroup)
         {
-           var listStudent = context.Users
-                .Include(x => x.Group)
-                .Where(x =>  x.Group.Id == idGroup).ToList();
+            var listStudent = context.Users
+                 .Include(x => x.Group)
+                 .Where(x => x.Group.Id == idGroup).ToList();
             var listUserDto = new List<ShortUserDto>();
             listStudent.ForEach(x =>
             {
@@ -141,7 +137,7 @@ namespace Repository.RepositoryUser
 
 
                 });
-                
+
             });
             return listUserDto;
         }
@@ -161,7 +157,7 @@ namespace Repository.RepositoryUser
             {
                 listStudentAttempt.Add(new StudentAttemptResultDto
                 {
-                    Id= x.User.Id,
+                    Id = x.User.Id,
                     FullName = x.User.FullName,
                     IdAttempt = x.Responses.OrderByDescending(x => x.Result).First().Id,
                     Result = x.Responses.OrderByDescending(x => x.Result).FirstOrDefault().Result

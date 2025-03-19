@@ -25,6 +25,7 @@ using Repository.RepositoryDirection;
 using Service.ServiceDirection;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +89,13 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseAuthorization();
+app.UseStaticFiles();    //Serve files from wwwroot
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+            Path.Combine(builder.Environment.ContentRootPath, "Img")),
+    RequestPath = "/Img"
+});
 
 app.MapControllers();
 

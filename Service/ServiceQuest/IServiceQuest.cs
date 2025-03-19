@@ -13,7 +13,7 @@ namespace Service.ServiceQuest
         List<QuestDto> GetAllQuests();
         List<DetailsQuestDto> GetListQuests(int id);
         void DeleteQuest(int id);
-        void UpdateQuest(UpdateQuestDto updateQuest);
+        List<string>? UpdateQuest(UpdateQuestDto updateQuest);
         long CreateQuest(CreateQuestDto createQuest);
       
     }

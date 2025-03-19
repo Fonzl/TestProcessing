@@ -130,20 +130,18 @@ namespace Repository.RepositoryQuest
             return quest.Id;
         }
 
-        public void Update(UpdateQuestDto dto)
+        public List<string>? Update(UpdateQuestDto dto)
         {
-            var quest = context.Quests.First(x => x.Id == dto.Id);
-
-
+            var quest = context.Quests.Include(x => x.Tests).First(x => x.Id == dto.Id);
+            var listPhotoDelete = quest.PathToImage.Where(x => dto.PathPhotos.Contains(x) == false).ToList();
             quest.Name = dto.Name;
             quest.Info = dto.Info;
-            quest.Answers = context.Answers.Where(x => dto.Answers.Contains(x.Id)).ToList();
             quest.CategoryTasks = context.CategoryTasks.First(x => x.Id == dto.CategoryTaskId);
-            quest.Tests = context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList();
-
-            
+            quest.Tests = context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList(); 
+            quest.PathToImage = dto.PathPhotos;
             context.Quests.Update(quest);
             context.SaveChanges();
+            return listPhotoDelete;
         }
     }
 }

@@ -12,7 +12,8 @@ namespace DTO.QuestDto
         public string Name { get; set; }
         public string Info { get; set; }
         public short CategoryTaskId { get; set; }
-        public List<long> Tests { get; set; }
-        public List<long> Answers { get; set; }
+        public List<long>? Tests { get; set; }
+        public List<string>? PathPhotos { get; set; }
+       
     }
 }
