@@ -150,7 +150,7 @@ namespace Repository.RepositoryTest
            var result = context.Results
                 .Include(x => x.Responses)
                 .Include(x => x.Test)
-                .Where(x => x.Id == IdUsser).ToList();
+                .Where(x => x.User.Id == IdUsser).ToList();
        
             if (user.RoleId == 3)
             {
@@ -166,8 +166,9 @@ namespace Repository.RepositoryTest
                  }
                  else
                  {
-                     if(x.NumberOfAttempts <= result.First(y =>
-                     y.Test.Id == x.Id && y.User.Id == user.Id ).Responses.Count)
+                     var AttemptTest = result.First(y =>
+                     y.Test.Id == x.Id && y.User.Id == user.Id).Responses.Count;
+                     if (x.NumberOfAttempts <= AttemptTest)
                      {
                          List.Add(x);
                      }
