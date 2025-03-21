@@ -89,7 +89,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseAuthorization();
-app.UseStaticFiles();    //Serve files from wwwroot
+   //Serve files from wwwroot
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
