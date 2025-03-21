@@ -168,7 +168,7 @@ namespace Repository.RepositoryTest
                  {
                      var AttemptTest = result.First(y =>
                      y.Test.Id == x.Id && y.User.Id == user.Id).Responses.Count;
-                     if (x.NumberOfAttempts <= AttemptTest)
+                     if (x.NumberOfAttempts < AttemptTest)
                      {
                          List.Add(x);
                      }
