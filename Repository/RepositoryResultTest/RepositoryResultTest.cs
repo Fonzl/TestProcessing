@@ -312,7 +312,9 @@ namespace Repository.RepositoryResultTest
                                 {
                                     Id = Quest.Id,
                                     Info = Quest.Info,
-                                    Name = Quest.Name
+                                    Name = Quest.Name,
+                                    PathImg = Quest.PathToImage
+
                                 },
                                 IsCorrectQuest = answerVerfiedUser3.IsResponeUser,
                                 CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
