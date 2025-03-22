@@ -55,6 +55,7 @@ builder.Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 var tokenSettings = builder.Configuration.GetSection("Token");
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -79,6 +80,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
+
 }
 
 
@@ -87,15 +89,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
-
+Console.WriteLine(builder.Environment.WebRootPath);
 app.UseAuthorization();
    //Serve files from wwwroot
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-            Path.Combine(builder.Environment.ContentRootPath, "Img")),
-    RequestPath = "/Img"
-});
+app.UseStaticFiles();
 
 app.MapControllers();
 
