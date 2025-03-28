@@ -165,11 +165,18 @@ namespace Repository.RepositoryTest
                  {
                      List.Add(x);
                  }
+                
                  else
                  {
-                     var AttemptTest = result.First(y =>
-                     y.Test.Id == x.Id && y.User.Id == user.Id).Responses.Count;
-                     if (x.NumberOfAttempts < AttemptTest)
+                     var AttemptTest = result.FirstOrDefault(y =>
+                     y.Test.Id == x.Id && y.User.Id == user.Id);
+                     if (AttemptTest == null)                        //такой логики не должно быть в системе  но из-за дропов бд она появилась 
+                     {
+                         List.Add(x);
+                         return;
+                     }
+                       
+                     if (x.NumberOfAttempts > AttemptTest.Responses.Count)
                      {
                          List.Add(x);
                      }
@@ -220,7 +227,7 @@ namespace Repository.RepositoryTest
                .Include(x => x.Test)
                .Where(x => x.User.Id == IdUsser).ToList();
             if (test == null) return null;
-
+            
             return (new DetailsTestDto
             {
                 Id = test.Id,
