@@ -14,6 +14,7 @@ namespace DTO.TestDto
         public DisciplineDto.DisciplineDto? Discipline { get; set; }
         public long? Time {  get; set; }
         public bool IsCheck { get; set; }
+        public long? UserAttempt { get; set; }
 
     }
 }

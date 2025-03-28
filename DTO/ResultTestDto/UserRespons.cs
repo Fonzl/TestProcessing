@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace DTO.ResultTestDto
 {
-    public class UserRespons
+    public class UserRespon
+
     {
         public long QuestId { get; set; }
         public List<string>? UserRespones {  get; set; }

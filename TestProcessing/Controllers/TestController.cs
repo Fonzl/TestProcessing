@@ -39,13 +39,27 @@ namespace TestProcessing.Controllers
 
 
         //Тесты юзеров по дисциплине 
-        [Authorize]
+        [Authorize (Roles = "teacher,admin")]
         [HttpGet("{id}")]
         public IActionResult GetTest(int id)
         {
             try
             {
                 return Json(service.GetTest(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
+        [Authorize (Roles = "student")]
+        [HttpGet("{testId}/student")]
+        public IActionResult GetTestStusent(long testId)
+        {
+            try
+            {
+                var UserId = User.FindFirst("id")?.Value;
+                return Json(service.GetTestStudentDto(testId, Convert.ToInt64(UserId)));
             }
             catch (Exception ex)
             {

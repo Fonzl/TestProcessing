@@ -92,8 +92,13 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 Console.WriteLine(builder.Environment.WebRootPath);
 app.UseAuthorization();
    //Serve files from wwwroot
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//            Path.Combine(builder.Environment.ContentRootPath, "Img")),
+//    RequestPath = "/Img"
+//});
 app.UseStaticFiles();
-
 app.MapControllers();
 
 app.Run();

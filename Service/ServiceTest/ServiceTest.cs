@@ -46,5 +46,10 @@ namespace Service.ServiceTest
         {
             return repo.GetTestDiscipline( disciplineId,  IdUsser);
         }
+
+        public DetailsTestDto GetTestStudentDto(long testId, long IdUsser)
+        {
+            return repo.GetTestStudentDto( testId, IdUsser);
+        }
     }
 }

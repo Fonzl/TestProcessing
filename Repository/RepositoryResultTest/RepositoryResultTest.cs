@@ -163,10 +163,10 @@ namespace Repository.RepositoryResultTest
                 //{
 
                 //};
-                List<UserRespons> responses = new List<UserRespons>();
+                List<UserRespon> responses = new List<UserRespon>();
                 if (dto.UserResponesTest.ToList() == null)
                 {
-                     responses = JsonSerializer.Deserialize<List<UserRespons>>(
+                     responses = JsonSerializer.Deserialize<List<UserRespon>>(
                         context.UserResponses.First(x => x.Id == dto.idResult).ListUserResponses
                     );
                 }
@@ -577,7 +577,7 @@ namespace Repository.RepositoryResultTest
                 return new ReturnAttemptDto
                 { idResult = attempt.Id,
                     TestId = testId,
-                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
                     Minutes = null
 
                 };
@@ -590,7 +590,7 @@ namespace Repository.RepositoryResultTest
                 {
                     idResult = attempt.Id,
                     TestId = testId,
-                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
                     Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalMinutes,
                     Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalSeconds
 
@@ -602,7 +602,7 @@ namespace Repository.RepositoryResultTest
                 {
                     idResult = attempt.Id,
                     TestId = testId,
-                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespons>>(attempt.ListUserResponses),
+                    UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
                     Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Minutes,
                      Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Seconds
                 };
@@ -617,10 +617,10 @@ namespace Repository.RepositoryResultTest
                 .Include(x => x.User)
                 .FirstOrDefault(x => x.User.Id == studentId && x.Test.Id == testId) == null)
             {
-                var listResponses = new List<UserRespons>();
+                var listResponses = new List<UserRespon>();
                 context.Tests.Include(x => x.Quests).First(x => x.Id == testId).Quests.ForEach(x =>
                 {
-                    listResponses.Add(new UserRespons
+                    listResponses.Add(new UserRespon
                     {
                         QuestId = x.Id,
                         UserRespones = null
@@ -649,10 +649,10 @@ namespace Repository.RepositoryResultTest
             }
             else
             {
-                var listResponses = new List<UserRespons>();
+                var listResponses = new List<UserRespon>();
                 context.Tests.Include(x => x.Quests).First(x => x.Id == testId).Quests.ForEach(x =>
                 {
-                    listResponses.Add(new UserRespons
+                    listResponses.Add(new UserRespon
                     {
                         QuestId = x.Id,
                         UserRespones = null

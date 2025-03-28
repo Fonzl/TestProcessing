@@ -18,7 +18,7 @@ namespace Service.ServiceTest
         void CreateTest(CreateTestDto createTestDto);
         //public List<TestDto> GetTestsListStudent(long id);
         public List<TestDto> GetTestsListDiscipline(long disciplineId, long IdUsser);
-
+        DetailsTestDto GetTestStudentDto(long testId, long IdUsser);
 
     }
 }
