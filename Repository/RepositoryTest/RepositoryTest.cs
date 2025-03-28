@@ -21,7 +21,7 @@ namespace Repository.RepositoryTest
                 .Include(x => x.Quests)
                 .SingleOrDefault(x => x.Id == id);
             if (test == null) return null;
-            
+
             return (new DetailsTestDto
             {
                 Id = test.Id,
@@ -36,11 +36,12 @@ namespace Repository.RepositoryTest
                 },
                 Time = test.TimeInMinutes,
                 IsCheck = test.IsCheck,
+                UserAttempt = test.NumberOfAttempts,
 
             });
-            
 
-            
+
+
         }
 
         public void Delete(long id)
@@ -54,7 +55,7 @@ namespace Repository.RepositoryTest
         public List<TestDto> GetTestList()
         {
             var testList = context.Tests;
-            List<TestDto > list = new List<TestDto>();
+            List<TestDto> list = new List<TestDto>();
             foreach (var test in testList)
             {
                 TestDto dto = new TestDto
@@ -64,7 +65,7 @@ namespace Repository.RepositoryTest
                 };
                 list.Add(dto);
             }
-            return list;  
+            return list;
         }
 
         public void Insert(CreateTestDto dto)
@@ -73,7 +74,7 @@ namespace Repository.RepositoryTest
             foreach (var item in dto.Quests)
             {
                 List<Answer> listAnswer = new List<Answer>();
-                foreach(var answer in item.answerList)
+                foreach (var answer in item.answerList)
                 {
                     listAnswer.Add(new Answer
                     {
@@ -89,7 +90,7 @@ namespace Repository.RepositoryTest
                     CategoryTasks = context.CategoryTasks.First(x => x.Id == item.questDto.CategoryTaskId),
                     Info = item.questDto.Info,
                     Name = item.questDto.Name,
-                    
+
                 });
 
             }
@@ -98,12 +99,12 @@ namespace Repository.RepositoryTest
                 Name = dto.Name,
                 InfoTest = dto.InfoTest,
                 Quests = list,
-                Discipline  = context.Disciplines.First(x => x.Id == dto.DisciplineId),
+                Discipline = context.Disciplines.First(x => x.Id == dto.DisciplineId),
                 TimeInMinutes = dto.Time,
                 Evaluations = JsonSerializer.Serialize(dto.EvaluationDtos),
-                IsCheck = dto.IsCheck, 
-                
-                
+                IsCheck = dto.IsCheck,
+
+
             };
             context.Tests.Add(test);
             context.SaveChanges();
@@ -141,17 +142,17 @@ namespace Repository.RepositoryTest
         //        list.Add(dto);
         //    }
         //    return list;
-           
+
         //}
 
         public List<TestDto> GetTestDiscipline(long disciplineId, long IdUsser)//Получаем тесты по всё дисциплине.
         {
             var user = context.Users.First(x => x.Id == IdUsser);
-           var result = context.Results
-                .Include(x => x.Responses)
-                .Include(x => x.Test)
-                .Where(x => x.User.Id == IdUsser).ToList();
-       
+            var result = context.Results
+                 .Include(x => x.Responses)
+                 .Include(x => x.Test)
+                 .Where(x => x.User.Id == IdUsser).ToList();
+
             if (user.RoleId == 3)
             {
 
@@ -190,10 +191,11 @@ namespace Repository.RepositoryTest
                 }
                 return list.OrderBy(x => x.Id).ToList();
             }
-            else {
+            else
+            {
                 var List = context.Tests
                 .Where(x => x.Discipline.Id == disciplineId).ToList();
-                List <TestDto> list = new List<TestDto>();
+                List<TestDto> list = new List<TestDto>();
                 foreach (var test in List)
                 {
                     TestDto dto = new TestDto
@@ -205,6 +207,36 @@ namespace Repository.RepositoryTest
                 }
                 return list.OrderBy(x => x.Id).ToList();
             }
+        }
+
+        public DetailsTestDto GetTestStudentDto(long testId, long IdUsser)
+        {
+            var user = context.Users.First(x => x.Id == IdUsser);
+            var test = context.Tests
+                .Include(x => x.Discipline)
+                .SingleOrDefault(x => x.Id == testId);
+            var result = context.Results
+               .Include(x => x.Responses)
+               .Include(x => x.Test)
+               .Where(x => x.User.Id == IdUsser).ToList();
+            if (test == null) return null;
+
+            return (new DetailsTestDto
+            {
+                Id = test.Id,
+                InfoTest = test.InfoTest,
+                Name = test.Name,
+                Discipline = new DTO.DisciplineDto.DisciplineDto
+                {
+                    Id = test.Discipline.Id,
+                    Name = test.Discipline.Name
+
+                },
+                Time = test.TimeInMinutes,
+                IsCheck = test.IsCheck,
+                UserAttempt = test.NumberOfAttempts - result.FirstOrDefault(y => y.Test.Id == test.Id && y.User.Id == user.Id).Responses.Count ,
+                    
+            });
         }
     }
 }
