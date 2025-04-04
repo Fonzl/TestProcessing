@@ -11,7 +11,7 @@ namespace DTO.QuestDto
         public long Id { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
-        public List<string>? PathImg { get; set; }
+        public List<string> PathImg { get; set; }
         
     }
 }

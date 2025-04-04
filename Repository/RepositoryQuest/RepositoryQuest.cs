@@ -68,7 +68,7 @@ namespace Repository.RepositoryQuest
                         Id = quest.CategoryTasks.Id,
                         Name = quest.CategoryTasks.Name,
                     },
-                    PathImg = quest.PathToImage
+                    PathToImg = quest.PathToImage
 
 
 
@@ -103,7 +103,7 @@ namespace Repository.RepositoryQuest
                     Id = quest.CategoryTasks.Id,
                     Name = quest.CategoryTasks.Name,
                 },
-                PathImg = quest.PathToImage
+                PathToImg = quest.PathToImage
             };
             
         }

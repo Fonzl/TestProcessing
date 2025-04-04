@@ -5,7 +5,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>f774c166-67f7-4d29-99f1-71270fe15699</UserSecretsId>
-	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,9 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Img\QuestImg\" />
-    <Folder Include="wwwroot\Img\AnswerImg\" />
-    <Folder Include="wwwroot\Img\" />
+    <Folder Include="wwwroot\AnswerImg\" />
+    <Folder Include="wwwroot\QuestImg\" />
   </ItemGroup>
 
 </Project>
