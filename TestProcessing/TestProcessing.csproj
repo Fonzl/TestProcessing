@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\AnswerImg\" />
-    <Folder Include="wwwroot\QuestImg\" />
+    <Folder Include="wwwroot\Img\QuestImg\" />
   </ItemGroup>
 
 </Project>
