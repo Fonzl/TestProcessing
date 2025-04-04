@@ -12,6 +12,7 @@ namespace DTO.AnswerDto
         public string AnswerText { get; set; }
         public bool IsCorrectAnswer { get; set; }
         public bool IsResponeUser { get; set; } = false;
+        public List<string>? PathImg { get; set; }
 
     }
 }
