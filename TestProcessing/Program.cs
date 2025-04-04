@@ -82,23 +82,28 @@ if (app.Environment.IsDevelopment())
 
 
 }
-
+var patchSettings = builder.Configuration.GetSection("ConnectionStrings");
 
 app.UseHttpsRedirection();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+}); 
 Console.WriteLine(builder.Environment.WebRootPath);
 app.UseAuthorization();
-   //Serve files from wwwroot
+
+//var fileProvider = new PhysicalFileProvider(Path.Combine(patchSettings["FilePatchwwwroot"],"Img"));
+//var requestPath = "/Img";
+//Console.WriteLine(fileProvider);
+
+//// Enable displaying browser links.
 //app.UseStaticFiles(new StaticFileOptions
 //{
-//    FileProvider = new PhysicalFileProvider(
-//            Path.Combine(builder.Environment.ContentRootPath, "Img")),
-//    RequestPath = "/Img"
+//    FileProvider = fileProvider,
+//    RequestPath = requestPath
 //});
 app.UseStaticFiles();
+
 app.MapControllers();
 
 app.Run();
