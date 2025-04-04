@@ -90,15 +90,16 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 Console.WriteLine(builder.Environment.WebRootPath);
+var connectionStrings = builder.Configuration.GetSection("ConnectionStrings");
 app.UseAuthorization();
-   //Serve files from wwwroot
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(
-//            Path.Combine(builder.Environment.ContentRootPath, "Img")),
-//    RequestPath = "/Img"
-//});
-app.UseStaticFiles();
+//Serve files from wwwroot
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+            Path.Combine(connectionStrings["FilePatchwwwroot"], "Img")),
+    RequestPath = "/Img"
+});
+
 app.MapControllers();
 
 app.Run();
