@@ -1,11 +1,14 @@
 ﻿using DTO.AnswerDto;
 using DTO.AnswerDto;
+using DTO.QuestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Service.ServiceAnswer;
+using Service.ServiceQuest;
+using Service.ServiceTest;
 
 
 namespace TestProcessing.Controllers
@@ -70,6 +73,7 @@ namespace TestProcessing.Controllers
         public IActionResult AddAnswer([FromForm] CreateAnswerDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile, IWebHostEnvironment env)
         {
             dto.PathToImg = new List<string>();
+
             try
             {
                 List<string> list = new List<string>();
@@ -78,20 +82,22 @@ namespace TestProcessing.Controllers
                 {
                     var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
                                                                 // путь к папке Files
-                    string path = appEnvironment.ContentRootPath + StringSettings["FilePatchShortAnswer"] + myUniqueFileName + file.FileName;// myUniqueFileName+"."+uploadedFile.ContentType;
-                                                                                                                                            // сохраняем файл в папку Files 
-                    using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortAnswer"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
+                                                                                                                                                // сохраняем файл в папку Files 
+                    using (var fileStream = new FileStream(path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
-
-                    var s = StringSettings["ServerConnectkingString"];
-                    dto.PathToImg.Add(s + "/Answer/postAnswerImg/" + myUniqueFileName + file.FileName);
+                    list.Add(StringSettings["FilePatchShortAnswer"] + myUniqueFileName + fileExtension);
                 }
 
+                list.ForEach(x =>
+                {
+                    dto.PathToImg.Add(x);
+                });
 
-                serviceAnswer.CreateAnswer(dto);
-                return StatusCode(201);
+                return Json(serviceAnswer.CreateAnswer(dto));
             }
             catch (Exception ex)
             {
@@ -103,18 +109,64 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]
         [HttpPatch]
         [Route("update")]
-        public IActionResult UpdateAnswer(UpdateAnswerDto dto)
+        public IActionResult UpdateQuest([FromForm] UpdateAnswerDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
             try
             {
-                serviceAnswer.UpdateAnswer(dto);
-                return StatusCode(200, "The content has been changed");
+                dto.PathToImage = new List<string>();
+                List<string> list = new List<string>();
+                var StringSettings = configuration.GetSection("ConnectionStrings");//
+                foreach (var file in uploadedFile)
+                {
+                    var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
+                                                                // путь к папке Files
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortAnswer"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
+                                                                                                                                                // сохраняем файл в папку Files 
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    list.Add(StringSettings["FilePatchShortAnswer"] + myUniqueFileName + fileExtension);
+                }
+                list.ForEach(x =>
+                {
+                    dto.PathToImage.Add(x);
+                });
+                var listDelete = serviceAnswer.UpdateAnswer(dto);
+                if (listDelete == null)
+                {
+                    return StatusCode(200, "The content has been changed");
+                }
+                else
+                {
+                    foreach (var item in listDelete)
+                    {
+
+                        FileInfo fileInfo = new FileInfo(StringSettings["FilePatchwwwroot"] + item);
+                        if (fileInfo.Exists)
+                        {
+                            DateTime newTime = DateTime.Now;
+
+                            fileInfo.CreationTime = newTime;
+                            fileInfo.LastWriteTime = newTime;
+                            fileInfo.LastAccessTime = newTime;
+                            // альтернатива с помощью класса File
+                            // File.Delete(path);
+                        }
+
+
+                    }
+                    return StatusCode(200, "The content has been changed");
+                }
+
             }
             catch (Exception ex)
             {
                 return StatusCode(520, ex.Message);
             }
         }
+
 
         // DELETE api/<ValuesController>/5
         [Authorize(Roles = "teacher,admin")]

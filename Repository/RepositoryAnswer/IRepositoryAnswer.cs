@@ -12,8 +12,8 @@ namespace Repository.RepositoryAnswer
         AnswerDto Answer(long id);
         List<StudentAnsewerDto> Answers(long id);
         void InsertList(List<CreateAnswerDto> list);
-        void Insert(CreateAnswerDto dto);
-        void Update(UpdateAnswerDto dto);
+        long Insert(CreateAnswerDto dto);
+        List<string>? Update(UpdateAnswerDto dto);
         void Delete(long id);
     }
 }
