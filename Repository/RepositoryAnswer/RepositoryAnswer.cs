@@ -31,7 +31,8 @@ namespace Repository.RepositoryAnswer
                 studentAnsewers.Add(new StudentAnsewerDto
                 {
                     Id = ansewer.Id,
-                    AnswerText = ansewer.AnswerText
+                    AnswerText = ansewer.AnswerText,
+                    PathToImage = ansewer.PathToImage
                 });
 
             }
@@ -46,7 +47,7 @@ namespace Repository.RepositoryAnswer
             context.SaveChanges();
         }
 
-        public void Insert(CreateAnswerDto dto)
+        public long Insert(CreateAnswerDto dto)
         {
             var answer = new Answer
             {
@@ -58,6 +59,7 @@ namespace Repository.RepositoryAnswer
             };
             context.Answers.Add(answer);
             context.SaveChanges();
+            return answer.Id;
         }
 
         public void InsertList(List<CreateAnswerDto> list)
@@ -76,14 +78,16 @@ namespace Repository.RepositoryAnswer
 
         }
 
-        public void Update(UpdateAnswerDto dto)
+        public List<string>? Update(UpdateAnswerDto dto)
         {
-            var answer = context.Answers.SingleOrDefault(x => x.Id == dto.Id);
-            if (answer == null) return;
+            var answer = context.Answers.Include(x => x.Quest).First(x => x.Id == dto.Id);
+            var listPhotoDelete = answer.PathToImage.Where(x => dto.PathToImage.Contains(x) == false).ToList();
             answer.AnswerText = dto.AnswerText;
             answer.IsCorrectAnswer = dto.IsCorrectAnswer;
+            answer.PathToImage = dto.PathToImage;
             context.Answers.Update(answer);
             context.SaveChanges();
+            return listPhotoDelete;
         }
     }
 }

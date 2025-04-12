@@ -13,7 +13,7 @@ namespace Service.ServiceAnswer
         List<StudentAnsewerDto> GetQuestAnswers(long id);
         void AnswerListCreate(List<CreateAnswerDto> answerList);
         void DeleteAnswer(long id);
-        void UpdateAnswer(UpdateAnswerDto updateAnswerDto);
-        void CreateAnswer(CreateAnswerDto createAnswerDto);
+        List<string>? UpdateAnswer(UpdateAnswerDto updateAnswerDto);
+        long CreateAnswer(CreateAnswerDto createAnswerDto);
     }
 }

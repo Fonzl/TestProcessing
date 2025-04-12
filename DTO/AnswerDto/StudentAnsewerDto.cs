@@ -10,5 +10,6 @@ namespace DTO.AnswerDto
     {
         public long Id { get; set; }
         public string AnswerText { get; set; }
+        public List<string>? PathToImage { get; set; }
     }
 }

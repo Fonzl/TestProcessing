@@ -85,9 +85,9 @@ namespace TestProcessing.Controllers
                     var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
                                                                 // путь к папке Files
                     var fileExtension = Path.GetExtension(file.FileName);
-                    string path = appEnvironment.ContentRootPath + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
+                    string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
                                                                                                                                             // сохраняем файл в папку Files 
-                    using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                    using (var fileStream = new FileStream( path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
@@ -123,9 +123,9 @@ namespace TestProcessing.Controllers
                     var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
                                                                 // путь к папке Files
                     var fileExtension = Path.GetExtension(file.FileName);
-                    string path = appEnvironment.ContentRootPath + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
+                    string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
                                                                                                                                             // сохраняем файл в папку Files 
-                    using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                    using (var fileStream = new FileStream( path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
@@ -144,11 +144,15 @@ namespace TestProcessing.Controllers
                 {
                     foreach (var item in listDelete)
                     {
-                        var appPath = appEnvironment.ContentRootPath;
-                        FileInfo fileInf = new FileInfo(appPath + item);
-                        if (fileInf.Exists)
+                        
+                        FileInfo fileInfo = new FileInfo(StringSettings["FilePatchwwwroot"] + item);
+                        if (fileInfo.Exists)
                         {
-                            fileInf.Delete();
+                            DateTime newTime = DateTime.Now;
+
+                            fileInfo.CreationTime = newTime;
+                            fileInfo.LastWriteTime = newTime;
+                            fileInfo.LastAccessTime = newTime;
                             // альтернатива с помощью класса File
                             // File.Delete(path);
                         }

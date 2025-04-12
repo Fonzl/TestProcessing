@@ -10,9 +10,9 @@ namespace Service.ServiceAnswer
 {
     public class ServiceAnswer(IRepositoryAnswer repo ) : IServiceAnswer
     {
-        public void CreateAnswer(CreateAnswerDto createAnswerDto)
+        public long CreateAnswer(CreateAnswerDto createAnswerDto)
         {
-            repo.Insert(createAnswerDto);
+          return  repo.Insert(createAnswerDto);
         }
 
         public void DeleteAnswer(long id)
@@ -30,9 +30,9 @@ namespace Service.ServiceAnswer
            return repo.Answer(id);
         }
 
-        public void UpdateAnswer(UpdateAnswerDto updateAnswerDto)
+        public List<string>? UpdateAnswer(UpdateAnswerDto updateAnswerDto)
         {
-            repo.Update(updateAnswerDto);
+           return repo.Update(updateAnswerDto);
         }
 
         public void AnswerListCreate(List<CreateAnswerDto> answerList)
