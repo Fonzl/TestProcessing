@@ -12,6 +12,6 @@ namespace DTO.ResultTestDto
         public UserDto.StudentUserDto User { get; set; }
         public TestDto.TestDto Test { get; set; }
         public List<ResultOfAttemptsDTO> Result { get; set; }
-        public string? EvaluationName { get; set; }
+
     }
 }

@@ -125,13 +125,13 @@ namespace Repository.RepositoryResultTest
             return staticstic;
 
         }
-        public List<ResultTestDto> ResultStudentId(long studentId)
+        public List<ResultTestDto> ResultStudentId(long studentId, long idDiscipline)
         {
             var results = context.Results
                .Include(x => x.User)
-               .Include(x => x.Test)
+               .Include(x => x.Test.Discipline)
                .Include(x => x.Responses)
-              .Where(x => x.User.Id == studentId).ToList();
+              .Where(x => x.User.Id == studentId && x.Test.Discipline.Id == idDiscipline).ToList();
             var studerResults = results.Where(x => x.User.Id == studentId).ToList();
             var listResults = new List<ResultTestDto>();
             foreach (var result in results)

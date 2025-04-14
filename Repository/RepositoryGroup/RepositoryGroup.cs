@@ -91,7 +91,7 @@ namespace Repository.RepositoryGroup
                 Name = group.Name,
                 EndOfTraining = group.EndOfTraining,
                 StartDateOfTraining = group.StartDateOfTraining,
-                Direction = group.Direction.ToString(),
+                Direction = group.Direction.Name.ToString(),
                 Users = null
                 
 
