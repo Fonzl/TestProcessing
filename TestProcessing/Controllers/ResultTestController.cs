@@ -96,7 +96,7 @@ namespace TestProcessing.Controllers
             try
             {
                 var id = User.FindFirst("id")?.Value;
-                return Json(service.GetStatisticsDiscipline(new ResultStatisticsDto { DisciplineId = disciploneId, StudentId = Convert.ToInt16(id) }));
+                return Json(new StatisticResult { result = service.GetStatisticsDiscipline(new ResultStatisticsDto { DisciplineId = disciploneId, StudentId = Convert.ToInt16(id) }) } );
             }
             catch (Exception ex)
             {

@@ -102,7 +102,15 @@ namespace Repository.RepositoryResultTest
                                             .Include(x => x.Responses)
                                             .Where(x => x.User.Id == dto.StudentId)
                                             .ToList();
+            if(studentResultDiscipline == null)
+            {
+                return 0;
+            }
             var results = studentResultDiscipline.Where(x => x.Test.Discipline.Id == dto.DisciplineId).ToList();
+            if (results.Count == 0)
+            {
+                return 0;
+            }
             decimal sum = 0;
             foreach (var result in results)
             {
@@ -131,8 +139,13 @@ namespace Repository.RepositoryResultTest
                 var ListAttempts = new List<ResultOfAttemptsDTO>();
                 result.Responses.ForEach(x =>
                 {
+                    if(x.Result == null)
+                    {
+                        return; 
+                    }
                     ListAttempts.Add(new ResultOfAttemptsDTO
                     {
+                        
                         IdUserRespones = x.Id,
                         Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
                         EvaluationName = x.EvaluationName,
@@ -145,7 +158,7 @@ namespace Repository.RepositoryResultTest
                     Id = result.Id,
                     Result = ListAttempts,
 
-                    Test = new DTO.TestDto.DetailsTestDto
+                    Test = new DTO.TestDto.TestDto
                     {
                         Id = result.Test.Id,
                         Name = result.Test.Name,

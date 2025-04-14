@@ -104,8 +104,8 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                service.CreateTest(dto);
-                return StatusCode(201);
+             
+                return Json(service.CreateTest(dto));
             }
             catch (Exception ex)
             {
