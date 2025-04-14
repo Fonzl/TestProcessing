@@ -81,7 +81,9 @@ namespace Repository.RepositoryGroup
         public DetailsGroupDto GetGroupUser(long userId)
         {
             var user = context.Users.First(x => x.Id == userId);
-            var group = context.Groups.Where(x => x.Users.Contains(user)).First();
+            var group = context.Groups
+                .Include(x => x.Direction)
+                .Where(x => x.Users.Contains(user)).First();
 
             return new DetailsGroupDto
             {
@@ -91,6 +93,7 @@ namespace Repository.RepositoryGroup
                 StartDateOfTraining = group.StartDateOfTraining,
                 Direction = group.Direction.ToString(),
                 Users = null
+                
 
             };
         

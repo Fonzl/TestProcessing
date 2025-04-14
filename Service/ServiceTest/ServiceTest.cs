@@ -10,9 +10,9 @@ namespace Service.ServiceTest
 {
     public class ServiceTest(IRepositoryTest repo) : IServiceTest
     {
-        public void CreateTest(CreateTestDto createTestDto)
+        public long CreateTest(CreateTestDto createTestDto)
         {
-            repo.Insert(createTestDto);
+          return  repo.Insert(createTestDto);
         }
 
         public void DeleteTest(long id)
