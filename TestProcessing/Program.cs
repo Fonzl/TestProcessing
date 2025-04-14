@@ -55,7 +55,13 @@ builder.Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll", policy => {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 var tokenSettings = builder.Configuration.GetSection("Token");
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -82,7 +88,7 @@ if (app.Environment.IsDevelopment())
 
 
 }
-
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 app.UseForwardedHeaders(new ForwardedHeadersOptions

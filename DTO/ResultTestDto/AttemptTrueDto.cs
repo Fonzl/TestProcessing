@@ -8,6 +8,6 @@ namespace DTO.ResultTestDto
 {
     public class AttemptTrueDto
     {
-        public bool IsAttempt { get; set; }
+        public bool IsTrue{ get; set; }
     }
 }

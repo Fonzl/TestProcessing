@@ -27,13 +27,21 @@ namespace TestProcessing.Controllers
         }
         [Authorize(Roles = "student")]
         [HttpGet]
-        [Route("student")]
-        public IActionResult GetResultTest()//результаты тестов студента все
+        [Route("student/{idDiscipline}")]
+        public IActionResult GetResultTest(long idDiscipline)//результаты тестов студента все
         {
             try
             {
                 var id = User.FindFirst("id")?.Value;
-                return Json(service.ResultStudentId(Convert.ToInt16(id)));
+                var results = service.ResultStudentId(Convert.ToInt16(id), idDiscipline);
+                if (results.Count == 0)
+                {
+                    return Json(new AttemptTrueDto { IsTrue = false });
+                }
+                else
+                {
+                    return Json(results);
+                }
             }
             catch (Exception ex)
             {
@@ -61,12 +69,20 @@ namespace TestProcessing.Controllers
         }
         [Authorize(Roles = "teacher")]//рузуьтаты тестов по  студента для учителя;id - id  студента
         [HttpGet]
-        [Route("teacherStudentResultId/{id}")]
-        public IActionResult GetResultTest(long id)
+        [Route("teacherStudentId/{idStudent}/Discipline/{idDiscipline}")]
+        public IActionResult GetResultTestTeacher(long idStudent, long idDiscipline)
         {
             try
             {
-                return Json(service.ResultStudentId(id));
+                var results = service.ResultStudentId(Convert.ToInt16(idStudent), idDiscipline);
+                if (results.Count == 0)
+                {
+                    return Json(new AttemptTrueDto { IsTrue = false });
+                }
+                else
+                {
+                    return Json(results);
+                }
             }
             catch (Exception ex)
             {
@@ -176,7 +192,7 @@ namespace TestProcessing.Controllers
 
                 AttemptTrueDto w = new AttemptTrueDto()
                 {
-                    IsAttempt = true,
+                    IsTrue = true,
                 };
                 var studentId = User.FindFirst("id")?.Value;
                 var result = service.CheckingStudentResult(idTest, Convert.ToInt16(studentId));
