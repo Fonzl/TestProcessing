@@ -1,7 +1,5 @@
-﻿using Database;
-using DTO.ResultTestDto;
+﻿using DTO.ResultTestDto;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceResultTest;
 
@@ -58,7 +56,7 @@ namespace TestProcessing.Controllers
             try
             {
                 var id = User.FindFirst("id")?.Value;
-                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserResponesTest = dto.UserResponesTest , idResult = dto.idResult};
+                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserResponesTest = dto.UserResponesTest, idResult = dto.idResult };
 
                 return Json(service.CreateResultTest(studentDto));
             }
@@ -112,7 +110,7 @@ namespace TestProcessing.Controllers
             try
             {
                 var id = User.FindFirst("id")?.Value;
-                return Json(new StatisticResult { result = service.GetStatisticsDiscipline(new ResultStatisticsDto { DisciplineId = disciploneId, StudentId = Convert.ToInt16(id) }) } );
+                return Json(new StatisticResult { result = service.GetStatisticsDiscipline(new ResultStatisticsDto { DisciplineId = disciploneId, StudentId = Convert.ToInt16(id) }) });
             }
             catch (Exception ex)
             {
@@ -173,9 +171,10 @@ namespace TestProcessing.Controllers
             try
             {
                 var studentId = User.FindFirst("id")?.Value;
-                return Json(new IdAttemptDto { 
-                 Id = service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId))
-                }) ;
+                return Json(new IdAttemptDto
+                {
+                    Id = service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId))
+                });
             }
             catch (Exception ex)
             {
@@ -196,7 +195,7 @@ namespace TestProcessing.Controllers
                 };
                 var studentId = User.FindFirst("id")?.Value;
                 var result = service.CheckingStudentResult(idTest, Convert.ToInt16(studentId));
-                if(result == null)
+                if (result == null)
                 {
                     return Json(w);
                 }
@@ -221,21 +220,21 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-            [Authorize(Roles = "student")]
-            [HttpPatch]
-            [Route("Attempt/update")]
-             public IActionResult UpdateAttemptTest(AddResultTestStudentDto dto)
+        [Authorize(Roles = "student")]
+        [HttpPatch]
+        [Route("Attempt/update")]
+        public IActionResult UpdateAttemptTest(AddResultTestStudentDto dto)
+        {
+            try
             {
-                try
-                {
-                    service.UpdateRespones(dto);
-                    return StatusCode(200, "The content has been changed");
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(520, ex.Message);
-                }
+                service.UpdateRespones(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
             }
         }
     }
+}
 

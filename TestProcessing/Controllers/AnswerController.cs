@@ -1,25 +1,19 @@
 ﻿using DTO.AnswerDto;
-using DTO.AnswerDto;
-using DTO.QuestDto;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Configuration;
 using Service.ServiceAnswer;
-using Service.ServiceQuest;
-using Service.ServiceTest;
 
 
 namespace TestProcessing.Controllers
 {
     [Route("Answer")]
     [ApiController]
-    
+
     public class AnswerController(IServiceAnswer serviceAnswer, IConfiguration configuration, IWebHostEnvironment appEnvironment) : Controller
     {
-        
-        
+
+
         [HttpGet]
         [Authorize]
         [Route("QuestIdAnswer/{id}")]
@@ -84,7 +78,7 @@ namespace TestProcessing.Controllers
                                                                 // путь к папке Files
                     var fileExtension = Path.GetExtension(file.FileName);
                     string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortAnswer"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
-                                                                                                                                                // сохраняем файл в папку Files 
+                                                                                                                                                 // сохраняем файл в папку Files 
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -122,7 +116,7 @@ namespace TestProcessing.Controllers
                                                                 // путь к папке Files
                     var fileExtension = Path.GetExtension(file.FileName);
                     string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortAnswer"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
-                                                                                                                                                // сохраняем файл в папку Files 
+                                                                                                                                                 // сохраняем файл в папку Files 
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -183,7 +177,7 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-    
+
         [HttpGet]
         [Route("postAnswerImg/{nameImg}")]
 

@@ -1,6 +1,5 @@
-﻿    using DTO.DisciplineDto;
+﻿using DTO.DisciplineDto;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceDiscipline;
 

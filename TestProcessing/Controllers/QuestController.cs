@@ -1,21 +1,10 @@
 ﻿using DTO.AnswerDto;
 using DTO.QuestDto;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.VisualBasic.FileIO;
-using Service.ServiceAnswer;
-
-using System.Web;
 using Microsoft.AspNetCore.StaticFiles;
-using static System.Net.WebRequestMethods;
-using Microsoft.Extensions.Configuration;
+using Service.ServiceAnswer;
 using Service.ServiceQuest;
-using System.IO;
-using System.Diagnostics.Tracing;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace TestProcessing.Controllers
 {
@@ -83,11 +72,11 @@ namespace TestProcessing.Controllers
                 foreach (var file in uploadedFile)
                 {
                     var myUniqueFileName = $@"{Guid.NewGuid()}";//генерируем имя
-                                                                // путь к папке Files
+
                     var fileExtension = Path.GetExtension(file.FileName);
                     string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
-                                                                                                                                            // сохраняем файл в папку Files 
-                    using (var fileStream = new FileStream( path, FileMode.Create))
+                                                                                                                                                // сохраняем файл в папку Files 
+                    using (var fileStream = new FileStream(path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
@@ -124,8 +113,8 @@ namespace TestProcessing.Controllers
                                                                 // путь к папке Files
                     var fileExtension = Path.GetExtension(file.FileName);
                     string path = StringSettings["FilePatchwwwroot"] + StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension;// myUniqueFileName+"."+uploadedFile.ContentType;
-                                                                                                                                            // сохраняем файл в папку Files 
-                    using (var fileStream = new FileStream( path, FileMode.Create))
+                                                                                                                                                // сохраняем файл в папку Files 
+                    using (var fileStream = new FileStream(path, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
@@ -144,7 +133,7 @@ namespace TestProcessing.Controllers
                 {
                     foreach (var item in listDelete)
                     {
-                        
+
                         FileInfo fileInfo = new FileInfo(StringSettings["FilePatchwwwroot"] + item);
                         if (fileInfo.Exists)
                         {

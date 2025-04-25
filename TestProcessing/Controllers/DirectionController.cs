@@ -1,7 +1,6 @@
 ﻿using DTO.DirectionDto;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceDirection;
 
@@ -123,12 +122,12 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("updateShedule")]
-        public IActionResult GetDirectionsShedule(int corusId , int directionId)
+        public IActionResult GetDirectionsShedule(int corusId, int directionId)
         {
             try
             {
-                return Json( service.GetDirectionsShedule(corusId ,directionId));
-            
+                return Json(service.GetDirectionsShedule(corusId, directionId));
+
             }
             catch (Exception ex)
             {

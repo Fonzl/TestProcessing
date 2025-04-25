@@ -12,7 +12,7 @@ namespace Repository.RepositoryResultTest
         List<ResultTestDto> GetResults();
         ResultTestDto GetResult(long id);
         decimal GetStatisticsDiscipline(ResultStatisticsDto dto);
-        List<ResultTestDto> ResultStudentId(long studentId, long idDiscipline);
+        List<ResultOfAttemptsDTO> ResultStudentId(long studentId, long idDiscipline);
         void Update(UpdateResultTestDto dto);
         void Delete(int id);
         bool CheckingForAccess();

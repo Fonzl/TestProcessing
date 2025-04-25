@@ -12,5 +12,8 @@ namespace DTO.ResultTestDto
         public decimal Result { get; set; }
         public string? EvaluationName { get; set; }
         public int Attempts { get; set; }
+        public bool IsChek {  get; set; }
+        public string NameTest { get; set; }
+        public DateTime DateFinish { get; set; }
     }
 }

@@ -1,18 +1,8 @@
 ﻿
 using DTO.TestDto;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Session;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Service;
 using Service.ServiceTest;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
 
 namespace TestProcessing.Controllers
 {
@@ -39,7 +29,7 @@ namespace TestProcessing.Controllers
 
 
         //Тесты юзеров по дисциплине 
-        [Authorize (Roles = "teacher,admin")]
+        [Authorize(Roles = "teacher,admin")]
         [HttpGet("{id}")]
         public IActionResult GetTest(int id)
         {
@@ -52,7 +42,7 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [Authorize (Roles = "student")]
+        [Authorize(Roles = "student")]
         [HttpGet("{testId}/student")]
         public IActionResult GetTestStusent(long testId)
         {
@@ -85,10 +75,10 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,student")]
         public IActionResult GetListTestDiscipline(long dis)
         {
-         try
+            try
             {
                 var UserId = User.FindFirst("id")?.Value;
-                return Json(service.GetTestsListDiscipline(dis,Convert.ToInt64( UserId)));
+                return Json(service.GetTestsListDiscipline(dis, Convert.ToInt64(UserId)));
             }
             catch (Exception ex)
             {
@@ -104,7 +94,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
-             
+
                 return Json(service.CreateTest(dto));
             }
             catch (Exception ex)
@@ -127,14 +117,14 @@ namespace TestProcessing.Controllers
             {
                 return StatusCode(520, ex.Message);
             }
-            
+
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         public IActionResult DeleteTest(int id)
         {
-        
+
             try
             {
                 service.DeleteTest(id);

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Runtime.InteropServices.JavaScript;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Database
+﻿namespace Database
 {
     public class UserResponses
     {
@@ -16,7 +8,8 @@ namespace Database
         public string? EvaluationName { get; set; }
         public string ListUserResponses { get; set; }
         public DateTime StartdateTime { get; set; }
-       public bool IsFinish {  get; set; }
+        public DateTime FinishdateTime { get; set; }
+        public bool IsFinish { get; set; }
         public ResultTest ResultTest { get; set; }
     }
 }

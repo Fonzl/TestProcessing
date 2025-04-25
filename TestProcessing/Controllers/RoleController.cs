@@ -1,6 +1,5 @@
 ﻿using DTO.RoleDto;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceRole;
 
@@ -76,8 +75,8 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-       
-        
+
+
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]

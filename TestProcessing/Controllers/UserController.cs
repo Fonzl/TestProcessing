@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DTO.UserDto;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service.ServiceUser;
-using System.Security.Claims;
-using DTO.UserDto;
-using Database;
-using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,9 +11,9 @@ namespace TestProcessing.Controllers
     [Route("User")]
     public class UserController(IServiceUser service) : Controller
     {
-        
+
         // GET: api/<ValuesController>
-        
+
         [HttpGet]
         [Route("all")]
         [Authorize(Roles = "admin")]
@@ -52,7 +49,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                return Json(service.GetStudentAttempt(idGroup,idTest));
+                return Json(service.GetStudentAttempt(idGroup, idTest));
             }
             catch (Exception ex)
             {
@@ -62,7 +59,7 @@ namespace TestProcessing.Controllers
         // GET api/<ValuesController>/5
         [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
-        
+
         public IActionResult GetUser(int id)
         {
             try
@@ -100,7 +97,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
-               
+
                 service.UpdateUser(dto);
                 return StatusCode(200, "The content has been changed");
             }
@@ -140,11 +137,11 @@ namespace TestProcessing.Controllers
 
 
                 return Json(user);
-               
+
             }
             catch (Exception ex)
             {
-                return StatusCode(404,ex.Message);
+                return StatusCode(404, ex.Message);
             }
 
         }
