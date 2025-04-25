@@ -88,14 +88,14 @@ if (app.Environment.IsDevelopment())
 
 
 }
-app.UseCors("AllowAll");
+
 
 app.UseHttpsRedirection();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
-Console.WriteLine(builder.Environment.WebRootPath);
+    
 var connectionStrings = builder.Configuration.GetSection("ConnectionStrings");
 app.UseAuthorization();
 //Serve files from wwwroot

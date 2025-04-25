@@ -35,7 +35,7 @@ namespace Service.ServiceResultTest
             return repo.GetStatisticsDiscipline(dto);
         }
 
-        public List<ResultTestDto> ResultStudentId(long studentId, long idDiscipline)
+        public List<ResultOfAttemptsDTO> ResultStudentId(long studentId, long idDiscipline)
         {
             return repo.ResultStudentId(studentId,  idDiscipline);
         }

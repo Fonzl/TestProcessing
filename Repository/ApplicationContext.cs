@@ -62,7 +62,6 @@ namespace Repository
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123456As"))),
                     Disciplines = null,
                     Group = null,
-                    Tests = null,
                     RoleId = 1,
 
                 });
@@ -76,7 +75,6 @@ namespace Repository
                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123456As"))),
                    Disciplines = null,
                    Group = null,
-                   Tests = null,
                    RoleId = 2
 
                });
@@ -88,7 +86,6 @@ namespace Repository
                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123456As"))),
                 Disciplines = null,
                 Group = null,
-                Tests = null,
                 RoleId = 3,
 
             });

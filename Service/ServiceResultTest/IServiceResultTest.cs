@@ -13,7 +13,7 @@ namespace Service.ServiceResultTest
         ResultTestDto GetResultTest(int id);
         List<ResultTestDto> GetAllResultTests();
         decimal GetStatisticsDiscipline(ResultStatisticsDto dto);
-        List<ResultTestDto> ResultStudentId(long studentId, long idDiscipline);
+        List<ResultOfAttemptsDTO> ResultStudentId(long studentId, long idDiscipline);
         void DeleteResultTest(int id);
         void UpdateResultTest(UpdateResultTestDto updateResultTest);
         ResultOfAttemptsDTO CreateResultTest(AddResultTestStudentDto createResultTest);

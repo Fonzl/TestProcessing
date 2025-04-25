@@ -83,6 +83,7 @@ namespace Repository.RepositoryGroup
             var user = context.Users.First(x => x.Id == userId);
             var group = context.Groups
                 .Include(x => x.Direction)
+                .Include(x => x.Cours)
                 .Where(x => x.Users.Contains(user)).First();
 
             return new DetailsGroupDto
@@ -92,7 +93,9 @@ namespace Repository.RepositoryGroup
                 EndOfTraining = group.EndOfTraining,
                 StartDateOfTraining = group.StartDateOfTraining,
                 Direction = group.Direction.Name.ToString(),
-                Users = null
+                Users = null,
+                Cours = group.Cours,
+                
                 
 
             };
@@ -109,9 +112,9 @@ namespace Repository.RepositoryGroup
                 StartDateOfTraining = dto.StartDateOfTraining,
                 Users = context.Users.Where(x => dto.Users.Contains(x.Id)).ToList(),
                 Cours = dto.Cours,
-                Schedule = (Schedule)context.Schedules.Where(x => x.Cours == dto.Cours && x.DirectionId == dto.Direction),
-               
-                
+                Direction = context.Directions.First(x => x.Id == dto.Direction),
+                Schedule = context.Schedules.First(x => x.DirectionId == dto.Direction && x.Cours == dto.Cours)
+
 
             };
             context.Groups.Add(group);
@@ -125,7 +128,9 @@ namespace Repository.RepositoryGroup
             group.StartDateOfTraining = dto.StartDateOfTraining;
             group.EndOfTraining = dto.EndOfTraining;
             group.Users = context.Users.Where(x => dto.Users.Contains(x.Id)).ToList();
-            group.Schedule = context.Schedules.FirstOrDefault(x => x.Cours == dto.Cours && x.DirectionId == dto.Direction);
+            group.Cours = dto.Cours;
+            group.Direction = context.Directions.First(x => x.Id == dto.Direction);
+            group.Schedule = context.Schedules.First(x=>x.DirectionId == dto.Direction && x.Cours == dto.Cours);
             context.Groups.Update(group);
             context.SaveChanges();
         }
