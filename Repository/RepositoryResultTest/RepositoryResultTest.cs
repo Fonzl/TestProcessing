@@ -130,7 +130,10 @@ namespace Repository.RepositoryResultTest
             var listResults = new List<ResultOfAttemptsDTO>();
             foreach (var result in results)
             {
-
+                if(result.IsFinish == false)
+                {
+                    continue;
+                }
                 listResults.Add(new ResultOfAttemptsDTO
                 {
 
@@ -343,17 +346,25 @@ namespace Repository.RepositoryResultTest
                 userResponses.Result = resulTest;
                 userResponses.EvaluationName = evaluationName;
                 userResponses.IsFinish = true;
-                userResponses.FinishdateTime = DateTime.Now;
+                userResponses.FinishdateTime = DateTime.UtcNow;
                 context.Update(userResponses);
                 context.SaveChanges();
+                var f = context.Results
+                    .Include(x => x.Responses)
+                    .Include(x => x.Test)
+                    .Include(x => x.User)
+                    .FirstOrDefault(y => y.Test.Id == dto.TestId && y.User.Id == dto.StudentId).Responses.Count;
                 return new ResultOfAttemptsDTO
                 {
                     IdUserRespones = dto.idResult,
                     Result = resulTest,
                     EvaluationName = evaluationName,
-                    Attempts = context.Results.Include(x => x.Responses)
-                    .FirstOrDefault(x => x.Test.Id == dto.TestId && x.User.Id == dto.StudentId).Responses.Count(),
-                    IsChek = context.Tests.First( x => x.Id == dto.TestId).IsCheck,
+                    Attempts = test.NumberOfAttempts - context.Results
+                    .Include(x => x.Test)
+                    .Include(x => x.User)
+                    .Include(x => x.Responses)
+                    .FirstOrDefault(y => y.Test.Id == dto.TestId && y.User.Id == dto.StudentId).Responses.Count,
+                    IsChek = context.Tests.First(x => x.Id == dto.TestId).IsCheck,
                     NameTest = context.Tests.First(x => x.Id == dto.TestId).Name,
                     DateFinish = userResponses.FinishdateTime,
                 };

@@ -83,7 +83,6 @@ namespace Repository.RepositoryGroup
             var user = context.Users.First(x => x.Id == userId);
             var group = context.Groups
                 .Include(x => x.Direction)
-                .Include(x => x.Cours)
                 .Where(x => x.Users.Contains(user)).First();
 
             return new DetailsGroupDto
