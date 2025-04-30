@@ -1,4 +1,6 @@
-﻿namespace Database
+﻿using System.Data;
+
+namespace Database
 {
     public class UserResponses
     {

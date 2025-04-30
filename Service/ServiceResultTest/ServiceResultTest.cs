@@ -50,9 +50,17 @@ namespace Service.ServiceResultTest
             repo.Update(updateResultTest);
             
         }
-       public long CreatResultAndAttempt(long testId, long studentId)
+        public long CreatResultAndAttempt(long testId, long studentId)
         {
-            return repo.CreatResultAndAttempt(testId, studentId);
+            if (repo.CheckingStudentResult(testId, studentId) == null)
+            {
+                return repo.CreatResultAndAttempt(testId, studentId);
+            }
+            else
+            {
+                 throw new Exception("Есть не законченный попытки");
+            }
+               
         }
 
         public ReturnAttemptDto? CheckingStudentResult(long testId, long studentId)

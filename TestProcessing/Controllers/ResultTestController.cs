@@ -183,7 +183,7 @@ namespace TestProcessing.Controllers
         }
         [Authorize(Roles = "student")]
         [HttpGet]
-        [Route("checkingAttempt/{idTest}")]
+        [Route("checkingAttempt/{idTest}")]//проверка на действующие попытки
         public IActionResult CheckingAttempt(long idTest)
         {
             try

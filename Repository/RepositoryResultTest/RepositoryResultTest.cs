@@ -143,7 +143,7 @@ namespace Repository.RepositoryResultTest
                     Result = (decimal)result.Result,
                     IsChek = result.ResultTest.Test.IsCheck,
                     NameTest = result.ResultTest.Test.Name,
-                    DateFinish = result.FinishdateTime,
+                    DateFinish = result.FinishdateTime.ToLocalTime(),
 
 
                 });
@@ -346,7 +346,7 @@ namespace Repository.RepositoryResultTest
                 userResponses.Result = resulTest;
                 userResponses.EvaluationName = evaluationName;
                 userResponses.IsFinish = true;
-                userResponses.FinishdateTime = DateTime.UtcNow;
+                userResponses.FinishdateTime = DateTime.Now.ToUniversalTime();
                 context.Update(userResponses);
                 context.SaveChanges();
                 var f = context.Results
@@ -366,7 +366,7 @@ namespace Repository.RepositoryResultTest
                     .FirstOrDefault(y => y.Test.Id == dto.TestId && y.User.Id == dto.StudentId).Responses.Count,
                     IsChek = context.Tests.First(x => x.Id == dto.TestId).IsCheck,
                     NameTest = context.Tests.First(x => x.Id == dto.TestId).Name,
-                    DateFinish = userResponses.FinishdateTime,
+                    DateFinish = userResponses.FinishdateTime.ToLocalTime(),
                 };
             }
             else
@@ -569,7 +569,7 @@ namespace Repository.RepositoryResultTest
 
                 };
             }
-            if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Seconds <= 0)
+            if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).Seconds <= 0)
             {
 
 
@@ -578,8 +578,8 @@ namespace Repository.RepositoryResultTest
                     idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
-                    Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalMinutes,
-                    Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).TotalSeconds
+                    Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).TotalMinutes,
+                    Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).TotalSeconds
 
                 };
             }
@@ -591,8 +591,8 @@ namespace Repository.RepositoryResultTest
                     idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
-                    Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Minutes,
-                    Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.UtcNow).Seconds
+                    Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).Minutes,
+                    Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).Seconds
                 };
             }
 
@@ -618,7 +618,7 @@ namespace Repository.RepositoryResultTest
 
                 var attempt = new UserResponses
                 {
-                    StartdateTime = DateTime.UtcNow,
+                    StartdateTime = DateTime.Now.ToUniversalTime(),
                     IsFinish = false,
                     ListUserResponses = JsonSerializer.Serialize(listResponses)
 
@@ -652,7 +652,7 @@ namespace Repository.RepositoryResultTest
                 var attempt = new UserResponses
                 {
                     ResultTest = context.Results.First(x => x.Test.Id == testId && x.User.Id == studentId),
-                    StartdateTime = DateTime.UtcNow,
+                    StartdateTime = DateTime.Now.ToUniversalTime(),
                     IsFinish = false,
                     ListUserResponses = JsonSerializer.Serialize(listResponses)
 

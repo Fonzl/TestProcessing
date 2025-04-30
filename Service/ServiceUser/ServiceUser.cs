@@ -65,11 +65,11 @@ namespace Service.ServiceUser
                issuer: AuthOptions.ISSUER,
                audience: AuthOptions.AUDIENCE,
                claims: claims,
-               expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)), // время действия 2 минуты
+               expires: DateTime.Now.Add(TimeSpan.FromDays(1)), // время действия 2 минуты
                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             //claims: claims,
-            //expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)), 
+            //expires: DateTime.Now.ToUniversalTime().Add(TimeSpan.FromDays(1)), 
             //        signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["KEY"])), SecurityAlgorithms.HmacSha256));
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             
