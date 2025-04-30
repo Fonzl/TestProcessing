@@ -86,8 +86,32 @@ namespace Repository.RepositoryQuest
                 .Include(x => x.Answers)
                 .Include(x => x.CategoryTasks)
                 .First(x => x.Id == id);
+            if(quest.CategoryTasks.Id == 3)
+            {
+                return new DetailsQuestDto
+                {
+
+                    Id = quest.Id,
+                    Name = quest.Name,
+                    Info = quest.Info,
+                    Answers = quest.Answers.Select(x => new AnswerShortDto
+                    {
+                        Id = x.Id,
+                        AnswerText = null,
+                        PathPhoto = x.PathToImage,
+
+                    }).ToList(),
+                    CategoryTasks = new DTO.CategoryTasksDto.CategoryTasksDto
+                    {
+                        Id = quest.CategoryTasks.Id,
+                        Name = quest.CategoryTasks.Name,
+                    },
+                    PathImg = quest.PathToImage
+                };
+            }
             return new DetailsQuestDto
             {
+                
                 Id = quest.Id,
                 Name = quest.Name,
                 Info = quest.Info,

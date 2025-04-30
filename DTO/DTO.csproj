@@ -9,6 +9,9 @@
   <ItemGroup>
     <Folder Include="CategoryTasksDto\" />
     <Folder Include="RoleDto\" />
+    <Folder Include="Новая папка1\" />
+    <Folder Include="Новая папка2\Новая папка\" />
+    <Folder Include="Новая папка\" />
   </ItemGroup>
 
 </Project>

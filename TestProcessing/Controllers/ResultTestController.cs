@@ -1,4 +1,5 @@
-﻿using DTO.ResultTestDto;
+﻿using DTO.GeneralDto;
+using DTO.ResultTestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceResultTest;
@@ -164,14 +165,14 @@ namespace TestProcessing.Controllers
             }
         }
         [Authorize(Roles = "student")]
-        [HttpGet]
+        [HttpPost]
         [Route("createAttempt/{idTest}")]
         public IActionResult CreateAttempt(long idTest)
         {
             try
             {
                 var studentId = User.FindFirst("id")?.Value;
-                return Json(new IdAttemptDto
+                return Json(new IdDto
                 {
                     Id = service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId))
                 });

@@ -1,4 +1,6 @@
-﻿using DTO.AnswerDto;
+﻿using Database;
+using DTO.AnswerDto;
+using DTO.GeneralDto;
 using DTO.QuestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,11 +64,18 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]
         [Route("add")]
-        public IActionResult AddQuest([FromForm] CreateQuestDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
+        public IActionResult AddQuest([FromForm] CreateQuestDtoShort dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
 
             try
             {
+                CreateQuestDto createQuestDto = new CreateQuestDto() {
+                    CategoryTaskId = dto.CategoryTaskId,
+                    Info = dto.Info,
+                    Name = dto.Name,
+                    Tests = dto.Tests,
+                    PathPhotos = new List<string>()
+                };
                 List<string> list = new List<string>();
                 var StringSettings = configuration.GetSection("ConnectionStrings");//
                 foreach (var file in uploadedFile)
@@ -82,13 +91,16 @@ namespace TestProcessing.Controllers
                     }
                     list.Add(StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension);
                 }
-
+                
                 list.ForEach(x =>
                 {
-                    dto.PathPhotos.Add(x);
+                    createQuestDto.PathPhotos.Add(x);
                 });
-
-                return Json(serviceQuest.CreateQuest(dto));
+                return Json(new IdDto
+                {
+                    Id = serviceQuest.CreateQuest(createQuestDto)
+                });
+                
             }
             catch (Exception ex)
             {
@@ -120,6 +132,8 @@ namespace TestProcessing.Controllers
                     }
                     list.Add(StringSettings["FilePatchShortQuest"] + myUniqueFileName + fileExtension);
                 }
+              
+
                 list.ForEach(x =>
                 {
                     dto.PathPhotos.Add(x);

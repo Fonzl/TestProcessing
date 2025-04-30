@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace DTO.AnswerDto
 {
-    public class CreateAnswerDto
+    public class CreateAnswerDto: CreateAnswerDtoShort
     {
-        public string? AnswerText { get; set; }
-        public long QuestId { get; set; }
-        public bool IsCorrectAnswer { get; set; }
+     
         public List<string> PathToImg { get;set; }
 
     } 
