@@ -50,30 +50,48 @@ namespace Repository.RepositoryQuest
             foreach (var quest in list)
             {
                 var listAnswer = new List<AnswerShortDto>();
-                quest.Answers.ForEach(x => listAnswer.Add(new AnswerShortDto
+                if (quest.CategoryTasks.Id == 3)
                 {
-                    Id = x.Id,
-                    AnswerText = x.AnswerText,
-                    PathPhoto = x.PathToImage
-                })
-                );
-                result.Add(new DetailsQuestDto
-                {
-                    Id = quest.Id,
-                    Name = quest.Name,
-                    Info = quest.Info,
-                    Answers = listAnswer,
-                    CategoryTasks = new DTO.CategoryTasksDto.CategoryTasksDto
+                   
+                    quest.Answers.ForEach(x => listAnswer.Add(new AnswerShortDto
                     {
-                        Id = quest.CategoryTasks.Id,
-                        Name = quest.CategoryTasks.Name,
-                    },
-                    PathImg = quest.PathToImage
+                        Id = x.Id,
+                        AnswerText = null,
+                        PathPhoto = x.PathToImage
+                    })
+
+                    );
+                }
+                else
+                {
+                    
+                    quest.Answers.ForEach(x => listAnswer.Add(new AnswerShortDto
+                    {
+                        Id = x.Id,
+                        AnswerText = x.AnswerText,
+                        PathPhoto = x.PathToImage
+                    })
+
+                    );
+                }
+                    result.Add(new DetailsQuestDto
+                    {
+                        Id = quest.Id,
+                        Name = quest.Name,
+                        Info = quest.Info,
+                        Answers = listAnswer,
+                        CategoryTasks = new DTO.CategoryTasksDto.CategoryTasksDto
+                        {
+                            Id = quest.CategoryTasks.Id,
+                            Name = quest.CategoryTasks.Name,
+                        },
+                        PathImg = quest.PathToImage
 
 
 
 
-                });
+                    });
+                
             }
             return result;
         }
@@ -86,7 +104,7 @@ namespace Repository.RepositoryQuest
                 .Include(x => x.Answers)
                 .Include(x => x.CategoryTasks)
                 .First(x => x.Id == id);
-            if(quest.CategoryTasks.Id == 3)
+            if (quest.CategoryTasks.Id == 3)
             {
                 return new DetailsQuestDto
                 {

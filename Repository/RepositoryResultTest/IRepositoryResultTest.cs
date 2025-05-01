@@ -19,7 +19,9 @@ namespace Repository.RepositoryResultTest
         ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto);// финальный ответ студента
         ReturnAttemptDto? CheckingStudentResult(long testId,long studentId);
         long CreatResultAndAttempt(long testId, long studentId);
-        List<VerifiedUserResponesDto> returnResultDetails(long idResulTest);
+        List<VerifiedUserResponesDto> returnResultDetailsTrue(long idResulTest);
         void UpdateRespones (AddResultTestStudentDto dto);
+        public List<VerifiedUserResponesDtoShort> returnResultDetailsFalse(long idResulTest);
+        public DTO.GeneralDto.IsBoolDto TestBool(long IdResponse);
     }
 }

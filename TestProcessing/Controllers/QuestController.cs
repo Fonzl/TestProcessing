@@ -201,54 +201,54 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [HttpGet]
-        [Route("postQuestImg/{nameImg}")]
+        //[HttpGet]
+        //[Route("postQuestImg/{nameImg}")]
 
-        public IActionResult ReturnPhoto(string nameImg)//по id test
-        {
-            var tokenSettings = configuration.GetSection("ConnectionStrings");
-            try
-            {
-                var appPath = appEnvironment.ContentRootPath;
-                string path = appPath + tokenSettings["FilePatchShortQuest"] + "\\" + nameImg;
-                byte[] mas = System.IO.File.ReadAllBytes(path);
-                string type;
-                new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
-                return File(mas, type);
+        //public IActionResult ReturnPhoto(string nameImg)//по id test
+        //{
+        //    var tokenSettings = configuration.GetSection("ConnectionStrings");
+        //    try
+        //    {
+        //        var appPath = appEnvironment.ContentRootPath;
+        //        string path = appPath + tokenSettings["FilePatchShortQuest"] + "\\" + nameImg;
+        //        byte[] mas = System.IO.File.ReadAllBytes(path);
+        //        string type;
+        //        new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
+        //        return File(mas, type);
 
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
-        }
-        [HttpDelete]
-        [Route("DeleteQuestImg")]
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
+        //}
+        //[HttpDelete]
+        //[Route("DeleteQuestImg")]
 
-        public IActionResult DeletePhoto(string nameImg)//по id test
-        {
-            var tokenSettings = configuration.GetSection("ConnectionStrings");
-            try
-            {
-                var appPath = appEnvironment.ContentRootPath;
-                string path = appPath + tokenSettings["FilePatchShortQuest"] + "\\" + nameImg;
-                FileInfo fileInf = new FileInfo(path);
-                if (fileInf.Exists)
-                {
-                    fileInf.Delete();
-                    // альтернатива с помощью класса File
-                    // File.Delete(path);
-                }
+        //public IActionResult DeletePhoto(string nameImg)//по id test
+        //{
+        //    var tokenSettings = configuration.GetSection("ConnectionStrings");
+        //    try
+        //    {
+        //        var appPath = appEnvironment.ContentRootPath;
+        //        string path = appPath + tokenSettings["FilePatchShortQuest"] + "\\" + nameImg;
+        //        FileInfo fileInf = new FileInfo(path);
+        //        if (fileInf.Exists)
+        //        {
+        //            fileInf.Delete();
+        //            // альтернатива с помощью класса File
+        //            // File.Delete(path);
+        //        }
 
-                return StatusCode(200, "Deletion was successful");
+        //        return StatusCode(200, "Deletion was successful");
 
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
 
-        }
+        //}
 
         //public List<string> SaveFile(Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         //{

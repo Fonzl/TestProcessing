@@ -188,27 +188,27 @@ namespace TestProcessing.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("postAnswerImg/{nameImg}")]
+        //[HttpGet]
+        //[Route("postAnswerImg/{nameImg}")]
 
-        public IActionResult RetunPhoto(string nameImg)//по id test
-        {
-            var tokenSettings = configuration.GetSection("ConnectionStrings");
-            try
-            {
-                var appPath = appEnvironment.ContentRootPath;
-                string path = appPath + tokenSettings["FilePatchShortAnswer"] + "\\" + nameImg;
-                byte[] mas = System.IO.File.ReadAllBytes(path);
-                string type;
-                new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
-                return File(mas, type);
+        //public IActionResult RetunPhoto(string nameImg)//по id test
+        //{
+        //    var tokenSettings = configuration.GetSection("ConnectionStrings");
+        //    try
+        //    {
+        //        var appPath = appEnvironment.ContentRootPath;
+        //        string path = appPath + tokenSettings["FilePatchShortAnswer"] + "\\" + nameImg;
+        //        byte[] mas = System.IO.File.ReadAllBytes(path);
+        //        string type;
+        //        new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
+        //        return File(mas, type);
 
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
+        //}
     }
 }
 

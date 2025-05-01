@@ -1,4 +1,5 @@
-﻿using DTO.GroupDto;
+﻿using DTO.GeneralDto;
+using DTO.GroupDto;
 using DTO.ResultTestDto;
 using Repository.RepositoryResultTest;
 using System;
@@ -39,10 +40,13 @@ namespace Service.ServiceResultTest
         {
             return repo.ResultStudentId(studentId,  idDiscipline);
         }
-
-        public List<VerifiedUserResponesDto> ReturnResultDetails(long idResultTest)
+        public List<VerifiedUserResponesDtoShort> ReturnResultDetailsFalse(long idResultTest)
         {
-            return repo.returnResultDetails(idResultTest);
+            return repo.returnResultDetailsFalse(idResultTest);
+        }
+        public List<VerifiedUserResponesDto> ReturnResultDetailsTrue(long idResultTest)
+        {
+            return repo.returnResultDetailsTrue(idResultTest);
         }
 
         public void UpdateResultTest(UpdateResultTestDto updateResultTest)
@@ -70,6 +74,11 @@ namespace Service.ServiceResultTest
             public void UpdateRespones(AddResultTestStudentDto dto)
         {
             repo.UpdateRespones(dto);
+        }
+
+        public IsBoolDto TestBool(long IdResponse)
+        {
+            return repo.TestBool(IdResponse);
         }
     }
 }

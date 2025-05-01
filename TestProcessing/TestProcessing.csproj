@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Img\AnswerImg\0524892f-09ed-4299-bf8b-aba3017c068e.png" />
+    <Content Remove="wwwroot\Img\AnswerImg\272fc52e-721a-4f5e-a5ae-e8d62615f883.png" />
+    <Content Remove="wwwroot\Img\AnswerImg\74398137-364a-4789-b223-41304b13d2bf.png" />
+    <Content Remove="wwwroot\Img\AnswerImg\e81c30a3-b6d2-4b27-87b0-3ed8cfbc3eb8.png" />
+    <Content Remove="wwwroot\Img\QuestImg\2a3af77b-2301-4deb-8b46-5d16d7b62134.png" />
+    <Content Remove="wwwroot\Img\QuestImg\7157ac06-dc47-42cb-9ab4-cdda2e2b6209.png" />
+    <Content Remove="wwwroot\Img\QuestImg\a75d7ad2-2a0d-4a48-a737-ac0122650556.png" />
+    <Content Remove="wwwroot\Img\QuestImg\fe620de3-57cd-4388-a3c7-a34451e9bf2d.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>

@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text.Json;
 using Database;
 using DTO.AnswerDto;
@@ -57,6 +59,14 @@ namespace Repository.RepositoryResultTest
 
             });
         }
+        public DTO.GeneralDto.IsBoolDto TestBool(long IdResponse)
+        {
+            var res = context.UserResponses
+                .Include(x => x.ResultTest.Test)
+                .FirstOrDefault(x => x.Id == IdResponse);
+            return new DTO.GeneralDto.IsBoolDto { IsTrue = res.ResultTest.Test.IsCheck };
+        }
+        
 
         public List<ResultTestDto> GetResults()
         {
@@ -376,8 +386,7 @@ namespace Repository.RepositoryResultTest
         }
 
 
-
-        public List<VerifiedUserResponesDto> returnResultDetails(long idResulTest)
+        public List<VerifiedUserResponesDtoShort> returnResultDetailsFalse(long idResulTest)
         {
             var respons = context.UserResponses
                 .Include(x => x.ResultTest.Test)
@@ -385,144 +394,22 @@ namespace Repository.RepositoryResultTest
             List<VerifiedUserResponesDto> listUserRespons = JsonSerializer.Deserialize<List<VerifiedUserResponesDto>>(respons.ListUserResponses);
             List<long> answer = new List<long>();
             List<string> d = new List<string>();
-            //listUserRespons.ForEach(x => {
-            //    x.UserRespones.ForEach
-            //    (x => { d.Add(x); });
-            //});
-            //d.ForEach(x => {
-            //    answer.Add((long)Convert.ToDouble(x));//Вытаскиваем id ответов пользователя.Пока делаем ток так ,но потом это будет одним из способов в зависимости от категории вопросаю 
-            //});
-            //var answersUser = context.Answers.Where(x => answer.Contains(x.Id)).ToList();
+            List < VerifiedUserResponesDtoShort > verifiedUserResponesDtoShorts = listUserRespons.Cast<VerifiedUserResponesDtoShort>().ToList();
 
-            //var listVerifiedRespouns = new List<VerifiedUserResponesDto>();
-            //var ListQuest = context.Quests.Where(x => x.Tests.Contains(respons.ResultTest.Test)).Include(x => x.Answers).Include(x => x.CategoryTasks).ToList();
-            //foreach (var Quest in ListQuest)
-            //{
-            //    switch (Quest.CategoryTasks.Id)
-            //    {
-            //        case 1:
-            //            bool correctdefault = false;
+            return verifiedUserResponesDtoShorts;
 
 
-            //            List<AnswerVerfiedDto> answerVerfiedUser = new List<AnswerVerfiedDto>();
-            //            Quest.Answers.ForEach(x =>
-            //            {
-            //                answerVerfiedUser.Add(new AnswerVerfiedDto()
-            //                {
-            //                    Id = x.Id,
-            //                    AnswerText = x.AnswerText,
-            //                    IsCorrectAnswer = x.IsCorrectAnswer,
-            //                    IsResponeUser = answersUser.Contains(x)
+        }
 
-            //                });
-            //            });
-
-            //            if (Quest.Answers.Where(x => x.IsCorrectAnswer == true).All(x => answerVerfiedUser.Where(y => y.IsResponeUser == true).Select(y => y.Id).Contains(x.Id)))
-            //            {
-            //                correctdefault = true;
-            //            }
-            //            listVerifiedRespouns.Add(new VerifiedUserResponesDto
-            //            {
-            //                UserRespones = answerVerfiedUser.Cast<AnswerVerfiedDto>().ToList(),
-            //                QuestDto = new QuestDto
-            //                {
-            //                    Id = Quest.Id,
-            //                    Info = Quest.Info,
-            //                    Name = Quest.Name
-            //                },
-            //                IsCorrectQuest = correctdefault,
-            //                CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
-            //                {
-            //                    Id = Quest.CategoryTasks.Id,
-            //                    Name = Quest.CategoryTasks.Name,
-            //                }           
-            //            });
-            //            break;
-            //        case 2:
-            //            bool correctdefault2 = false;
-
-
-            //            List<AnswerVerfiedDto> answerVerfiedUser2 = new List<AnswerVerfiedDto>();
-            //            Quest.Answers.ForEach(x =>
-            //            {
-            //                answerVerfiedUser2.Add(new AnswerVerfiedDto()
-            //                {
-            //                    Id = x.Id,
-            //                    AnswerText = x.AnswerText,
-            //                    IsCorrectAnswer = x.IsCorrectAnswer,
-            //                    IsResponeUser = answersUser.Contains(x)
-
-            //                });
-            //            });
-
-            //            if (Quest.Answers.Where(x => x.IsCorrectAnswer == true).All(x => answerVerfiedUser2.Where(y => y.IsResponeUser == true).Select(y => y.Id).Contains(x.Id)))
-            //            {
-            //                correctdefault = true;
-            //            }
-            //            listVerifiedRespouns.Add(new VerifiedUserResponesDto
-            //            {
-            //                UserRespones = answerVerfiedUser2.Cast<AnswerVerfiedDto>().ToList(),
-            //                QuestDto = new QuestDto
-            //                {
-            //                    Id = Quest.Id,
-            //                    Info = Quest.Info,
-            //                    Name = Quest.Name
-            //                },
-            //                IsCorrectQuest = correctdefault2,
-            //                CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
-            //                {
-            //                    Id = Quest.CategoryTasks.Id,
-            //                    Name = Quest.CategoryTasks.Name,
-            //                }
-            //            });
-            //            break;
-            //        case 3:
-            //            bool correctdefault3 = false;
-            //            var answerVerfiedUser3 = new AnswerVerfiedDto();
-            //            var answerQuestDto = Quest.Answers.FirstOrDefault(x => x.Quest.Id == Quest.Id);
-            //            if (listUserRespons.First(x => x.QuestId == Quest.Id).UserRespones.First() == null)
-            //            {
-            //                answerVerfiedUser3 = new AnswerVerfiedDto()
-            //                {
-            //                    Id = answerQuestDto.Id,
-            //                    AnswerText = listUserRespons.FirstOrDefault( x => x.QuestId == Quest.Id).UserRespones.FirstOrDefault(),
-            //                    IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
-            //                    IsResponeUser = false,
-            //                };
-            //            }
-
-            //            else
-            //            {
-            //                answerVerfiedUser3 = new AnswerVerfiedDto()
-            //                {
-            //                    Id = answerQuestDto.Id,
-            //                    AnswerText = listUserRespons.FirstOrDefault(x => x.QuestId == Quest.Id).UserRespones.FirstOrDefault() ,
-            //                    IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
-            //                    IsResponeUser = answerQuestDto.AnswerText.ToLower().Split(";").Any(x => listUserRespons.FirstOrDefault(x => x.QuestId == Quest.Id).UserRespones
-            //                    .Select(s => s.ToLower()).ToArray().Contains(x)),
-            //                };
-            //            }
-            //            listVerifiedRespouns.Add(new VerifiedUserResponesDto
-            //            {
-            //                UserRespones = new List<AnswerVerfiedDto>() { answerVerfiedUser3 },
-            //                QuestDto = new QuestDto
-            //                {
-            //                    Id = Quest.Id,
-            //                    Info = Quest.Info,
-            //                    Name = Quest.Name
-            //                },
-            //                IsCorrectQuest = answerVerfiedUser3.IsResponeUser,
-            //                CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
-            //                {
-            //                    Id = Quest.CategoryTasks.Id,
-            //                    Name = Quest.CategoryTasks.Name,
-            //                }
-            //            });
-            //            break;
-
-            //    }
-
-            // }
+        public List<VerifiedUserResponesDto> returnResultDetailsTrue(long idResulTest)
+        {
+            var respons = context.UserResponses
+                .Include(x => x.ResultTest.Test)
+                .FirstOrDefault(x => x.Id == idResulTest);
+            List<VerifiedUserResponesDto> listUserRespons = JsonSerializer.Deserialize<List<VerifiedUserResponesDto>>(respons.ListUserResponses);
+            List<long> answer = new List<long>();
+            List<string> d = new List<string>();
+            
             return listUserRespons;
 
 

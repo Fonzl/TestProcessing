@@ -35,7 +35,7 @@ namespace TestProcessing.Controllers
                 var results = service.ResultStudentId(Convert.ToInt16(id), idDiscipline);
                 if (results.Count == 0)
                 {
-                    return Json(new AttemptTrueDto { IsTrue = false });
+                    return Json(new IsBoolDto { IsTrue = false });
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace TestProcessing.Controllers
                 var results = service.ResultStudentId(Convert.ToInt16(idStudent), idDiscipline);
                 if (results.Count == 0)
                 {
-                    return Json(new AttemptTrueDto { IsTrue = false });
+                    return Json(new IsBoolDto { IsTrue = false });
                 }
                 else
                 {
@@ -150,6 +150,7 @@ namespace TestProcessing.Controllers
             }
 
         }
+
         [Authorize]
         [HttpGet]
         [Route("resultDetails/{id}")]
@@ -157,8 +158,51 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                return Json(service.ReturnResultDetails(id));
+                if (Convert.ToInt16(User.FindFirst("id")?.Value) == 3)
+                {
+                    if (service.TestBool(id).IsTrue == true)
+                    { var responesDto = service.ReturnResultDetailsTrue(id);
+
+
+                        return Json(new ReturnResultDetails
+                        {
+                            numberOfCorrect = responesDto.Where(x => x.IsCorrectQuest == true).Count(),
+                            numberOfIncorrect = responesDto.Where(x => x.IsCorrectQuest == false).Count(),
+                            verifiedUserRespones = responesDto
+
+
+                        });
+                    }
+                    else
+                    {   
+                        var responesDtoShorts = service.ReturnResultDetailsFalse(id);
+                        
+                        return Json(new ReturnResultDetailsShort
+                        {
+                            numberOfCorrect = responesDtoShorts.Where(x => x.IsCorrectQuest == true).Count(),
+                            numberOfIncorrect = responesDtoShorts.Where(x => x.IsCorrectQuest == false).Count(),
+                            verifiedUserRespones = responesDtoShorts
+                        });
+
+                    }
+
+                }
+                else
+                {
+                    var responesDto = service.ReturnResultDetailsTrue(id);
+
+
+                    return Json(new ReturnResultDetails
+                    {
+                        numberOfCorrect = responesDto.Where(x => x.IsCorrectQuest == true).Count(),
+                        numberOfIncorrect = responesDto.Where(x => x.IsCorrectQuest == false).Count(),
+                        verifiedUserRespones = responesDto
+
+
+                    });
+                }
             }
+
             catch (Exception ex)
             {
                 return StatusCode(520, ex.Message);
@@ -171,11 +215,14 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                var studentId = User.FindFirst("id")?.Value;
-                return Json(new IdDto
-                {
-                    Id = service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId))
-                });
+                
+                
+                    var studentId = User.FindFirst("id")?.Value;
+                    return Json(new IdDto
+                    {
+                        Id = service.CreatResultAndAttempt(idTest, Convert.ToInt16(studentId))
+                    });
+                
             }
             catch (Exception ex)
             {
@@ -190,7 +237,7 @@ namespace TestProcessing.Controllers
             try
             {
 
-                AttemptTrueDto w = new AttemptTrueDto()
+                IsBoolDto w = new IsBoolDto()
                 {
                     IsTrue = true,
                 };

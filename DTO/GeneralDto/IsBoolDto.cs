@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.ResultTestDto
+namespace DTO.GeneralDto
 {
-    public class AttemptTrueDto
+    public class IsBoolDto
     {
         public bool IsTrue{ get; set; }
     }
