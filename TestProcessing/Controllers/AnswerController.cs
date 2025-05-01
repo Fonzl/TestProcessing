@@ -1,8 +1,11 @@
 ﻿using DTO.AnswerDto;
+using DTO.GeneralDto;
+using DTO.QuestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Service.ServiceAnswer;
+using Service.ServiceQuest;
 
 
 namespace TestProcessing.Controllers
@@ -64,10 +67,14 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]
         [Route("add")]
-        public IActionResult AddAnswer([FromForm] CreateAnswerDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile, IWebHostEnvironment env)
+        public IActionResult AddAnswer([FromForm] CreateAnswerDtoShort dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile, IWebHostEnvironment env)
         {
-            dto.PathToImg = new List<string>();
-
+            CreateAnswerDto createAnswer= new CreateAnswerDto {
+                AnswerText = dto.AnswerText,
+                IsCorrectAnswer = dto.IsCorrectAnswer,
+                QuestId = dto.QuestId,
+                PathToImg = new List<string>()
+            };
             try
             {
                 List<string> list = new List<string>();
@@ -88,10 +95,13 @@ namespace TestProcessing.Controllers
 
                 list.ForEach(x =>
                 {
-                    dto.PathToImg.Add(x);
+                    createAnswer.PathToImg.Add(x);
                 });
-
-                return Json(serviceAnswer.CreateAnswer(dto));
+                return Json(new IdDto
+                {
+                    Id = serviceAnswer.CreateAnswer(createAnswer)
+                });
+               
             }
             catch (Exception ex)
             {
@@ -178,27 +188,27 @@ namespace TestProcessing.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("postAnswerImg/{nameImg}")]
+        //[HttpGet]
+        //[Route("postAnswerImg/{nameImg}")]
 
-        public IActionResult RetunPhoto(string nameImg)//по id test
-        {
-            var tokenSettings = configuration.GetSection("ConnectionStrings");
-            try
-            {
-                var appPath = appEnvironment.ContentRootPath;
-                string path = appPath + tokenSettings["FilePatchShortAnswer"] + "\\" + nameImg;
-                byte[] mas = System.IO.File.ReadAllBytes(path);
-                string type;
-                new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
-                return File(mas, type);
+        //public IActionResult RetunPhoto(string nameImg)//по id test
+        //{
+        //    var tokenSettings = configuration.GetSection("ConnectionStrings");
+        //    try
+        //    {
+        //        var appPath = appEnvironment.ContentRootPath;
+        //        string path = appPath + tokenSettings["FilePatchShortAnswer"] + "\\" + nameImg;
+        //        byte[] mas = System.IO.File.ReadAllBytes(path);
+        //        string type;
+        //        new FileExtensionContentTypeProvider().TryGetContentType(path, out type);
+        //        return File(mas, type);
 
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
+        //}
     }
 }
 

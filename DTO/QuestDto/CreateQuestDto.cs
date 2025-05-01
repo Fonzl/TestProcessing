@@ -7,13 +7,10 @@ using System.Threading.Tasks;
 
 namespace DTO.QuestDto
 {
-    public class CreateQuestDto
+    public class CreateQuestDto : CreateQuestDtoShort
     {
      
-        public string Name { get; set; }
-        public string Info { get; set; }
-        public short CategoryTaskId { get; set; }
-        public List<long> Tests { get; set; }
+        
         public List<string>? PathPhotos { get; set; }
     }
 } 

@@ -17,9 +17,11 @@ namespace Service.ServiceResultTest
         void DeleteResultTest(int id);
         void UpdateResultTest(UpdateResultTestDto updateResultTest);
         ResultOfAttemptsDTO CreateResultTest(AddResultTestStudentDto createResultTest);
-        List<DTO.ResultTestDto.VerifiedUserResponesDto> ReturnResultDetails(long idResultTest);
+        List<DTO.ResultTestDto.VerifiedUserResponesDto> ReturnResultDetailsTrue(long idResultTest);
         long CreatResultAndAttempt(long testId, long studentId);
         ReturnAttemptDto? CheckingStudentResult(long testId, long studentId);
         void UpdateRespones(AddResultTestStudentDto dto);
+        public List<VerifiedUserResponesDtoShort> ReturnResultDetailsFalse(long idResultTest);
+        public DTO.GeneralDto.IsBoolDto TestBool(long IdResponse);
     }
 }

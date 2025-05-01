@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.ResultTestDto
+namespace DTO.GeneralDto
 {
-    public class AttemptTrueDto
+    public class IdDto
     {
-        public bool IsTrue{ get; set; }
+        public long Id { get; set; }
     }
 }
