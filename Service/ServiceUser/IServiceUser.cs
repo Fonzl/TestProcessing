@@ -17,5 +17,6 @@ namespace Service.ServiceUser
         void CreateUser(CreateUserDto user);
         public List<ShortUserDto> GetStudentIdGroup(long idGroup);
         public List<StudentAttemptResultDto> GetStudentAttempt(long idGroup, long idTest);
+        void PasswordСhange(PasswordСhangeDto passwordСhangeDto);
     }
 }

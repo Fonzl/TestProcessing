@@ -145,5 +145,30 @@ namespace TestProcessing.Controllers
             }
 
         }
+        [Authorize(Roles = "admin")]
+        [HttpPatch]
+        [Route("PasswordСhange")]
+        public IActionResult PasswordСhange(PasswordСhangeDto dto)
+        {
+            try
+            {
+                if(dto.Password == dto.PasswordConfirmation)
+                {
+                    service.PasswordСhange(dto);
+                    return StatusCode(201, "Password update");
+                }
+                else
+                {
+                    throw new Exception("Пароли не совпадают");
+                }
+               
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
+
+        }
     }
 }
