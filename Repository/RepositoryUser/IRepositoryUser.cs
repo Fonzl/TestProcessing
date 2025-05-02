@@ -19,5 +19,6 @@ namespace Repository.RepositoryUser
         void Insert(CreateUserDto dto);
         public List<ShortUserDto> GetStudentIdGroup(long idGroup);// Выыод студентов группы
         public List<StudentAttemptResultDto> GetStudentAttempt(long idGroup,long idTest);
+        void PasswordСhange(PasswordСhangeDto passwordСhangeDto);
     }
 }

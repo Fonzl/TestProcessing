@@ -3,12 +3,13 @@ using DTO.ResultTestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.ServiceResultTest;
+using Service.ServiceUser;
 
 namespace TestProcessing.Controllers
 {
     [Route("ResultTest")]
     [ApiController]
-    public class ResultTestController(IServiceResultTest service) : Controller
+    public class ResultTestController(IServiceResultTest service,IServiceUser serviceUser) : Controller
     {
         [HttpGet]
         [Route("all")]
@@ -158,7 +159,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                if (Convert.ToInt16(User.FindFirst("id")?.Value) == 3)
+                if (serviceUser.GetUser(Convert.ToInt16(User.FindFirst("id")?.Value)).Role.Id == 3)
                 {
                     if (service.TestBool(id).IsTrue == true)
                     { var responesDto = service.ReturnResultDetailsTrue(id);

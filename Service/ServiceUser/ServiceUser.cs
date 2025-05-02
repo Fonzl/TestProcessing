@@ -76,6 +76,11 @@ namespace Service.ServiceUser
            return new ReturnLoginUser { jwt = token ,IdUser = dto.Id,UserName = dto.FullName, RoleDto = dto.Role};
         }
 
+        public void PasswordСhange(PasswordСhangeDto passwordСhangeDto)
+        {
+            repo.PasswordСhange(passwordСhangeDto);
+        }
+
         public void UpdateUser(UpdateUserDto user)
         {
             repo.Update(user);

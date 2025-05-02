@@ -56,26 +56,28 @@ namespace Repository.RepositoryUser
                 .Include(x => x.Group)
                 .Include(x => x.Disciplines)
                 .First(x => x.Id == id);
-            return (new StudentUserDto
-            {
-                Id = user.Id,
-                FullName = user.FullName,
-                Group = new DTO.GroupDto.DetailsGroupDto
+           
+                return (new StudentUserDto
                 {
-                    Id = user.Group.Id,
-                    Name = user.Group.Name,
-                    StartDateOfTraining = user.Group.StartDateOfTraining,
-                    EndOfTraining = user.Group.EndOfTraining
+                    Id = user.Id,
+                    FullName = user.FullName,
+                    Group = new DTO.GroupDto.DetailsGroupDto
+                    {
+                        Id = user.Group.Id,
+                        Name = user.Group.Name,
+                        StartDateOfTraining = user.Group.StartDateOfTraining,
+                        EndOfTraining = user.Group.EndOfTraining
 
-                },
-                Role = new DTO.RoleDto.RoleDto
-                {
-                    Id = user.Role.Id,
-                    Name = user.Role.Name,
-                }
+                    },
+                    Role = new DTO.RoleDto.RoleDto
+                    {
+                        Id = user.Role.Id,
+                        Name = user.Role.Name,
+                    }
 
 
-            });
+                });
+            
 
         }
 
@@ -165,6 +167,15 @@ namespace Repository.RepositoryUser
             });
             return listStudentAttempt;
 
+        }
+
+        public void PasswordСhange(PasswordСhangeDto passwordСhangeDto)//Смена пароля пользователю 
+        {
+            var user = context.Users.FirstOrDefault(x => x.Id == passwordСhangeDto.IdUser);
+            user.Password = Convert.ToHexString(
+                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(passwordСhangeDto.Password)));
+            context.Users.Update(user);
+            context.SaveChanges();
         }
     }
 }

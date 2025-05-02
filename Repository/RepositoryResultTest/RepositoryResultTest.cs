@@ -163,6 +163,10 @@ namespace Repository.RepositoryResultTest
         }
         public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
         {
+            if( context.UserResponses.First(x => x.Id == dto.idResult).IsFinish)
+            {
+                throw new Exception("Тест уже завершён");
+            }
             if (context.Tests.Include(x => x.Quests)
                 .FirstOrDefault(x => x.Id == dto.TestId).Quests.Count == dto.UserResponesTest.Count)
             {
@@ -294,12 +298,12 @@ namespace Repository.RepositoryResultTest
                             bool correctdefault3 = false;
                             var answerVerfiedUser3 = new AnswerVerfiedDto();
                             var answerQuestDto = Quest.Answers.FirstOrDefault(x => x.Quest.Id == Quest.Id);
-                            if (responses.First(x => x.QuestId == Quest.Id).UserRespones.First() == null)
+                            if (responses.First(x => x.QuestId == Quest.Id).UserRespones == null)
                             {
                                 answerVerfiedUser3 = new AnswerVerfiedDto()
                                 {
                                     Id = answerQuestDto.Id,
-                                    AnswerText = responses.FirstOrDefault(x => x.QuestId == Quest.Id).UserRespones.FirstOrDefault(),
+                                    AnswerText = null,
                                     IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
                                     IsResponeUser = false,
                                 };
