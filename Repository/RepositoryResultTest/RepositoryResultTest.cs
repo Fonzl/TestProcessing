@@ -270,27 +270,50 @@ namespace Repository.RepositoryResultTest
 
                                 });
                             });
-                            if (answerVerfiedUser2.Where(y => y.IsResponeUser == true).All(x => Quest.Answers.Where(x => x.IsCorrectAnswer == true).Select(y => y.Id).Contains(x.Id)))// проверка на правельный ответ
+                            if (responses.First(x => x.QuestId == Quest.Id).UserRespones == null)
                             {
-                                correctdefault2 = true;
-                            }
-                            listVerifiedRespons.Add(new VerifiedUserResponesDto
-                            {
-                                UserRespones = answerVerfiedUser2.Cast<AnswerVerfiedDto>().ToList(),
-                                QuestDto = new QuestDto
+                                listVerifiedRespons.Add(new VerifiedUserResponesDto
                                 {
-                                    Id = Quest.Id,
-                                    Info = Quest.Info,
-                                    Name = Quest.Name,
-                                    PathImg = Quest.PathToImage,
-                                },
-                                IsCorrectQuest = correctdefault2,
-                                CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
-                                {
-                                    Id = Quest.CategoryTasks.Id,
-                                    Name = Quest.CategoryTasks.Name,
+                                    UserRespones = answerVerfiedUser2.Cast<AnswerVerfiedDto>().ToList(),
+                                    QuestDto = new QuestDto
+                                    {
+                                        Id = Quest.Id,
+                                        Info = Quest.Info,
+                                        Name = Quest.Name,
+                                        PathImg = Quest.PathToImage,
+                                    },
+                                    IsCorrectQuest = correctdefault2,
+                                    CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
+                                    {
+                                        Id = Quest.CategoryTasks.Id,
+                                        Name = Quest.CategoryTasks.Name,
+                                    }
+                                });
                                 }
-                            });
+                            else
+                            {
+                                if (answerVerfiedUser2.Where(y => y.IsResponeUser == true).All(x => Quest.Answers.Where(x => x.IsCorrectAnswer == true).Select(y => y.Id).Contains(x.Id)))// проверка на правельный ответ
+                                {
+                                    correctdefault2 = true;
+                                }
+                                listVerifiedRespons.Add(new VerifiedUserResponesDto
+                                {
+                                    UserRespones = answerVerfiedUser2.Cast<AnswerVerfiedDto>().ToList(),
+                                    QuestDto = new QuestDto
+                                    {
+                                        Id = Quest.Id,
+                                        Info = Quest.Info,
+                                        Name = Quest.Name,
+                                        PathImg = Quest.PathToImage,
+                                    },
+                                    IsCorrectQuest = correctdefault2,
+                                    CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
+                                    {
+                                        Id = Quest.CategoryTasks.Id,
+                                        Name = Quest.CategoryTasks.Name,
+                                    }
+                                });
+                            }
                             break;
                         case 3:// обработка с письменым ответом
                             bool correctdefault3 = false;
@@ -437,7 +460,7 @@ namespace Repository.RepositoryResultTest
         }
             else
             {
-                return null;
+                throw new Exception("Не соотвествует количеству вопросов в тесте");
             }
         }
 
@@ -612,14 +635,23 @@ namespace Repository.RepositoryResultTest
 
         public void UpdateRespones(AddResultTestStudentDto dto)
         {
+
             if (context.UserResponses.First(x => x.Id == dto.idResult).IsFinish)
             {
                 throw new Exception("Тест уже завершён");
             }
-            var respones = context.UserResponses.First(x => x.Id == dto.idResult);
-            respones.ListUserResponses = JsonSerializer.Serialize(dto.UserResponesTest);
-            context.UserResponses.Update(respones);
-            context.SaveChanges();
+            if (context.Tests.Include(x => x.Quests)
+            .FirstOrDefault(x => x.Id == dto.TestId).Quests.Count == dto.UserResponesTest.Count)
+            {
+                var respones = context.UserResponses.First(x => x.Id == dto.idResult);
+                respones.ListUserResponses = JsonSerializer.Serialize(dto.UserResponesTest);
+                context.UserResponses.Update(respones);
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Не соотвествует количеству вопросов в тесте");
+            }
         }
 
         public bool CheckingForAccess()
