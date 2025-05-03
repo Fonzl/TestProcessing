@@ -15,6 +15,11 @@ namespace Service.ServiceQuest
 {
     public class ServiceQuest(IRepositoryQuest repo) : IServiceQuest
     {
+        public ChekAnswerQuest ChekAnswerQuest(long questId)
+        {
+            return repo.ChekAnswerQuest(questId);
+        }
+
         public long CreateQuest(CreateQuestDto createQuest)
         {
           
@@ -22,7 +27,7 @@ namespace Service.ServiceQuest
             
         }
 
-        public void DeleteQuest(int id)
+        public void DeleteQuest(long id)
         {
             repo.Delete(id);
         }
@@ -32,12 +37,12 @@ namespace Service.ServiceQuest
             return repo.GetAll();
         }
 
-        public List<DetailsQuestDto> GetListQuests(int id)
+        public List<DetailsQuestDto> GetListQuests(long id)
         {
             return repo.GetListQuests(id);
         }
 
-        public DetailsQuestDto GetQuest(int id)
+        public DetailsQuestDto GetQuest(long id)
         {
           return  repo.GetQuest(id);
         }

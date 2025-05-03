@@ -12,7 +12,38 @@ namespace Repository.RepositoryQuest
 {
     public class RepositoryQuest(ApplicationContext context) : IRepositoryQuest
     {
-        public void Delete(int id)
+        public ChekAnswerQuest ChekAnswerQuest(long questId)
+        {
+            var quest = context.Quests
+                .Include(x => x.Answers)
+                .Include(x => x.CategoryTasks)
+                .FirstOrDefault(x => x.Id == questId);
+            var listAnswer = new List<AnswerDto>();
+            quest.Answers.ForEach(x =>
+            {
+                listAnswer.Add(new AnswerDto
+                {
+                    AnswerText = x.AnswerText,
+                    IsCorrectAnswer = x.IsCorrectAnswer,
+                    Id = x.Id
+
+                });
+            });
+            return new ChekAnswerQuest
+            {
+
+                CategoryTasks = new DTO.CategoryTasksDto.CategoryTasksDto()
+                {
+                    Id = quest.CategoryTasks.Id,
+                    Name = quest.CategoryTasks.Name,
+                },
+                Answers = listAnswer
+
+            };
+
+        }
+
+        public void Delete(long id)
         {
             var quest = context.Quests.First(x => x.Id == id);
             context.Quests.Remove(quest);
@@ -37,7 +68,7 @@ namespace Repository.RepositoryQuest
 
      
 
-        public List<DetailsQuestDto> GetListQuests(int testId)
+        public List<DetailsQuestDto> GetListQuests(long testId)
         {
             var test = context.Tests.First(x => x.Id == testId);
            var list = context.Quests
@@ -96,7 +127,7 @@ namespace Repository.RepositoryQuest
             return result;
         }
 
-        public DetailsQuestDto GetQuest(int id)
+        public DetailsQuestDto GetQuest(long id)
         {
             
             var quest = context.Quests

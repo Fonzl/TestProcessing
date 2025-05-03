@@ -9,10 +9,11 @@ namespace Service.ServiceQuest
 {
     public interface IServiceQuest
     {
-        DetailsQuestDto GetQuest(int id);
+        DetailsQuestDto GetQuest(long id);
+        public ChekAnswerQuest ChekAnswerQuest(long questId);
         List<QuestDto> GetAllQuests();
-        List<DetailsQuestDto> GetListQuests(int id);
-        void DeleteQuest(int id);
+        List<DetailsQuestDto> GetListQuests(long id);
+        void DeleteQuest(long id);
         List<string>? UpdateQuest(UpdateQuestDto updateQuest);
         long CreateQuest(CreateQuestDto createQuest);
       

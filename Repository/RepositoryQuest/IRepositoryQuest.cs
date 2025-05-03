@@ -10,10 +10,11 @@ namespace Repository.RepositoryQuest
     public interface IRepositoryQuest
     {
         List<QuestDto> GetAll();
-        List<DetailsQuestDto> GetListQuests(int testId);
-        DetailsQuestDto GetQuest(int id);
+        List<DetailsQuestDto> GetListQuests(long testId);
+        DetailsQuestDto GetQuest(long id);
         List<string>? Update(UpdateQuestDto dto);
         long Insert(CreateQuestDto dto);
-        void Delete(int id);
+        ChekAnswerQuest ChekAnswerQuest( long questId);
+        void Delete(long id);
     }
 }

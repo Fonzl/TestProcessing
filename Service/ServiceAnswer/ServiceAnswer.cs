@@ -1,4 +1,5 @@
 ﻿using DTO.AnswerDto;
+using DTO.QuestDto;
 using Repository.RepositoryAnswer;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,10 @@ namespace Service.ServiceAnswer
 
         public void AnswerListCreate(List<CreateAnswerDto> answerList)
         {
+            
             repo.InsertList(answerList);
         }
+
+       
     }
 }

@@ -1,9 +1,7 @@
 ﻿using DTO.AnswerDto;
 using DTO.GeneralDto;
-using DTO.QuestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 using Service.ServiceAnswer;
 using Service.ServiceQuest;
 
@@ -13,7 +11,7 @@ namespace TestProcessing.Controllers
     [Route("Answer")]
     [ApiController]
 
-    public class AnswerController(IServiceAnswer serviceAnswer, IConfiguration configuration, IWebHostEnvironment appEnvironment) : Controller
+    public class AnswerController(IServiceAnswer serviceAnswer, IConfiguration configuration, IWebHostEnvironment appEnvironment, IServiceQuest serviceQuest) : Controller
     {
 
 
@@ -50,33 +48,44 @@ namespace TestProcessing.Controllers
         }
 
         // POST api/<ValuesController>
-        [HttpPost]
-        [Route("addAnswer")]
-        public IActionResult AddAnswer(List<CreateAnswerDto> dto)
-        {
-            try
-            {
-                serviceAnswer.AnswerListCreate(dto);
-                return StatusCode(201);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
-        }
+        //[HttpPost]
+        //[Route("addAnswer")]
+        //public IActionResult AddAnswer(List<CreateAnswerDto> dto)
+        //{
+        //    try
+        //    {
+        //        serviceAnswer.AnswerListCreate(dto);
+        //        return StatusCode(201);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
+        //}
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]
         [Route("add")]
         public IActionResult AddAnswer([FromForm] CreateAnswerDtoShort dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile, IWebHostEnvironment env)
         {
-            CreateAnswerDto createAnswer= new CreateAnswerDto {
-                AnswerText = dto.AnswerText,
-                IsCorrectAnswer = dto.IsCorrectAnswer,
-                QuestId = dto.QuestId,
-                PathToImg = new List<string>()
-            };
+
             try
             {
+                var quest = serviceQuest.ChekAnswerQuest(dto.QuestId);
+                if ((quest.CategoryTasks.Id == 1 && quest.Answers.Where(x => x.IsCorrectAnswer == true).ToList().Count == 1 && dto.IsCorrectAnswer == true) ||
+                   (quest.CategoryTasks.Id == 3 && ((dto.IsCorrectAnswer == true && quest.Answers.Count >= 1) || uploadedFile == null)) ||
+                    (quest.CategoryTasks.Id == 4 && dto.IsCorrectAnswer == false))
+                {
+
+                    throw new Exception("Неправильно введены данные вопроса");
+
+                }
+                CreateAnswerDto createAnswer = new CreateAnswerDto
+                {
+                    AnswerText = dto.AnswerText,
+                    IsCorrectAnswer = dto.IsCorrectAnswer,
+                    QuestId = dto.QuestId,
+                    PathToImg = new List<string>()
+                };
                 List<string> list = new List<string>();
                 var StringSettings = configuration.GetSection("ConnectionStrings");//
                 foreach (var file in uploadedFile)
@@ -101,7 +110,9 @@ namespace TestProcessing.Controllers
                 {
                     Id = serviceAnswer.CreateAnswer(createAnswer)
                 });
-               
+
+
+
             }
             catch (Exception ex)
             {
