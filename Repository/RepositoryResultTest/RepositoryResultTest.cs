@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System.Data;
 using System.Text.Json;
 using Database;
 using DTO.AnswerDto;
@@ -66,7 +64,7 @@ namespace Repository.RepositoryResultTest
                 .FirstOrDefault(x => x.Id == IdResponse);
             return new DTO.GeneralDto.IsBoolDto { IsTrue = res.ResultTest.Test.IsCheck };
         }
-        
+
 
         public List<ResultTestDto> GetResults()
         {
@@ -140,7 +138,7 @@ namespace Repository.RepositoryResultTest
             var listResults = new List<ResultOfAttemptsDTO>();
             foreach (var result in results)
             {
-                if(result.IsFinish == false)
+                if (result.IsFinish == false)
                 {
                     continue;
                 }
@@ -157,13 +155,13 @@ namespace Repository.RepositoryResultTest
 
 
                 });
-                
+
             }
             return listResults.OrderByDescending(x => x.DateFinish).ToList();
         }
         public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
         {
-            if( context.UserResponses.First(x => x.Id == dto.idResult).IsFinish)
+            if (context.UserResponses.First(x => x.Id == dto.idResult).IsFinish)
             {
                 throw new Exception("Тест уже завершён");
             }
@@ -272,9 +270,9 @@ namespace Repository.RepositoryResultTest
 
                                 });
                             });
-                            if (Quest.Answers.Where(x => x.IsCorrectAnswer == true).All(x => answerVerfiedUser2.Where(y => y.IsResponeUser == true).Select(y => y.Id).Contains(x.Id)))// проверка на правельный ответ
+                            if (answerVerfiedUser2.Where(y => y.IsResponeUser == true).All(x => Quest.Answers.Where(x => x.IsCorrectAnswer == true).Select(y => y.Id).Contains(x.Id)))// проверка на правельный ответ
                             {
-                                correctdefault = true;
+                                correctdefault2 = true;
                             }
                             listVerifiedRespons.Add(new VerifiedUserResponesDto
                             {
@@ -319,6 +317,7 @@ namespace Repository.RepositoryResultTest
                                     IsResponeUser = answerQuestDto.AnswerText.ToLower().Split(";").Any(x => responses.First(x => x.QuestId == Quest.Id).UserRespones
                                     .Select(s => s.ToLower()).ToArray().Contains(x)),
 
+
                                 };
                             }
                             listVerifiedRespons.Add(new VerifiedUserResponesDto
@@ -340,49 +339,102 @@ namespace Repository.RepositoryResultTest
                                 }
                             });
                             break;
+                        case 4://обработка с последовательным выбором
+                            bool correctdefault4 = false;
+                            List<AnswerVerfiedDto> answerVerfiedUser4 = new List<AnswerVerfiedDto>();
+                            Quest.Answers.OrderBy(x => x.Id).ToList().ForEach(x =>
+                            {
+                                bool isResponeUser;
 
-                    }
+
+                                if (responses.First(x => x.QuestId == Quest.Id).UserRespones == null)// если на вопрос не был дан ответ то он автоматически помечаеться не правельным
+                                {
+                                    isResponeUser = false;
+                                }
+                                else
+                                {
+                                    var indexAnswer = Quest.Answers.OrderBy(y => y.Id).ToList().FindIndex(y => y.Id == x.Id);
+                                    isResponeUser = responses.First(y => y.QuestId == Quest.Id).UserRespones[indexAnswer] == x.AnswerText;
+                                }
+
+                                answerVerfiedUser4.Add(new AnswerVerfiedDto()
+                                {
+                                    Id = x.Id,
+                                    AnswerText = x.AnswerText,
+                                    IsCorrectAnswer = x.IsCorrectAnswer,
+                                    IsResponeUser = isResponeUser,
+                                    PathImg = x.PathToImage
+
+
+                                });
+                            });
+                            if (Quest.Answers.Where(x => x.IsCorrectAnswer == true).All(x => answerVerfiedUser4.Where(y => y.IsResponeUser == true).Select(y => y.Id).Contains(x.Id)))// проверка на правельный ответ
+                            {
+                                correctdefault4 = true;
+                            }
+                            listVerifiedRespons.Add(new VerifiedUserResponesDto
+                            {
+                                UserRespones = answerVerfiedUser4.Cast<AnswerVerfiedDto>().ToList(),
+                                QuestDto = new QuestDto
+                                {
+                                    Id = Quest.Id,
+                                    Info = Quest.Info,
+                                    Name = Quest.Name,
+                                    PathImg = Quest.PathToImage,
+                                },
+                                IsCorrectQuest = correctdefault4,
+                                CategoryTasksDto = new DTO.CategoryTasksDto.CategoryTasksDto
+                                {
+                                    Id = Quest.CategoryTasks.Id,
+                                    Name = Quest.CategoryTasks.Name,
+                                }
+                            });
+                  
+                    break;
 
 
                 }
-                var resulTest = (Convert.ToDecimal(listVerifiedRespons
-                    .Where(x => x.IsCorrectQuest == true).ToList().Count) / Convert.ToDecimal(listVerifiedRespons.Count)) * 100;// результат в процентах 
-                string evaluationName = "";
-                var listTestEvaluationName = new List<DTO.TestDto.EvaluationDto>();
-                var test = context.Tests.FirstOrDefault(x => x.Id == dto.TestId);
-                if (test.Evaluations != null)
-                {
-                    listTestEvaluationName = JsonSerializer.Deserialize<List<DTO.TestDto.EvaluationDto>>(test.Evaluations);
-                    evaluationName = listTestEvaluationName.Where(x => x.Percent <= resulTest).ToList().Max(x => x.EvaluationName);
-                }
-                var userResponses = context.UserResponses.First(x => x.Id == dto.idResult);
-                userResponses.ListUserResponses = JsonSerializer.Serialize(listVerifiedRespons);//Сохраняем ответы ввиде строки
-                userResponses.Result = resulTest;
-                userResponses.EvaluationName = evaluationName;
-                userResponses.IsFinish = true;
-                userResponses.FinishdateTime = DateTime.Now.ToUniversalTime();
-                context.Update(userResponses);
-                context.SaveChanges();
-                var f = context.Results
-                    .Include(x => x.Responses)
-                    .Include(x => x.Test)
-                    .Include(x => x.User)
-                    .FirstOrDefault(y => y.Test.Id == dto.TestId && y.User.Id == dto.StudentId).Responses.Count;
-                return new ResultOfAttemptsDTO
-                {
-                    IdUserRespones = dto.idResult,
-                    Result = resulTest,
-                    EvaluationName = evaluationName,
-                    Attempts = test.NumberOfAttempts - context.Results
-                    .Include(x => x.Test)
-                    .Include(x => x.User)
-                    .Include(x => x.Responses)
-                    .FirstOrDefault(y => y.Test.Id == dto.TestId && y.User.Id == dto.StudentId).Responses.Count,
-                    IsChek = context.Tests.First(x => x.Id == dto.TestId).IsCheck,
-                    NameTest = context.Tests.First(x => x.Id == dto.TestId).Name,
-                    DateFinish = userResponses.FinishdateTime.ToLocalTime(),
-                };
+
+
             }
+            var resulTest = (Convert.ToDecimal(listVerifiedRespons
+                .Where(x => x.IsCorrectQuest == true).ToList().Count) / Convert.ToDecimal(listVerifiedRespons.Count)) * 100;// результат в процентах 
+            string evaluationName = "";
+            var listTestEvaluationName = new List<DTO.TestDto.EvaluationDto>();
+            var test = context.Tests.FirstOrDefault(x => x.Id == dto.TestId);
+            if (test.Evaluations != null)
+            {
+                listTestEvaluationName = JsonSerializer.Deserialize<List<DTO.TestDto.EvaluationDto>>(test.Evaluations);
+                evaluationName = listTestEvaluationName.Where(x => x.Percent <= resulTest).ToList().Max(x => x.EvaluationName);
+            }
+            var userResponses = context.UserResponses.First(x => x.Id == dto.idResult);
+            userResponses.ListUserResponses = JsonSerializer.Serialize(listVerifiedRespons);//Сохраняем ответы ввиде строки
+            userResponses.Result = resulTest;
+            userResponses.EvaluationName = evaluationName;
+            userResponses.IsFinish = true;
+            userResponses.FinishdateTime = DateTime.Now.ToUniversalTime();
+            context.Update(userResponses);
+            context.SaveChanges();
+            var f = context.Results
+                .Include(x => x.Responses)
+                .Include(x => x.Test)
+                .Include(x => x.User)
+                .FirstOrDefault(y => y.Test.Id == dto.TestId && y.User.Id == dto.StudentId).Responses.Count;
+            return new ResultOfAttemptsDTO
+            {
+                IdUserRespones = dto.idResult,
+                Result = resulTest,
+                EvaluationName = evaluationName,
+                Attempts = test.NumberOfAttempts - context.Results
+                .Include(x => x.Test)
+                .Include(x => x.User)
+                .Include(x => x.Responses)
+                .FirstOrDefault(y => y.Test.Id == dto.TestId && y.User.Id == dto.StudentId).Responses.Count,
+                IsChek = context.Tests.First(x => x.Id == dto.TestId).IsCheck,
+                NameTest = context.Tests.First(x => x.Id == dto.TestId).Name,
+                DateFinish = userResponses.FinishdateTime.ToLocalTime(),
+            };
+        }
             else
             {
                 return null;
@@ -398,7 +450,7 @@ namespace Repository.RepositoryResultTest
             List<VerifiedUserResponesDto> listUserRespons = JsonSerializer.Deserialize<List<VerifiedUserResponesDto>>(respons.ListUserResponses);
             List<long> answer = new List<long>();
             List<string> d = new List<string>();
-            List < VerifiedUserResponesDtoShort > verifiedUserResponesDtoShorts = listUserRespons.Cast<VerifiedUserResponesDtoShort>().ToList();
+            List<VerifiedUserResponesDtoShort> verifiedUserResponesDtoShorts = listUserRespons.Cast<VerifiedUserResponesDtoShort>().ToList();
 
             return verifiedUserResponesDtoShorts;
 
@@ -413,7 +465,7 @@ namespace Repository.RepositoryResultTest
             List<VerifiedUserResponesDto> listUserRespons = JsonSerializer.Deserialize<List<VerifiedUserResponesDto>>(respons.ListUserResponses);
             List<long> answer = new List<long>();
             List<string> d = new List<string>();
-            
+
             return listUserRespons;
 
 
@@ -421,6 +473,7 @@ namespace Repository.RepositoryResultTest
 
         public void Update(UpdateResultTestDto dto)
         {
+
             var result = context.Results.First(x => x.Id == dto.Id);
 
             result.Id = dto.Id;
@@ -559,6 +612,10 @@ namespace Repository.RepositoryResultTest
 
         public void UpdateRespones(AddResultTestStudentDto dto)
         {
+            if (context.UserResponses.First(x => x.Id == dto.idResult).IsFinish)
+            {
+                throw new Exception("Тест уже завершён");
+            }
             var respones = context.UserResponses.First(x => x.Id == dto.idResult);
             respones.ListUserResponses = JsonSerializer.Serialize(dto.UserResponesTest);
             context.UserResponses.Update(respones);

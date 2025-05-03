@@ -78,6 +78,7 @@ namespace Service.ServiceResultTest
 
         public IsBoolDto TestBool(long IdResponse)
         {
+            
             return repo.TestBool(IdResponse);
         }
     }

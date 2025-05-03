@@ -7,11 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Новая папка1\**" />
+    <Compile Remove="Новая папка2\**" />
+    <Compile Remove="Новая папка\**" />
+    <EmbeddedResource Remove="Новая папка1\**" />
+    <EmbeddedResource Remove="Новая папка2\**" />
+    <EmbeddedResource Remove="Новая папка\**" />
+    <None Remove="Новая папка1\**" />
+    <None Remove="Новая папка2\**" />
+    <None Remove="Новая папка\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="CategoryTasksDto\" />
     <Folder Include="RoleDto\" />
-    <Folder Include="Новая папка1\" />
-    <Folder Include="Новая папка2\Новая папка\" />
-    <Folder Include="Новая папка\" />
   </ItemGroup>
 
 </Project>

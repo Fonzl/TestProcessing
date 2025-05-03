@@ -1,4 +1,5 @@
 ﻿using DTO.AnswerDto;
+using DTO.QuestDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Service.ServiceAnswer
         List<StudentAnsewerDto> GetQuestAnswers(long id);
         void AnswerListCreate(List<CreateAnswerDto> answerList);
         void DeleteAnswer(long id);
+        
         List<string>? UpdateAnswer(UpdateAnswerDto updateAnswerDto);
         long CreateAnswer(CreateAnswerDto createAnswerDto);
     }
