@@ -301,7 +301,7 @@ namespace Repository.RepositoryResultTest
                                 answerVerfiedUser3 = new AnswerVerfiedDto()
                                 {
                                     Id = answerQuestDto.Id,
-                                    AnswerText = null,
+                                    AnswerText = Quest.Answers.First().AnswerText,
                                     IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
                                     IsResponeUser = false,
                                 };
@@ -312,7 +312,7 @@ namespace Repository.RepositoryResultTest
                                 answerVerfiedUser3 = new AnswerVerfiedDto()
                                 {
                                     Id = answerQuestDto.Id,
-                                    AnswerText = responses.FirstOrDefault(x => x.QuestId == Quest.Id).UserRespones.First().ToString(),
+                                    AnswerText = Quest.Answers.First().AnswerText,
                                     IsCorrectAnswer = answerQuestDto.IsCorrectAnswer,
                                     IsResponeUser = answerQuestDto.AnswerText.ToLower().Split(";").Any(x => responses.First(x => x.QuestId == Quest.Id).UserRespones
                                     .Select(s => s.ToLower()).ToArray().Contains(x)),
