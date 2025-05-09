@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace DTO.DirectionDto
 {
-    public class ReturnScheduleDirection
+    public class ReturnScheduleDirection : ReturnScheduleDirectionShortDto
     {
-        public int CoursId { get; set; }
-        public int DirectionId { get; set; }
-        public string Direction { get; set; }
         public List<DTO.DisciplineDto.DisciplineDto> Discipline { get; set; }
     }
 }

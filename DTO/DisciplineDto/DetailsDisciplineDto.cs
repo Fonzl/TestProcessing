@@ -9,8 +9,8 @@ namespace DTO.DisciplineDto
     public class DetailsDisciplineDto : DisciplineDto
     {
   
-        public List<TestDto.DetailsTestDto> Tests { get; set; }
-        public List<UserDto.StudentUserDto> Users { get; set; }
+
+        public List<UserDto.ShortUserDto> Users { get; set; }
        
     }
 }

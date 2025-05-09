@@ -1,6 +1,7 @@
 ﻿using Database;
 using DTO.DirectionDto;
 using DTO.DisciplineDto;
+using Microsoft.EntityFrameworkCore;
 using Repository.RepositoryDirection;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace Repository.RepositoryDirection
                 }
                 return Direction;
             }
-
+            
             public DirectionDto GetDirection(int id)
             {
                 var directions = context.Directions.First(c => c.Id == id);
@@ -51,7 +52,9 @@ namespace Repository.RepositoryDirection
 
         public ReturnScheduleDirection GetDirectionsShedule(int coursId, int directionId)
         {
-            var schedule = context.Schedules.FirstOrDefault( x => x.Cours == coursId && x.DirectionId == directionId);
+            var schedule = context.Schedules
+                .Include(x => x.Disciplines)
+                .FirstOrDefault( x => x.Cours == coursId && x.DirectionId == directionId);
             var listDisciplineDto = new List<DisciplineDto>();
             schedule.Disciplines.ForEach(x =>
             {
@@ -65,6 +68,26 @@ namespace Repository.RepositoryDirection
                 Direction = context.Directions.SingleOrDefault(x => x.Id == directionId).Name,
                 Discipline = listDisciplineDto
             };
+        }
+        public List<ReturnScheduleDirectionShortDto> GetDirectionsSheduleShort()
+        {
+            var schedules = context.Schedules
+                .Include(x => x.Disciplines)
+                .Include(x => x.Direction);
+            var listScheduleDirectionDto = new List<ReturnScheduleDirectionShortDto>();
+            foreach (var schedule in schedules)
+            {
+                listScheduleDirectionDto.Add(new ReturnScheduleDirectionShortDto
+                {
+                    CoursId = schedule.Cours,
+                    Direction = schedule.Direction.Name,
+                    DirectionId = schedule.DirectionId
+                });
+            } 
+             return listScheduleDirectionDto;
+           
+           
+            
         }
 
         public void GetShedule(UpdateScheduleDirectionDto dto)
