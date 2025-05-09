@@ -13,6 +13,7 @@ namespace Service.ServiceDirection
         List<DirectionDto> GetDirections();
         void DeleteDirections(int id);
         void UpdateDirection(UpdateDirectionDto updateAnswerDto);
+        public List<ReturnScheduleDirectionShortDto> GetDirectionsSheduleShort();
         void UpdateSchedule(UpdateScheduleDirectionDto updateSheduleDirectionDto);
          ReturnScheduleDirection GetDirectionsShedule(int coursId, int directionId);
         void CreateDirection(CreateDirectionDto createAnswerDto);

@@ -42,19 +42,19 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [Authorize(Roles = "admin")]
-        [HttpGet("DirectionsShedule/{id}")]
-        public IActionResult GetDirectionsShedule(int id)
-        {
-            try
-            {
-                return Json(service.GetDirection(id));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
-        }
+        //[Authorize(Roles = "admin")]
+        //[HttpGet("DirectionsShedule/{id}")]
+        //public IActionResult GetDirectionsShedule(int id)
+        //{
+        //    try
+        //    {
+        //        return Json(service.GetDirection(id));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
+        //}
         // POST api/<ValuesController>
         [HttpPost]
         [Authorize(Roles = "admin")]
@@ -119,15 +119,30 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "admin")]
-        [Route("updateShedule")]
+        [Route("GetDirectionsShedule/{directionId}/Cours/{corusId}")]
         public IActionResult GetDirectionsShedule(int corusId, int directionId)
         {
             try
             {
                 return Json(service.GetDirectionsShedule(corusId, directionId));
 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        [Route("AllListShedules")]
+
+        public IActionResult GetAllShedules()
+        {
+            try
+            {
+                return Json(service.GetDirectionsSheduleShort());
             }
             catch (Exception ex)
             {

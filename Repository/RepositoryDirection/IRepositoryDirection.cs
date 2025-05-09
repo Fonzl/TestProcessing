@@ -16,6 +16,7 @@ namespace Repository.RepositoryDirection
         void Update(UpdateDirectionDto dto);
         void UpdateShedule(UpdateScheduleDirectionDto dto);
         void GetShedule(UpdateScheduleDirectionDto dto);
+        public List<ReturnScheduleDirectionShortDto> GetDirectionsSheduleShort();
        ReturnScheduleDirection GetDirectionsShedule(int coursId,int directionId);
         void Delete(int id);
     }

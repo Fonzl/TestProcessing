@@ -36,6 +36,11 @@ namespace Service.ServiceDirection
                 repo.GetDirectionsShedule(coursId, directionId);
         }
 
+        public List<ReturnScheduleDirectionShortDto> GetDirectionsSheduleShort()
+        {
+            return repo.GetDirectionsSheduleShort();
+        }
+
         public void UpdateDirection(UpdateDirectionDto updateAnswerDto)
         {
             repo.Update(updateAnswerDto);

@@ -45,12 +45,8 @@ namespace Repository.RepositoryDiscipline
             {
                 Id = dc.Id,
                 Name = dc.Name,
-                Tests = dc.Tests.Select(x => new DTO.TestDto.DetailsTestDto()
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).ToList(),
-                Users = dc.Users.Select(x => new DTO.UserDto.StudentUserDto()
+               
+                Users = dc.Users.Select(x => new DTO.UserDto.ShortUserDto()
                 {
                   Id= x.Id,
                 FullName = x.FullName,
@@ -64,8 +60,7 @@ namespace Repository.RepositoryDiscipline
             var dc = new Discipline
             {
                 Name = dto.Name,
-                Tests = context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList(),
-                Users = context.Users.Where(x => dto.Tests.Contains(x.Id)).ToList(),
+                
             };
             context.Disciplines.Add(dc);
             context.SaveChanges();
@@ -75,8 +70,8 @@ namespace Repository.RepositoryDiscipline
         {
            var dc = context.Disciplines.First( x => x.Id == dto.Id );
             dc .Name = dto.Name;
-            dc.Tests = context.Tests.Where(x => dto.Tests.Contains(x.Id)).ToList();
-            dc.Users = context.Users.Where(x => dto.Tests.Contains(x.Id)).ToList();
+            context.Update( dc );
+            context.SaveChanges();
         }
 
         public List<DisciplineDto> TeacherGet(long id)

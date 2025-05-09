@@ -9,7 +9,6 @@ namespace DTO.DisciplineDto
     public class CreateDisciplineDto
     {
         public string Name { get; set; }
-        public List<long> Tests { get; set; }
-        public List<long> Users { get; set; }
+
     }
 }
