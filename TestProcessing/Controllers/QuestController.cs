@@ -31,7 +31,7 @@ namespace TestProcessing.Controllers
         }
 
 
-        [Authorize(Roles = "teacher,student")]
+        [Authorize(Roles = "teacher,admin")]
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         public IActionResult GetQuest(int id)
@@ -47,6 +47,8 @@ namespace TestProcessing.Controllers
         }
 
         // POST api/<ValuesController>
+
+        [Authorize(Roles = "teacher,admin")]
         [HttpPost]
         [Route("addAnswer")]
         public IActionResult AddAnswer(List<CreateAnswerDto> dto)
@@ -189,7 +191,7 @@ namespace TestProcessing.Controllers
         }
         [HttpGet]
         [Route("getListQuests/{id}")]
-        [Authorize(Roles = "teacher,student")]
+        [Authorize]
         public IActionResult GetListQuest(int id)//по id test
         {
             try

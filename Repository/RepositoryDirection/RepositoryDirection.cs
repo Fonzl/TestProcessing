@@ -12,11 +12,21 @@ using System.Threading.Tasks;
 
 namespace Repository.RepositoryDirection
 {
-    public class RepositoryDirection(ApplicationContext context):IRepositoryDirection { 
-        
+    public class RepositoryDirection(ApplicationContext context):IRepositoryDirection {
+        public void CreatShedule(CreatShedule dto)
+        {
+            
+            var shedule = new Schedule
+            {
+                Cours = dto.CoursId,
+                DirectionId = dto.DirectionId,
+                Direction = context.Directions.First(x => x.Id == dto.DirectionId),
+            };
+            context.Schedules.Add(shedule);
+            context.SaveChanges();
+        }
 
-
-            public void Delete(int id)
+        public void Delete(int id)
             {
                 var directions = context.Directions.SingleOrDefault(c => c.Id == id);
                 if (directions == null) return;
@@ -116,11 +126,13 @@ namespace Repository.RepositoryDirection
 
         public void UpdateShedule(UpdateScheduleDirectionDto dto)
         {
-            var shedule = context.Schedules.Where(x => x.DirectionId == dto.DirectionId && x.Cours == dto.CoursId).FirstOrDefault();
-            if (shedule == null) return;
-            shedule.Disciplines.Clear();
-            shedule.Disciplines.AddRange(context.Disciplines.Where(x => dto.DisciplineId.Contains(x.Id)).ToList());
-            context.Schedules.Add(shedule);
+            var schedule = context.Schedules
+                .Include(x => x.Disciplines)
+                .Where(x => x.DirectionId == dto.DirectionId && x.Cours == dto.CoursId).FirstOrDefault();
+            if (schedule == null) return;
+            var listDiscipline = context.Disciplines.Where(x => dto.DisciplineId.Contains(x.Id)).ToList();
+            schedule.Disciplines = listDiscipline;
+            context.Schedules.Update(schedule);
             context.SaveChanges();
 
         }

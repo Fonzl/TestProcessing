@@ -42,20 +42,22 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        //[Authorize(Roles = "admin")]
-        //[HttpGet("DirectionsShedule/{id}")]
-        //public IActionResult GetDirectionsShedule(int id)
-        //{
-        //    try
-        //    {
-        //        return Json(service.GetDirection(id));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(520, ex.Message);
-        //    }
-        //}
-        // POST api/<ValuesController>
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [Route("addSchedule")]
+        public IActionResult AddSchedule(CreatShedule dto)
+        {
+            try
+            {
+                service.CreatShedule(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("add")]
