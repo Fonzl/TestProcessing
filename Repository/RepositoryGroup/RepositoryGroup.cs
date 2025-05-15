@@ -26,8 +26,22 @@ namespace Repository.RepositoryGroup
             var discipline = context.Disciplines
                 .Include(x => x.Schedules)
                 .First(x => x.Id == idDiscipline);
-            var groups = context.Groups
-                .Where(x => discipline.Schedules.Contains(x.Schedule)).ToList();
+            var allGroups = context.Groups
+    .Include(x => x.Direction.Schedule)
+    .AsEnumerable();
+    var groups = allGroups
+    .Where(x => discipline.Schedules
+        .Select(s => new { s.DirectionId, s.Cours })
+        .Contains(new
+        {
+            x.Schedule.DirectionId,
+            x.Schedule.Cours
+        }))
+    .ToList();
+
+           
+
+
             var listGroup = new List<GroupDto>();
             foreach (var group in groups)
             {
@@ -43,8 +57,9 @@ namespace Repository.RepositoryGroup
 
         public DetailsGroupDto GetGroupDto(long id)
         {
-           var group = context.Groups
+             var group = context.Groups
                 .Include(x => x.Users)
+                .Include(x => x.Direction)
                 .First(x => x.Id == id);
             return new DetailsGroupDto
             {
@@ -55,11 +70,12 @@ namespace Repository.RepositoryGroup
                 Users = group.Users.Select(x => new StudentUserDto()
                 {
                     Id = x.Id,
-                  FullName = x.FullName,
+                    FullName = x.FullName,
                 }).ToList(),
-                Direction = group.Direction.ToString(),
-               
-                
+                Cours = group.Cours,
+                Direction = group.Direction.Name,
+
+
             };
         }
 

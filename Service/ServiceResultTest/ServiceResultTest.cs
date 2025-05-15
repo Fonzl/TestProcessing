@@ -81,5 +81,10 @@ namespace Service.ServiceResultTest
             
             return repo.TestBool(IdResponse);
         }
+
+        public List<UserAttemptShort> userAttemptShorts(long groupId, long testId)
+        {
+          return  repo.userAttemptShorts(groupId, testId);
+        }
     }
 }
