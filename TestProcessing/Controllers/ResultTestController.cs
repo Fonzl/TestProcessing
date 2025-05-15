@@ -89,7 +89,20 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-
+        [Authorize(Roles = "teacher")]//статистика по предмету  студента для учителя
+        [HttpGet]
+        [Route("teacherResultGroup/{idGroup}/Test/{idTest}")]
+        public IActionResult GetTeacherResultGroup(long idGroup,long idTest )
+        {
+            try
+            {
+                return Json(service.userAttemptShorts(idGroup, idTest));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
         [Authorize(Roles = "teacher")]//статистика по предмету  студента для учителя
         [HttpPost]
         [Route("teacherStatisticResultId")]

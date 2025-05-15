@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace DTO.DirectionDto
 {
-    public class UpdateScheduleDirectionDto
+    public class CreatShedule
     {
-     
+        [Range(1,6)]
         public int CoursId { get; set; }
         public int DirectionId { get; set; }
-        public List<int> DisciplineId {  get; set; } 
     }
 }

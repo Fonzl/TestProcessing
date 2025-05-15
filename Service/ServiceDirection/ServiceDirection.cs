@@ -15,6 +15,11 @@ namespace Service.ServiceDirection
              repo.Insert(createAnswerDto);
         }
 
+        public void CreatShedule(CreatShedule dto)
+        {
+            repo.CreatShedule(dto);
+        }
+
         public void DeleteDirections(int id)
         {
            repo.Delete(id);

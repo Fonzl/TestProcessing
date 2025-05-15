@@ -1,9 +1,11 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Text.Json;
 using Database;
 using DTO.AnswerDto;
 using DTO.QuestDto;
 using DTO.ResultTestDto;
+using DTO.UserDto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository.RepositoryResultTest
@@ -657,6 +659,49 @@ namespace Repository.RepositoryResultTest
         public bool CheckingForAccess()
         {
             throw new NotImplementedException();
+        }
+
+        public List<UserAttemptShort> userAttemptShorts(long groupId, long testId)
+        {
+            List<ShortUserDto> shortUserDtos = new List<ShortUserDto>();
+            context.Groups
+                 .Include(x => x.Users)
+                 .First(context => context.Id == groupId).Users.ToList().ForEach(x =>
+                 {
+                     shortUserDtos.Add(new ShortUserDto
+                     {
+                         Id = x.Id,
+                         FullName = x.FullName,
+                     });
+                 });
+            List < UserAttemptShort > attemptShorts= new List<UserAttemptShort>();
+            shortUserDtos.ForEach(x =>
+            {
+                if (context.Results.FirstOrDefault(y => y.Test.Id == testId && y.User.Id == x.Id) == null)
+                {
+                    attemptShorts.Add(new UserAttemptShort
+                    {
+                        User = x,
+                        result = null,
+
+                    }
+                );
+                }
+                else
+                {
+                    attemptShorts.Add(new UserAttemptShort
+                    {
+                        User = x,
+                        result = context.UserResponses
+                    .Include(x => x.ResultTest)
+                    .Where(y => y.ResultTest.Test.Id == testId && y.ResultTest.User.Id == x.Id).ToList().Max(s => s.Result)
+
+                    }
+                );
+                }
+            });
+           
+            return attemptShorts;
         }
     }
 }

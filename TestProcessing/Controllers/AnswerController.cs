@@ -72,7 +72,7 @@ namespace TestProcessing.Controllers
             {
                 var quest = serviceQuest.ChekAnswerQuest(dto.QuestId);
                 if ((quest.CategoryTasks.Id == 1 && quest.Answers.Where(x => x.IsCorrectAnswer == true).ToList().Count == 1 && dto.IsCorrectAnswer == true) ||
-                   (quest.CategoryTasks.Id == 3 && ((dto.IsCorrectAnswer == true && quest.Answers.Count >= 1) || uploadedFile == null)) ||
+                   (quest.CategoryTasks.Id == 3 && (dto.IsCorrectAnswer == false || quest.Answers.Count == 1 || uploadedFile.Count != 0)) ||
                     (quest.CategoryTasks.Id == 4 && dto.IsCorrectAnswer == false))
                 {
 

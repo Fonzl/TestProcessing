@@ -19,6 +19,7 @@ namespace Service.ServiceResultTest
         ResultOfAttemptsDTO CreateResultTest(AddResultTestStudentDto createResultTest);
         List<DTO.ResultTestDto.VerifiedUserResponesDto> ReturnResultDetailsTrue(long idResultTest);
         long CreatResultAndAttempt(long testId, long studentId);
+        List<UserAttemptShort> userAttemptShorts(long groupId, long testId);
         ReturnAttemptDto? CheckingStudentResult(long testId, long studentId);
         void UpdateRespones(AddResultTestStudentDto dto);
         public List<VerifiedUserResponesDtoShort> ReturnResultDetailsFalse(long idResultTest);
