@@ -191,7 +191,7 @@ namespace TestProcessing.Controllers
         }
         [HttpGet]
         [Route("getListQuests/{id}")]
-        [Authorize]
+        [Authorize] 
         public IActionResult GetListQuest(int id)//по id test
         {
             try

@@ -96,22 +96,31 @@ namespace Repository.RepositoryDiscipline
         {
             var student = context.Users
                  .Include(x => x.Group)
+                 .Include(x => x.Role)
                  .First(x => x.Id == id);
-           var shedule = context.Schedules.
-                Include(x => x.Direction)
-                .First(x => x.DirectionId == student.Group.DirectionId && x.Cours == student.Group.Cours);
-            var list = context.Disciplines.Include(x => x.Schedules )
-                .Where(x =>  x.Schedules.Contains(shedule)).ToList();
-            var dcList = new List<DisciplineDto>();
-            foreach (var d in list)
+            if (student.Role.Id == 3)
             {
-                dcList.Add(new DisciplineDto
+                var shedule = context.Schedules.
+                     Include(x => x.Direction)
+                     .First(x => x.DirectionId == student.Group.DirectionId && x.Cours == student.Group.Cours);
+                var list = context.Disciplines.Include(x => x.Schedules)
+                    .Where(x => x.Schedules.Contains(shedule)).ToList();
+                var dcList = new List<DisciplineDto>();
+                foreach (var d in list)
                 {
-                    Id = d.Id,
-                    Name = d.Name
-                });
+                    dcList.Add(new DisciplineDto
+                    {
+                        Id = d.Id,
+                        Name = d.Name
+                    });
+                }
+                return dcList;
             }
-            return dcList;
+            else
+            {
+                throw new Exception("Эти данные не доступны");
+            }
+
         }
     }
 }

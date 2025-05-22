@@ -56,7 +56,8 @@ namespace Repository.RepositoryUser
                 .Include(x => x.Group)
                 .Include(x => x.Disciplines)
                 .First(x => x.Id == id);
-           
+            if (user.Role.Id == 3)
+            {
                 return (new StudentUserDto
                 {
                     Id = user.Id,
@@ -77,6 +78,11 @@ namespace Repository.RepositoryUser
 
 
                 });
+            }
+            else
+            {
+                throw new Exception("Нет доступа к данным этого пользователя");
+            }
             
 
         }

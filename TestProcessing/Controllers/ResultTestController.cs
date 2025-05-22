@@ -1,4 +1,5 @@
-﻿using DTO.GeneralDto;
+﻿using Database;
+using DTO.GeneralDto;
 using DTO.ResultTestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +68,7 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [Authorize(Roles = "teacher")]//рузуьтаты тестов по  студента для учителя;id - id  студента
+        [Authorize(Roles = "teacher,admin")]//рузуьтаты тестов по  студента для учителя;id - id  студента
         [HttpGet]
         [Route("teacherStudentId/{idStudent}/Discipline/{idDiscipline}")]
         public IActionResult GetResultTestTeacher(long idStudent, long idDiscipline)
@@ -89,7 +90,7 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [Authorize(Roles = "teacher")]//статистика по предмету  студента для учителя
+        [Authorize(Roles = "teacher,admin")]//статистика по предмету  студента для учителя
         [HttpGet]
         [Route("teacherResultGroup/{idGroup}/Test/{idTest}")]
         public IActionResult GetTeacherResultGroup(long idGroup,long idTest )
@@ -103,14 +104,19 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [Authorize(Roles = "teacher")]//статистика по предмету  студента для учителя
+        [Authorize(Roles = "teacher,admin")]//статистика по предмету  студента для учителя
         [HttpPost]
-        [Route("teacherStatisticResultId")]
-        public IActionResult GetTeacherStatisticResultTest(ResultStatisticsDto dto)
+        [Route("teacherStatisticResultId/{studentId}/discipline/{disciplineId}")]
+        public IActionResult GetTeacherStatisticResultTest(int disciplineId,long studentId)
         {
             try
             {
-                return Json(service.GetStatisticsDiscipline(dto));
+                ResultStatisticsDto dto = new ResultStatisticsDto
+                {
+                    DisciplineId = disciplineId,
+                    StudentId = studentId
+                };
+                return Json(new StatisticResult { result = service.GetStatisticsDiscipline(dto) });
             }
             catch (Exception ex)
             {

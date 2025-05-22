@@ -57,9 +57,8 @@ namespace TestProcessing.Controllers
             }
         }
         // GET api/<ValuesController>/5
-        [Authorize(Roles = "admin")]
-        [HttpGet("{id}")]
-
+        [Authorize(Roles = "admin,teacher")]
+        [HttpGet("student/{id}")]
         public IActionResult GetUser(int id)
         {
             try
