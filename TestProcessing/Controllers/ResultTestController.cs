@@ -105,7 +105,7 @@ namespace TestProcessing.Controllers
             }
         }
         [Authorize(Roles = "teacher,admin")]//статистика по предмету  студента для учителя
-        [HttpPost]
+        [HttpGet]
         [Route("teacherStatisticResultId/{studentId}/discipline/{disciplineId}")]
         public IActionResult GetTeacherStatisticResultTest(int disciplineId,long studentId)
         {
