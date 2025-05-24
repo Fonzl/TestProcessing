@@ -164,7 +164,7 @@ namespace Repository.RepositoryResultTest
         public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
         {
             if (context.UserResponses.First(x => x.Id == dto.idResult).IsFinish)
-            {
+                {
                 throw new Exception("Тест уже завершён");
             }
             if (context.Tests.Include(x => x.Quests)

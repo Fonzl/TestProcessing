@@ -125,7 +125,6 @@ namespace Repository.RepositoryGroup
                 Name = dto.Name,
                 EndOfTraining = dto.EndOfTraining,
                 StartDateOfTraining = dto.StartDateOfTraining,
-                Users = context.Users.Where(x => dto.Users.Contains(x.Id)).ToList(),
                 Cours = dto.Cours,
                 Direction = context.Directions.First(x => x.Id == dto.Direction),
                 Schedule = context.Schedules.First(x => x.DirectionId == dto.Direction && x.Cours == dto.Cours)

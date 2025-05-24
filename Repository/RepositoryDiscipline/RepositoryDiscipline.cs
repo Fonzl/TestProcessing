@@ -98,6 +98,7 @@ namespace Repository.RepositoryDiscipline
                  .Include(x => x.Group)
                  .Include(x => x.Role)
                  .First(x => x.Id == id);
+            
             if (student.Role.Id == 3)
             {
                 var shedule = context.Schedules.
@@ -106,6 +107,7 @@ namespace Repository.RepositoryDiscipline
                 var list = context.Disciplines.Include(x => x.Schedules)
                     .Where(x => x.Schedules.Contains(shedule)).ToList();
                 var dcList = new List<DisciplineDto>();
+                
                 foreach (var d in list)
                 {
                     dcList.Add(new DisciplineDto
@@ -115,6 +117,38 @@ namespace Repository.RepositoryDiscipline
                     });
                 }
                 return dcList;
+            }
+            else
+            {
+                throw new Exception("Эти данные не доступны");
+            }
+
+        }
+        public List<DisciplineDto> StudentGetProfil(long id)
+        {
+            var student = context.Users
+                 .Include(x => x.Group)
+                 .Include(x => x.Role)
+                 .First(x => x.Id == id);
+
+            if (student.Role.Id == 3)
+            {
+               
+                var dcList = new List<DisciplineDto>();
+                var results = context.Results.
+                        Include(x => x.User)
+                        .Include(x => x.Test.Discipline)
+                        .Where(x => x.User.Id == id).ToList();
+                var disciplinesOld = results.Select(x => x.Test.Discipline).Distinct();
+                foreach (var d in disciplinesOld)
+                {
+                    dcList.Add(new DisciplineDto
+                    {
+                        Id = d.Id,
+                        Name = d.Name
+                    });
+                }
+                return dcList.OrderBy(x => x.Id).ToList();
             }
             else
             {

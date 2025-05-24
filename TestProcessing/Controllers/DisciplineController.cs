@@ -70,14 +70,28 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
+        [HttpGet("studentProfilDiscipline")]//Список дисциплин в профиле ученика для статистики
+        [Authorize(Roles = "student")]
+        public IActionResult GetDisciplineProfil()
+        {
+            try
+            {
+                var id = User.FindFirst("id")?.Value;
+                return Json(service.StudentGetProfil((Convert.ToInt16(id))));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
         [HttpGet("studentProfilDiscipline/{id}")]//Список дисциплин в профиле ученика для статистики
-        [Authorize(Roles = "teacher")]
+        [Authorize(Roles = "teacher,admin")]
         public IActionResult GetDisciplineStudentProfil(long id)
         {
             try
             {
 
-                return Json(service.StudentGetDiscipline(id));
+                return Json(service.StudentGetProfil(id));
             }
             catch (Exception ex)
             {

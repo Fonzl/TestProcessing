@@ -15,13 +15,13 @@ namespace TestProcessing.Controllers
         // GET: api/<ValuesController>
 
         [HttpGet]
-        [Route("all")]
+        [Route("allRoleUser/{idRole}")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetAllUsers()
+        public IActionResult GetAllUsers(short idRole)
         {
             try
             {
-                return Json(service.GetUsers());
+                return Json(service.GetUsers(idRole));
             }
             catch (Exception ex)
             {
@@ -73,12 +73,12 @@ namespace TestProcessing.Controllers
         // POST api/<ValuesController>
         [HttpPost]
         [Authorize(Roles = "admin")]
-        [Route("add")]
-        public IActionResult AddUser(CreateUserDto dto)
+        [Route("addStudent")]
+        public IActionResult AddStudent(CreateStudentDto dto)
         {
             try
             {
-                service.CreateUser(dto);
+                service.CreateStudent(dto);
                 return StatusCode(201);
             }
             catch (Exception ex)
@@ -87,7 +87,22 @@ namespace TestProcessing.Controllers
             }
 
         }
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [Route("addTeacher")]
+        public IActionResult AddTeacher(CreateTeacherDto dto)
+        {
+            try
+            {
+                service.CreateTeacher(dto);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
 
+        }
         // PUT api/<ValuesController>/5
         [HttpPatch]
         [Authorize(Roles = "admin")]

@@ -12,7 +12,6 @@ namespace DTO.GroupDto
         public string Name { get; set; }
         public DateTime StartDateOfTraining { get; set; }
         public DateTime EndOfTraining { get; set; }
-        public List<long>? Users { get; set; }
         [Range(1, 4)]
         public short Cours { get; set; }
         public int Direction { get; set; }

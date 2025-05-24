@@ -87,37 +87,60 @@ namespace Repository.RepositoryUser
 
         }
 
-        public List<UserDto> GetUsers()
+        public List<ShortUserDto> GetUsers(short idRole)
         {
-            var listUser = context.Users.ToList();
-            var users = new List<UserDto>();
-            foreach (var user in listUser)
+            if (idRole == 2 || idRole == 3)
             {
-                users.Add(new UserDto
+                var listUser = context.Users
+                    .Include(x => x.Role)
+                    .Where(x => x.Id == idRole)
+                    .ToList();
+                var users = new List<ShortUserDto>();
+                foreach (var user in listUser)
                 {
-                    Id = user.Id,
-                    FullName = user.FullName,
-                });
+                    users.Add(new ShortUserDto
+                    {
+                        Id = user.Id,
+                        FullName = user.FullName,
+                    });
+                }
+                return users;
             }
-            return users;
+            else 
+            {
+                throw new Exception("Информация к таким пользователям недоступна");
+            }
         }
 
-        public void Insert(CreateUserDto dto)
+
+        public void InsertStudent(CreateStudentDto dto)
         {
             var user = new User
             {
                 FullName = dto.FullName,
                 Password = Convert.ToHexString(
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(dto.Password))),
-                Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList(),
                 Group = context.Groups.FirstOrDefault(x => x.Id == dto.Group),
-                Role = context.Roles.First(x => x.Id == dto.Role)
+                Role = context.Roles.First(x => x.Id == 3)
 
             };
             context.Users.Add(user);
             context.SaveChanges();
         }
+        public void InsertTeacher(CreateTeacherDto dto)
+        {
+            var user = new User
+            {
+                FullName = dto.FullName,
+                Password = Convert.ToHexString(
+                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(dto.Password))),
+                Disciplines =  context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList(),
+                Role = context.Roles.First(x => x.Id == 2)
 
+            };
+            context.Users.Add(user);
+            context.SaveChanges();
+        }
         public void Update(UpdateUserDto dto)
         {
             var user = context.Users.First(x => x.Id == dto.Id);

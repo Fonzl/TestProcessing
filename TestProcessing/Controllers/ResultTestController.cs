@@ -145,6 +145,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
+
                 service.UpdateResultTest(dto);
                 return StatusCode(200, "The content has been changed");
             }
@@ -291,11 +292,21 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpPatch]
         [Route("Attempt/update")]
-        public IActionResult UpdateAttemptTest(AddResultTestStudentDto dto)
+        public IActionResult UpdateAttemptTest(CreateResultTestDto dto)
         {
             try
             {
-                service.UpdateRespones(dto);
+                var id = User.FindFirst("id")?.Value;
+                var updateDto = new AddResultTestStudentDto()
+                {
+                    idResult = dto.idResult,
+                    TestId = dto.TestId,
+                    UserResponesTest = dto.UserResponesTest,
+                    StudentId = Convert.ToInt16(id)
+                };
+                
+                service.UpdateRespones(updateDto);
+
                 return StatusCode(200, "The content has been changed");
             }
             catch (Exception ex)

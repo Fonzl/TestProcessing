@@ -13,10 +13,11 @@ namespace Repository.RepositoryUser
     {
         public UserDto? Login(string username, string password);
         public StudentUserDto GetUser(long id);
-        public List<UserDto> GetUsers();
+        public List<ShortUserDto> GetUsers(short idRole);
         void Update(UpdateUserDto dto);
         void Delete(long id);
-        void Insert(CreateUserDto dto);
+        void InsertStudent(CreateStudentDto dto);
+        void InsertTeacher(CreateTeacherDto dto);
         public List<ShortUserDto> GetStudentIdGroup(long idGroup);// Выыод студентов группы
         public List<StudentAttemptResultDto> GetStudentAttempt(long idGroup,long idTest);
         void PasswordСhange(PasswordСhangeDto passwordСhangeDto);

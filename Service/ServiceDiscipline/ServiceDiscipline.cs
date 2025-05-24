@@ -35,6 +35,11 @@ namespace Service.ServiceDiscipline
             return repo.StudentGet(id);
         }
 
+        public List<DisciplineDto> StudentGetProfil(long id)
+        {
+            return repo.StudentGetProfil(id);
+        }
+
         public List<DisciplineDto> TeacherGetDiscipline(long id)
         {
           return repo.TeacherGet(id);
