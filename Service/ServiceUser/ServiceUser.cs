@@ -45,6 +45,11 @@ namespace Service.ServiceUser
             return repo.GetStudentIdGroup(idGroup);
         }
 
+        public TeacherUserDto GetTeacher(long id)
+        {
+            return repo.GetTeacher(id);
+        }
+
         public StudentUserDto GetUser(long id)
         {
             return  repo.GetUser(id);
@@ -86,9 +91,14 @@ namespace Service.ServiceUser
             repo.PasswordСhange(passwordСhangeDto);
         }
 
-        public void UpdateUser(UpdateUserDto user)
+        public void UpdateStudent(UpdateStudentDto user)
         {
-            repo.Update(user);
+            repo.UpdateStudent(user);
+        }
+
+        public void UpdateTeacher(UpdateTeacherDto user)
+        {
+            repo.UpdateTeacher(user);
         }
     }
 }

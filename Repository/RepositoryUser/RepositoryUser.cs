@@ -1,4 +1,5 @@
 ﻿using Database;
+using DTO.DisciplineDto;
 using DTO.UserDto;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -30,7 +31,8 @@ namespace Repository.RepositoryUser
                 {
                     Id = user.Id,
                     FullName = user.FullName,
-
+                    
+                    
                     Role = new DTO.RoleDto.RoleDto
                     {
                         Id = context.Roles.First(x => x.Id == user.RoleId).Id,
@@ -62,12 +64,16 @@ namespace Repository.RepositoryUser
                 {
                     Id = user.Id,
                     FullName = user.FullName,
+                    StudentNumber = user.studentNumber,
                     Group = new DTO.GroupDto.DetailsGroupDto
                     {
                         Id = user.Group.Id,
                         Name = user.Group.Name,
                         StartDateOfTraining = user.Group.StartDateOfTraining,
-                        EndOfTraining = user.Group.EndOfTraining
+                        EndOfTraining = user.Group.EndOfTraining,
+                        
+                        
+                        
 
                     },
                     Role = new DTO.RoleDto.RoleDto
@@ -86,6 +92,45 @@ namespace Repository.RepositoryUser
             
 
         }
+        public TeacherUserDto GetTeacher(long id)
+        {
+            var user = context.Users
+                .Include(x => x.Role)
+                .Include(x => x.Group)
+                .Include(x => x.Disciplines)
+                .First(x => x.Id == id);
+            if (user.Role.Id == 2)
+            {
+                var listDiscipline = new List<DisciplineDto>();
+                user.Disciplines.ForEach(x =>
+                {
+                    listDiscipline.Add(new DisciplineDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                    });
+                });
+                return (new TeacherUserDto
+                {
+                    Id = user.Id,
+                    FullName = user.FullName,
+                    Disciplines = listDiscipline,
+                    Role = new DTO.RoleDto.RoleDto
+                    {
+                        Id = user.Role.Id,
+                        Name = user.Role.Name,
+                    }
+
+
+                });
+            }
+            else
+            {
+                throw new Exception("Нет доступа к данным этого пользователя");
+            }
+
+
+        }
 
         public List<ShortUserDto> GetUsers(short idRole)
         {
@@ -93,7 +138,7 @@ namespace Repository.RepositoryUser
             {
                 var listUser = context.Users
                     .Include(x => x.Role)
-                    .Where(x => x.Id == idRole)
+                    .Where(x => x.Role.Id == idRole)
                     .ToList();
                 var users = new List<ShortUserDto>();
                 foreach (var user in listUser)
@@ -121,7 +166,9 @@ namespace Repository.RepositoryUser
                 Password = Convert.ToHexString(
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(dto.Password))),
                 Group = context.Groups.FirstOrDefault(x => x.Id == dto.Group),
-                Role = context.Roles.First(x => x.Id == 3)
+                Role = context.Roles.First(x => x.Id == 3),
+                studentNumber = dto.studentNumber,
+                
 
             };
             context.Users.Add(user);
@@ -141,13 +188,17 @@ namespace Repository.RepositoryUser
             context.Users.Add(user);
             context.SaveChanges();
         }
-        public void Update(UpdateUserDto dto)
+        public void UpdateStudent(UpdateStudentDto dto)
         {
-            var user = context.Users.First(x => x.Id == dto.Id);
+            var user = context.Users.Include(x => x.Role).First(x => x.Id == dto.Id);
+            if (user.Role.Id != 3)
+            {
+                throw new Exception("Неправельные введённые данные");
+            }
             user.FullName = dto.FullName;
-            user.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();
+            
             user.Group = context.Groups.FirstOrDefault(x => x.Id == dto.Group);
-            user.Role = context.Roles.First(x => x.Id == dto.Role);
+           
             context.Users.Update(user);
             context.SaveChanges();
         }
@@ -203,6 +254,25 @@ namespace Repository.RepositoryUser
             var user = context.Users.FirstOrDefault(x => x.Id == passwordСhangeDto.IdUser);
             user.Password = Convert.ToHexString(
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(passwordСhangeDto.Password)));
+            context.Users.Update(user);
+            context.SaveChanges();
+        }
+
+       
+
+        public void UpdateTeacher(UpdateTeacherDto dto)
+            {
+            var user = context.Users
+                .Include(x => x.Disciplines)
+                .Include(x => x.Role).First(x => x.Id == dto.Id);
+            if (user.Role.Id != 2)
+            {
+                throw new Exception("Неправельные введённые данные");
+            }
+            
+            user.FullName = dto.FullName;
+            user.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();
+          
             context.Users.Update(user);
             context.SaveChanges();
         }

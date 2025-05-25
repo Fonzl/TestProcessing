@@ -13,6 +13,7 @@ namespace DTO.UserDto
     {
         public  string jwt {  get; set; }
         public long IdUser { get; set; }
+       
         public string UserName { get; set; }
         public RoleDto.RoleDto RoleDto { get; set; }
         

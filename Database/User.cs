@@ -17,5 +17,7 @@ namespace Database
         public short RoleId { get; set; }
         [ForeignKey("RoleId")]
         public Role Role { get; set; }
+        public string? studentNumber { get; set; }
+
     }
 }

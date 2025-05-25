@@ -70,6 +70,19 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
+        [Authorize(Roles = "admin")]
+        [HttpGet("teacher/{id}")]
+        public IActionResult GetTeacher(int id)
+        {
+            try
+            {
+                return Json(service.GetTeacher(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
         // POST api/<ValuesController>
         [HttpPost]
         [Authorize(Roles = "admin")]
@@ -78,8 +91,16 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                service.CreateStudent(dto);
-                return StatusCode(201);
+                if( dto.checkingPassword == dto.Password)
+                {
+                    service.CreateStudent(dto);
+                    return StatusCode(201);
+                }
+                else
+                {
+                    throw new Exception("Пароли не совподают");
+                }
+               
             }
             catch (Exception ex)
             {
@@ -94,8 +115,15 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                service.CreateTeacher(dto);
-                return StatusCode(201);
+                if (dto.checkingPassword == dto.Password)
+                {
+                    service.CreateTeacher(dto);
+                    return StatusCode(201);
+                }
+                else
+                {
+                    throw new Exception("Парли не совподают");
+                }
             }
             catch (Exception ex)
             {
@@ -106,13 +134,30 @@ namespace TestProcessing.Controllers
         // PUT api/<ValuesController>/5
         [HttpPatch]
         [Authorize(Roles = "admin")]
-        [Route("update")]
-        public IActionResult UpdateUser(UpdateUserDto dto)
+        [Route("updateStudent")]
+        public IActionResult UpdateStudent(UpdateStudentDto dto)
         {
             try
             {
 
-                service.UpdateUser(dto);
+                service.UpdateStudent(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+
+        }
+        [HttpPatch]
+        [Authorize(Roles = "admin")]
+        [Route("updateTeacher")]
+        public IActionResult UpdateTeacher(UpdateTeacherDto dto)
+        {
+            try
+            {
+
+                service.UpdateTeacher(dto);
                 return StatusCode(200, "The content has been changed");
             }
             catch (Exception ex)

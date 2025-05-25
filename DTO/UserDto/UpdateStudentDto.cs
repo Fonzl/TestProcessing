@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace DTO.UserDto
 {
-    public class TeacherUserDto:UserDto
+    public class UpdateStudentDto : ShortUserDto
     {
-        public List<DisciplineDto.DisciplineDto>? Disciplines { get; set; }
+       
+        public int? Group { get; set; }
+
 
     }
 }
