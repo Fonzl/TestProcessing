@@ -9,6 +9,7 @@ namespace DTO.UserDto
     public class TeacherUserDto:UserDto
     {
         public List<DisciplineDto.DisciplineDto>? Disciplines { get; set; }
+        public string login { get; set; }
 
     }
 }

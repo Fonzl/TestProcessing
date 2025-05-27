@@ -11,9 +11,9 @@ namespace Repository.RepositoryUser
     public interface IRepositoryUser
         
     {
-        public UserDto? Login(string username, string password);
+        public UserDto? Login(string login, string password);
         public StudentUserDto GetUser(long id);
-        public TeacherUserDto GetTeacher(long id);
+        public TeacherUserDto? GetTeacher(long id);
         public List<ShortUserDto> GetUsers(short idRole);
         void UpdateStudent(UpdateStudentDto dto);
         void UpdateTeacher(UpdateTeacherDto dto);

@@ -22,6 +22,9 @@ namespace Service.ServiceUser
         
         public void CreateStudent(CreateStudentDto user)
         {
+            
+
+            
            repo.InsertStudent(user);
         }
 
@@ -46,8 +49,12 @@ namespace Service.ServiceUser
         }
 
         public TeacherUserDto GetTeacher(long id)
-        {
-            return repo.GetTeacher(id);
+        { var teacher = repo.GetTeacher(id);
+            if (teacher == null)
+            {
+                throw new Exception("Пользователь не найден");
+            }    
+            return teacher;
         }
 
         public StudentUserDto GetUser(long id)
@@ -100,5 +107,6 @@ namespace Service.ServiceUser
         {
             repo.UpdateTeacher(user);
         }
+       
     }
 }

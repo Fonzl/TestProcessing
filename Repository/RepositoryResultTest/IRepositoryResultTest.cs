@@ -14,7 +14,7 @@ namespace Repository.RepositoryResultTest
         List<ResultTestDto> GetResults();
         ResultTestDto GetResult(long id);
         decimal GetStatisticsDiscipline(ResultStatisticsDto dto);
-        List<ResultOfAttemptsDTO> ResultStudentId(long studentId, long idDiscipline);// лист всех попыток тестоа ученика по дисциплине
+        List<ResultOfAttemptsDTO> ResultStudentId(long studentId, long idDiscipline);// лист всех попыток теста ученика по дисциплине
         void Update(UpdateResultTestDto dto);
         void Delete(int id);
 

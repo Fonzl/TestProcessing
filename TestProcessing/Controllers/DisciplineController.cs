@@ -91,13 +91,15 @@ namespace TestProcessing.Controllers
             try
             {
 
-                return Json(service.StudentGetProfil(id));
+                var idTeacher = User.FindFirst("id")?.Value;
+                return Json(service.TheacherStudentGetProfil(id, Convert.ToInt16(idTeacher)));
             }
             catch (Exception ex)
             {
                 return StatusCode(520, ex.Message);
             }
         }
+       
         // POST api/<ValuesController>
         [HttpPost]
         [Authorize(Roles = "admin")]

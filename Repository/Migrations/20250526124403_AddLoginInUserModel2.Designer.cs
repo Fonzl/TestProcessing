@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repository;
@@ -12,9 +13,11 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250526124403_AddLoginInUserModel2")]
+    partial class AddLoginInUserModel2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,15 +308,16 @@ namespace Repository.Migrations
                     b.Property<long?>("GroupId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<short>("RoleId")
                         .HasColumnType("smallint");
-
-                    b.Property<string>("studentNumber")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -328,22 +332,9 @@ namespace Repository.Migrations
                         {
                             Id = 1L,
                             FullName = "admin",
+                            Login = "admin",
                             Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
                             RoleId = (short)1
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            FullName = "teacher",
-                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
-                            RoleId = (short)2
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            FullName = "student",
-                            Password = "9A15B2F417C1F2409FBB424BE8D39AAA",
-                            RoleId = (short)3
                         });
                 });
 

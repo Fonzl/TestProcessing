@@ -13,7 +13,7 @@ namespace DTO.UserDto
         
         public GroupDto.GroupDto? Group { get; set; }
        
-        public string StudentNumber { get; set; }
+        public string login { get; set; }
 
     }
 }

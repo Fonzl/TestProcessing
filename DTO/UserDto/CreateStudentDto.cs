@@ -16,7 +16,7 @@ namespace DTO.UserDto
         [Required]
         [RegularExpression(@"^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{6,}$")]
         public string checkingPassword { get; set; }
-        public string studentNumber { get; set; }
+      
         public long? Group { get; set; }
 
     }
