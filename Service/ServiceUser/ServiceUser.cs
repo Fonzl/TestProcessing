@@ -20,9 +20,17 @@ namespace Service.ServiceUser
     public class ServiceUser(IRepositoryUser repo) : IServiceUser
     {
         
-        public void CreateUser(CreateUserDto user)
+        public void CreateStudent(CreateStudentDto user)
         {
-           repo.Insert(user);
+            
+
+            
+           repo.InsertStudent(user);
+        }
+
+        public void CreateTeacher(CreateTeacherDto user)
+        {
+            repo.InsertTeacher(user);
         }
 
         public void DeleteUser(int id)
@@ -40,14 +48,23 @@ namespace Service.ServiceUser
             return repo.GetStudentIdGroup(idGroup);
         }
 
+        public TeacherUserDto GetTeacher(long id)
+        { var teacher = repo.GetTeacher(id);
+            if (teacher == null)
+            {
+                throw new Exception("Пользователь не найден");
+            }    
+            return teacher;
+        }
+
         public StudentUserDto GetUser(long id)
         {
             return  repo.GetUser(id);
         }
 
-        public List<UserDto> GetUsers()
+        public List<ShortUserDto> GetUsers(short idRole)
         {
-           return repo.GetUsers();
+           return repo.GetUsers( idRole);
         }
 
         public ReturnLoginUser Login(string username,string password) // Находим пользователя по данным и делаем jwt token
@@ -81,9 +98,15 @@ namespace Service.ServiceUser
             repo.PasswordСhange(passwordСhangeDto);
         }
 
-        public void UpdateUser(UpdateUserDto user)
+        public void UpdateStudent(UpdateStudentDto user)
         {
-            repo.Update(user);
+            repo.UpdateStudent(user);
         }
+
+        public void UpdateTeacher(UpdateTeacherDto user)
+        {
+            repo.UpdateTeacher(user);
+        }
+       
     }
 }

@@ -103,10 +103,14 @@ namespace Repository.RepositoryResultTest
         {
             var studentResultDiscipline = context.Results
                                             .Include(x => x.Test.Discipline)
-                                            .Include(x => x.User)
+                                            .Include(x => x.User.Role)
                                             .Include(x => x.Responses)
                                             .Where(x => x.User.Id == dto.StudentId)
                                             .ToList();
+            if(context.Users.Include( x => x.Role).First(x => x.Id == dto.StudentId).Role.Id != 3)
+            {
+                throw new Exception("Неправильно введёные данные");
+            }
             if (studentResultDiscipline == null)
             {
                 return 0;
@@ -164,7 +168,7 @@ namespace Repository.RepositoryResultTest
         public ResultOfAttemptsDTO InsertStudent(AddResultTestStudentDto dto)// тут  расчёт result
         {
             if (context.UserResponses.First(x => x.Id == dto.idResult).IsFinish)
-            {
+                {
                 throw new Exception("Тест уже завершён");
             }
             if (context.Tests.Include(x => x.Quests)

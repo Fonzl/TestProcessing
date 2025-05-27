@@ -11,10 +11,13 @@ namespace Service.ServiceUser
     {   
         ReturnLoginUser? Login(string username, string password);
         StudentUserDto GetUser( long id);
-        List<UserDto> GetUsers();
-        void UpdateUser(UpdateUserDto user);
+        public TeacherUserDto GetTeacher(long id);
+        List<ShortUserDto> GetUsers(short idRole);
+        void UpdateStudent(UpdateStudentDto user);
+        void UpdateTeacher(UpdateTeacherDto user);
         void DeleteUser(int id);
-        void CreateUser(CreateUserDto user);
+        void CreateStudent(CreateStudentDto user);
+        void CreateTeacher(CreateTeacherDto user);
         public List<ShortUserDto> GetStudentIdGroup(long idGroup);
         public List<StudentAttemptResultDto> GetStudentAttempt(long idGroup, long idTest);
         void PasswordСhange(PasswordСhangeDto passwordСhangeDto);

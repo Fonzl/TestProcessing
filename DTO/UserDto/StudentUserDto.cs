@@ -9,9 +9,11 @@ namespace DTO.UserDto
 {
     public class StudentUserDto : UserDto
     {
+
         
-       
         public GroupDto.GroupDto? Group { get; set; }
+       
+        public string login { get; set; }
 
     }
 }

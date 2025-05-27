@@ -14,7 +14,7 @@ namespace DTO.TestDto
         public int DisciplineId { get; set; }
         public long? Time { get; set; }
         public List<EvaluationDto>? EvaluationDtos { get; set; }
-        public bool IsCheck { get; set; }
+        public bool IsCheck { get; set; } 
         public long? NumberOfAttempts { get; set; }
 
     }

@@ -70,20 +70,36 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [HttpGet("studentProfilDiscipline/{id}")]//Список дисциплин в профиле ученика для статистики
-        [Authorize(Roles = "teacher")]
-        public IActionResult GetDisciplineStudentProfil(long id)
+        [HttpGet("studentProfilDiscipline")]//Список дисциплин в профиле ученика для статистики
+        [Authorize(Roles = "student")]
+        public IActionResult GetDisciplineProfil()
         {
             try
             {
-
-                return Json(service.StudentGetDiscipline(id));
+                var id = User.FindFirst("id")?.Value;
+                return Json(service.StudentGetProfil((Convert.ToInt16(id))));
             }
             catch (Exception ex)
             {
                 return StatusCode(520, ex.Message);
             }
         }
+        [HttpGet("studentProfilDiscipline/{id}")]//Список дисциплин в профиле ученика для статистики
+        [Authorize(Roles = "teacher,admin")]
+        public IActionResult GetDisciplineStudentProfil(long id)
+        {
+            try
+            {
+
+                var idTeacher = User.FindFirst("id")?.Value;
+                return Json(service.TheacherStudentGetProfil(id, Convert.ToInt16(idTeacher)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
+       
         // POST api/<ValuesController>
         [HttpPost]
         [Authorize(Roles = "admin")]

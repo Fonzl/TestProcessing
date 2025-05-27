@@ -15,13 +15,13 @@ namespace TestProcessing.Controllers
         // GET: api/<ValuesController>
 
         [HttpGet]
-        [Route("all")]
+        [Route("allRoleUser/{idRole}")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetAllUsers()
+        public IActionResult GetAllUsers(short idRole)
         {
             try
             {
-                return Json(service.GetUsers());
+                return Json(service.GetUsers(idRole));
             }
             catch (Exception ex)
             {
@@ -57,9 +57,8 @@ namespace TestProcessing.Controllers
             }
         }
         // GET api/<ValuesController>/5
-        [Authorize(Roles = "admin")]
-        [HttpGet("{id}")]
-
+        [Authorize(Roles = "admin,teacher")]
+        [HttpGet("student/{id}")]
         public IActionResult GetUser(int id)
         {
             try
@@ -71,16 +70,37 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        // POST api/<ValuesController>
-        [HttpPost]
         [Authorize(Roles = "admin")]
-        [Route("add")]
-        public IActionResult AddUser(CreateUserDto dto)
+        [HttpGet("teacher/{id}")]
+        public IActionResult GetTeacher(int id)
         {
             try
             {
-                service.CreateUser(dto);
-                return StatusCode(201);
+                return Json(service.GetTeacher(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+        }
+        // POST api/<ValuesController>
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [Route("addStudent")]
+        public IActionResult AddStudent(CreateStudentDto dto)
+        {
+            try
+            {
+                if( dto.checkingPassword == dto.Password)
+                {
+                    service.CreateStudent(dto);
+                    return StatusCode(201);
+                }
+                else
+                {
+                    throw new Exception("Пароли не совподают");
+                }
+               
             }
             catch (Exception ex)
             {
@@ -88,17 +108,56 @@ namespace TestProcessing.Controllers
             }
 
         }
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [Route("addTeacher")]
+        public IActionResult AddTeacher(CreateTeacherDto dto)
+        {
+            try
+            {
+                if (dto.checkingPassword == dto.Password)
+                {
+                    service.CreateTeacher(dto);
+                    return StatusCode(201);
+                }
+                else
+                {
+                    throw new Exception("Парли не совподают");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
 
+        }
         // PUT api/<ValuesController>/5
         [HttpPatch]
         [Authorize(Roles = "admin")]
-        [Route("update")]
-        public IActionResult UpdateUser(UpdateUserDto dto)
+        [Route("updateStudent")]
+        public IActionResult UpdateStudent(UpdateStudentDto dto)
         {
             try
             {
 
-                service.UpdateUser(dto);
+                service.UpdateStudent(dto);
+                return StatusCode(200, "The content has been changed");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(520, ex.Message);
+            }
+
+        }
+        [HttpPatch]
+        [Authorize(Roles = "admin")]
+        [Route("updateTeacher")]
+        public IActionResult UpdateTeacher(UpdateTeacherDto dto)
+        {
+            try
+            {
+
+                service.UpdateTeacher(dto);
                 return StatusCode(200, "The content has been changed");
             }
             catch (Exception ex)
@@ -129,7 +188,7 @@ namespace TestProcessing.Controllers
         {
             try
             {
-                var user = service.Login(dto.Name, dto.Password);
+                var user = service.Login(dto.login, dto.Password);
                 if (user == null)
                 {
                     return StatusCode(404, "Пользователь не найден");

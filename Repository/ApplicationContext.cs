@@ -63,7 +63,7 @@ namespace Repository
                     Disciplines = null,
                     Group = null,
                     RoleId = 1,
-
+                    Login = "admin"
                 });
          
             builder.Entity<User>().HasData(
@@ -75,8 +75,8 @@ namespace Repository
                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes("123456As"))),
                    Disciplines = null,
                    Group = null,
-                   RoleId = 2
-
+                   RoleId = 2,
+                   Login = "teacher"
                });
             builder.Entity<User>().HasData(new User
             {
@@ -87,7 +87,7 @@ namespace Repository
                 Disciplines = null,
                 Group = null,
                 RoleId = 3,
-
+                Login = "student"
             });
             builder.Entity<CategoryTasks>().HasData(new CategoryTasks
             {

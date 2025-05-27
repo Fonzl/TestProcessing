@@ -1,4 +1,5 @@
 ﻿using Database;
+using DTO.DisciplineDto;
 using DTO.UserDto;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,13 +13,13 @@ namespace Repository.RepositoryUser
 {
     public class RepositoryUser(ApplicationContext context) : IRepositoryUser
     {
-        public UserDto? Login(string name, string password) //Находит юзера и возращает 
+        public UserDto? Login(string login, string password) //Находит юзера и возращает 
         {
 
 
             var user = context.Users
                 .Include(x => x.Role)
-                .FirstOrDefault(x => x.FullName == name && x.Password == Convert.ToHexString(
+                .FirstOrDefault(x => x.Login == login && x.Password == Convert.ToHexString(
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(password))));
             if (user == null)
             {
@@ -30,7 +31,8 @@ namespace Repository.RepositoryUser
                 {
                     Id = user.Id,
                     FullName = user.FullName,
-
+                    
+                    
                     Role = new DTO.RoleDto.RoleDto
                     {
                         Id = context.Roles.First(x => x.Id == user.RoleId).Id,
@@ -56,17 +58,22 @@ namespace Repository.RepositoryUser
                 .Include(x => x.Group)
                 .Include(x => x.Disciplines)
                 .First(x => x.Id == id);
-           
+            if (user.Role.Id == 3)
+            {
                 return (new StudentUserDto
                 {
                     Id = user.Id,
                     FullName = user.FullName,
+                    login = user.Login,
                     Group = new DTO.GroupDto.DetailsGroupDto
                     {
                         Id = user.Group.Id,
                         Name = user.Group.Name,
                         StartDateOfTraining = user.Group.StartDateOfTraining,
-                        EndOfTraining = user.Group.EndOfTraining
+                        EndOfTraining = user.Group.EndOfTraining,
+                        
+                        
+                        
 
                     },
                     Role = new DTO.RoleDto.RoleDto
@@ -77,48 +84,144 @@ namespace Repository.RepositoryUser
 
 
                 });
+            }
+            else
+            {
+                throw new Exception("Нет доступа к данным этого пользователя");
+            }
             
 
         }
-
-        public List<UserDto> GetUsers()
+        public TeacherUserDto? GetTeacher(long id)
         {
-            var listUser = context.Users.ToList();
-            var users = new List<UserDto>();
-            foreach (var user in listUser)
+            var user = context.Users
+                .Include(x => x.Role)
+                .Include(x => x.Group)
+                .Include(x => x.Disciplines)
+                .FirstOrDefault(x => x.Id == id);
+            if(user.Role.Id == 1)
             {
-                users.Add(new UserDto
+                return null;
+            }
+            if (user.Role.Id == 2)
+            {
+                var listDiscipline = new List<DisciplineDto>();
+                user.Disciplines.ForEach(x =>
+                {
+                    listDiscipline.Add(new DisciplineDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                    });
+                });
+                return (new TeacherUserDto
                 {
                     Id = user.Id,
                     FullName = user.FullName,
+                    Disciplines = listDiscipline,
+                    Role = new DTO.RoleDto.RoleDto
+                    {
+                        Id = user.Role.Id,
+                        Name = user.Role.Name,
+                    },
+                    login = user.Login,
+
+
+
                 });
             }
-            return users;
+            else
+            {
+                throw new Exception("Нет доступа к данным этого пользователя");
+            }
+
+
         }
 
-        public void Insert(CreateUserDto dto)
+        public List<ShortUserDto> GetUsers(short idRole)
         {
+            if (idRole == 2 || idRole == 3)
+            {
+                var listUser = context.Users
+                    .Include(x => x.Role)
+                    .Where(x => x.Role.Id == idRole)
+                    .ToList();
+                var users = new List<ShortUserDto>();
+                foreach (var user in listUser)
+                {
+                    users.Add(new ShortUserDto
+                    {
+                        Id = user.Id,
+                        FullName = user.FullName,
+                    });
+                }
+                return users;
+            }
+            else 
+            {
+                throw new Exception("Информация к таким пользователям недоступна");
+            }
+        }
+
+
+        public void InsertStudent(CreateStudentDto dto)
+        {
+            string login;
+            do
+            {
+                var rand = new Random();
+                login = Transliterate(string.Join("", dto.FullName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)))
+                    + rand.Next(00, 99);
+            }
+            while (context.Users.FirstOrDefault(x => x.Login == login) != null);
             var user = new User
             {
                 FullName = dto.FullName,
                 Password = Convert.ToHexString(
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(dto.Password))),
-                Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList(),
                 Group = context.Groups.FirstOrDefault(x => x.Id == dto.Group),
-                Role = context.Roles.First(x => x.Id == dto.Role)
+                Role = context.Roles.First(x => x.Id == 3),
+                Login = login,
+                
 
             };
             context.Users.Add(user);
             context.SaveChanges();
         }
-
-        public void Update(UpdateUserDto dto)
+        public void InsertTeacher(CreateTeacherDto dto)
         {
-            var user = context.Users.First(x => x.Id == dto.Id);
+            string login;
+            do
+            {
+                var rand = new Random();
+                login = Transliterate(string.Join("", dto.FullName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)))
+                    + rand.Next(00, 99);
+            }
+            while (context.Users.FirstOrDefault(x => x.Login == login) != null);
+            var user = new User
+            {
+                FullName = dto.FullName,
+                Password = Convert.ToHexString(
+                    MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(dto.Password))),
+                Disciplines =  context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList(),
+                Role = context.Roles.First(x => x.Id == 2),
+                Login = login,
+
+            };
+            context.Users.Add(user);
+            context.SaveChanges();
+        }
+        public void UpdateStudent(UpdateStudentDto dto)
+        {
+            var user = context.Users.Include(x => x.Role).First(x => x.Id == dto.Id);
+            if (user.Role.Id != 3)
+            {
+                throw new Exception("Неправельные введённые данные");
+            }
             user.FullName = dto.FullName;
-            user.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();
+            
             user.Group = context.Groups.FirstOrDefault(x => x.Id == dto.Group);
-            user.Role = context.Roles.First(x => x.Id == dto.Role);
+           
             context.Users.Update(user);
             context.SaveChanges();
         }
@@ -176,6 +279,60 @@ namespace Repository.RepositoryUser
                     MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(passwordСhangeDto.Password)));
             context.Users.Update(user);
             context.SaveChanges();
+        }
+
+       
+
+        public void UpdateTeacher(UpdateTeacherDto dto)
+            {
+            var user = context.Users
+                .Include(x => x.Disciplines)
+                .Include(x => x.Role).First(x => x.Id == dto.Id);
+            if (user.Role.Id != 2)
+            {
+                throw new Exception("Неправельные введённые данные");
+            }
+            
+            user.FullName = dto.FullName;
+            user.Disciplines = context.Disciplines.Where(x => dto.Disciplines.Contains(x.Id)).ToList();
+          
+            context.Users.Update(user);
+            context.SaveChanges();
+        }
+        public static string Transliterate(string text)
+        {
+            var translitDict = new Dictionary<string, string>
+    {
+        {"а", "a"}, {"б", "b"}, {"в", "v"}, {"г", "g"}, {"д", "d"}, {"е", "e"},
+        {"ё", "yo"}, {"ж", "zh"}, {"з", "z"}, {"и", "i"}, {"й", "y"}, {"к", "k"},
+        {"л", "l"}, {"м", "m"}, {"н", "n"}, {"о", "o"}, {"п", "p"}, {"р", "r"},
+        {"с", "s"}, {"т", "t"}, {"у", "u"}, {"ф", "f"}, {"х", "kh"}, {"ц", "ts"},
+        {"ч", "ch"}, {"ш", "sh"}, {"щ", "shch"}, {"ъ", ""}, {"ы", "y"}, {"ь", ""},
+        {"э", "e"}, {"ю", "yu"}, {"я", "ya"},
+        {"А", "A"}, {"Б", "B"}, {"В", "V"}, {"Г", "G"}, {"Д", "D"}, {"Е", "E"},
+        {"Ё", "Yo"}, {"Ж", "Zh"}, {"З", "Z"}, {"И", "I"}, {"Й", "Y"}, {"К", "K"},
+        {"Л", "L"}, {"М", "M"}, {"Н", "N"}, {"О", "O"}, {"П", "P"}, {"Р", "R"},
+        {"С", "S"}, {"Т", "T"}, {"У", "U"}, {"Ф", "F"}, {"Х", "Kh"}, {"Ц", "Ts"},
+        {"Ч", "Ch"}, {"Ш", "Sh"}, {"Щ", "Shch"}, {"Ъ", ""}, {"Ы", "Y"}, {"Ь", ""},
+        {"Э", "E"}, {"Ю", "Yu"}, {"Я", "Ya"}
+    };
+
+            var result = new StringBuilder();
+            for (int i = 0; i < text.Length; i++)
+            {
+                // Проверяем, есть ли текущий символ в словаре
+                if (translitDict.TryGetValue(text[i].ToString(), out string value))
+                {
+                    result.Append(value);
+                }
+                else
+                {
+                    // Если символа нет в словаре, оставляем как есть
+                    result.Append(text[i]);
+                }
+            }
+
+            return result.ToString();
         }
     }
 }

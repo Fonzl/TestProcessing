@@ -15,6 +15,8 @@ namespace Service.ServiceDiscipline
         List<DisciplineDto> TeacherGetDiscipline(long id);
         List<DisciplineDto> StudentGetDiscipline(long id);
         void DeleteDiscipline(int id);
+        List<DisciplineDto> StudentGetProfil(long id);
+        List<DisciplineDto> TheacherStudentGetProfil(long idStudent,long idTeacher);
         void UpdateDiscipline(UpdateDisciplineDto discipline);
         void CreateDiscipline(CreateDisciplineDto discipline);
 
