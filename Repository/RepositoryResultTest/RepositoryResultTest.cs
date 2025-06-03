@@ -538,13 +538,12 @@ namespace Repository.RepositoryResultTest
                     idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
-                    Minutes = null,
-                    Second = null,
+                    Minutes = null
 
                 };
             }
             if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).Seconds <= 0)//Переводим всю разницу
-                // в секунды и проверяем что время закончилось.
+                // в секунды и проверяем что время нeзакончилось.
             {
 
 
@@ -558,7 +557,7 @@ namespace Repository.RepositoryResultTest
 
                 };
             }
-            else// Время на прохождение осталось.
+            else
             {
 
                 return new ReturnAttemptDto

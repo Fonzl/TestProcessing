@@ -268,9 +268,20 @@ namespace TestProcessing.Controllers
                         IsTrue = true,
                     });
                 }
+                if (result.Second == 0 && result.Minutes == 0)// Время закончилось.Завершаем тест.
+                {
+                    return Json(service.CreateResultTest(new AddResultTestStudentDto
+                    {
+                        StudentId = Convert.ToInt16(studentId),
+                        TestId = result.TestId,
+                        UserResponesTest = result.UserResponesTest,
+                        idResult = result.idResult,
+
+                    }));
+                }
                 else
                 {
-                    return Json(result);//Попытка есть
+                    return Json(result);
                 }
             }
             catch (Exception ex)
