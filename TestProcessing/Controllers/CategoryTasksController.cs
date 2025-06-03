@@ -13,7 +13,7 @@ namespace CategoryTasksProcessing.Controllers
         [HttpGet]
         [Route("all")]
 
-        public IActionResult GetAllCategoryTaskss()
+        public async Task<IActionResult> GetAllCategoryTaskss()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace CategoryTasksProcessing.Controllers
         // GET api/<ValuesController>/5
         [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
-        public IActionResult GetCategoryTasks(int id)
+        public async Task<IActionResult> GetCategoryTasks(int id)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace CategoryTasksProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("add")]
-        public IActionResult AddCategoryTasks(CreateCategoryTasksDto dto)
+        public async Task<IActionResult> AddCategoryTasks(CreateCategoryTasksDto dto)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace CategoryTasksProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("update")]
-        public IActionResult UpdateCategoryTasks(UpdateCategoryTasksDto dto)
+        public async Task<IActionResult> UpdateCategoryTasks(UpdateCategoryTasksDto dto)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace CategoryTasksProcessing.Controllers
         // DELETE api/<ValuesController>/5
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteCategoryTasks(int id)
+        public async Task<IActionResult> DeleteCategoryTasks(int id)
         {
             try
             {

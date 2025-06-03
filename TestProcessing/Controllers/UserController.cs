@@ -17,7 +17,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Route("allRoleUser/{idRole}")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetAllUsers(short idRole)
+        public async Task<IActionResult> GetAllUsers(short idRole)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Route("ListStudent/Group/{idGroup}")]
         [Authorize(Roles = "admin,teacher")]
-        public IActionResult GetListStusentIdGroup(long idGroup)
+        public async Task<IActionResult> GetListStusentIdGroup(long idGroup)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Route("ListStudent/Group/{idGroup}/Test/{idTest}")]
         [Authorize(Roles = "admin,teacher")]
-        public IActionResult GetListStusentAttemptIdGroup(long idGroup, long idTest)//Отдаёт список студентов и их выший бал на тестирование
+        public  async Task<IActionResult> GetListStusentAttemptIdGroup(long idGroup, long idTest)//Отдаёт список студентов и их выший бал на тестирование
         {
             try
             {
@@ -59,7 +59,7 @@ namespace TestProcessing.Controllers
         // GET api/<ValuesController>/5
         [Authorize(Roles = "admin,teacher")]
         [HttpGet("student/{id}")]
-        public IActionResult GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace TestProcessing.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpGet("teacher/{id}")]
-        public IActionResult GetTeacher(int id)
+        public async Task<IActionResult> GetTeacher(int id)
         {
             try
             {
@@ -87,14 +87,14 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("addStudent")]
-        public IActionResult AddStudent(CreateStudentDto dto)
+        public async Task<IActionResult> AddStudent(CreateStudentDto dto)
         {
             try
             {
                 if( dto.checkingPassword == dto.Password)
                 {
-                    service.CreateStudent(dto);
-                    return StatusCode(201);
+             
+                    return Json(new DTO.GeneralDto.Login() { login = service.CreateStudent(dto) } );
                 }
                 else
                 {
@@ -111,14 +111,14 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("addTeacher")]
-        public IActionResult AddTeacher(CreateTeacherDto dto)
+        public async Task<IActionResult> AddTeacher(CreateTeacherDto dto)
         {
             try
             {
                 if (dto.checkingPassword == dto.Password)
                 {
-                    service.CreateTeacher(dto);
-                    return StatusCode(201);
+                    
+                    return   Json(new DTO.GeneralDto.Login() { login = service.CreateTeacher(dto) });
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace TestProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("updateStudent")]
-        public IActionResult UpdateStudent(UpdateStudentDto dto)
+        public async Task<IActionResult> UpdateStudent(UpdateStudentDto dto)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace TestProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("updateTeacher")]
-        public IActionResult UpdateTeacher(UpdateTeacherDto dto)
+        public async Task<IActionResult> UpdateTeacher(UpdateTeacherDto dto)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         // DELETE api/<ValuesController>/5
         [HttpDelete("delete/{id}")]
-        public IActionResult DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace TestProcessing.Controllers
         }
         [HttpPost]
         [Route("login")]
-        public IActionResult Login(LoginUserDto dto)
+        public async Task<IActionResult> Login(LoginUserDto dto)
         {
             try
             {
@@ -207,7 +207,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         [HttpPatch]
         [Route("PasswordСhange")]
-        public IActionResult PasswordСhange(PasswordСhangeDto dto)
+        public async Task<IActionResult> PasswordСhange(PasswordСhangeDto dto)
         {
             try
             {

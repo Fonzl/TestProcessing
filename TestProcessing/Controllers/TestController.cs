@@ -15,7 +15,7 @@ namespace TestProcessing.Controllers
         [Route("all")]
         [Authorize(Roles = "admin")]
 
-        public IActionResult GetAllTests()
+        public async Task<IActionResult> GetAllTests()
         {
             try
             {
@@ -31,7 +31,7 @@ namespace TestProcessing.Controllers
         //Тесты юзеров по дисциплине 
         [Authorize(Roles = "teacher,admin")]
         [HttpGet("{id}")]
-        public IActionResult GetTest(int id)
+        public async Task<IActionResult> GetTest(int id)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace TestProcessing.Controllers
         }
         [Authorize(Roles = "student")]
         [HttpGet("{testId}/student")]
-        public IActionResult GetTestStusent(long testId)
+        public async Task<IActionResult> GetTestStusent(long testId)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace TestProcessing.Controllers
         }
         //[HttpGet("student")]
         //[Authorize(Roles = "student")]
-        //public IActionResult GetTestStudent()
+        //public async Task<IActionResult> GetTestStudent()
         //{
         //    try
         //    {
@@ -72,8 +72,8 @@ namespace TestProcessing.Controllers
         //}
 
         [HttpGet("GetListTestDiscipline/{dis}")]
-        [Authorize(Roles = "teacher,student")]
-        public IActionResult GetListTestDiscipline(long dis)
+        [Authorize(Roles = "teacher,student,admin")]
+        public async Task<IActionResult> GetListTestDiscipline(long dis)
         {
             try
             {
@@ -90,12 +90,12 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]
         [Route("add")]
-        public IActionResult AddTest(CreateTestDto dto)
+        public async Task<IActionResult> AddTest(CreateTestDto dto)
         {
             try
             {
 
-                return Json(service.CreateTest(dto));
+                return Json(new DTO.GeneralDto.IdDto { Id = service.CreateTest(dto) });
             }
             catch (Exception ex)
             {
@@ -106,7 +106,7 @@ namespace TestProcessing.Controllers
         // PUT api/<ValuesController>/5
         [HttpPatch]
         [Route("update")]
-        public IActionResult UpdateTest(UpdateTestDto dto)
+        public async Task<IActionResult> UpdateTest(UpdateTestDto dto)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace TestProcessing.Controllers
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteTest(int id)
+        public async Task<IActionResult> DeleteTest(int id)
         {
 
             try

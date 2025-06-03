@@ -18,7 +18,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]
         [Route("all")]
 
-        public IActionResult GetAllQuests()
+        public async Task<IActionResult> GetAllQuests()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public IActionResult GetQuest(int id)
+        public async Task<IActionResult> GetQuest(int id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]
         [HttpPost]
         [Route("addAnswer")]
-        public IActionResult AddAnswer(List<CreateAnswerDto> dto)
+        public async Task<IActionResult> AddAnswer(List<CreateAnswerDto> dto)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "teacher,admin")]
         [Route("add")]
-        public IActionResult AddQuest([FromForm] CreateQuestDtoShort dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
+        public async Task<IActionResult> AddQuest([FromForm] CreateQuestDtoShort dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
 
             try
@@ -114,7 +114,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]
         [HttpPatch]
         [Route("update")]
-        public IActionResult UpdateQuest([FromForm] UpdateQuestDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
+        public async Task<IActionResult> UpdateQuest([FromForm] UpdateQuestDto dto, Microsoft.AspNetCore.Http.IFormFileCollection? uploadedFile)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace TestProcessing.Controllers
         // DELETE api/<ValuesController>/5
         [Authorize(Roles = "teacher,admin")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteQuest(int id)
+        public async Task<IActionResult> DeleteQuest(int id)
         {
             try
             {
@@ -192,7 +192,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Route("getListQuests/{id}")]
         [Authorize] 
-        public IActionResult GetListQuest(int id)//по id test
+        public async Task<IActionResult> GetListQuest(int id)//по id test
         {
             try
             {
@@ -206,7 +206,7 @@ namespace TestProcessing.Controllers
         //[HttpGet]
         //[Route("postQuestImg/{nameImg}")]
 
-        //public IActionResult ReturnPhoto(string nameImg)//по id test
+        //public async Task<IActionResult> ReturnPhoto(string nameImg)//по id test
         //{
         //    var tokenSettings = configuration.GetSection("ConnectionStrings");
         //    try
@@ -227,7 +227,7 @@ namespace TestProcessing.Controllers
         //[HttpDelete]
         //[Route("DeleteQuestImg")]
 
-        //public IActionResult DeletePhoto(string nameImg)//по id test
+        //public async Task<IActionResult> DeletePhoto(string nameImg)//по id test
         //{
         //    var tokenSettings = configuration.GetSection("ConnectionStrings");
         //    try

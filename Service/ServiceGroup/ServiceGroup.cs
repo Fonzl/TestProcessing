@@ -1,5 +1,7 @@
 ﻿using DTO.GroupDto;
 using Repository.RepositoryGroup;
+using Repository.RepositoryUser;
+using Service.ServiceUser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Service.ServiceGroup
 {
-    public class ServiceGroup(IRepositoryGroup repo) : IServiceGroup
+    public class ServiceGroup(IRepositoryGroup repo,IServiceUser serviceUser) : IServiceGroup
     {
         public void CreateGroup(CreateGroupDto group)
         {
@@ -17,7 +19,16 @@ namespace Service.ServiceGroup
 
         public void DeleteGroup(int id)
         {
-            repo.Delete(id);
+            var users = repo.Delete(id);
+            if(users == null)
+            {
+                return;
+            }
+            foreach(var user in users)
+            {
+               serviceUser.DeleteUser(user.Id);
+            }
+
         }
 
         public List<GroupDto> GetAllGroups()

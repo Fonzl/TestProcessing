@@ -1,4 +1,5 @@
-﻿using DTO.GeneralDto;
+﻿using Database;
+using DTO.GeneralDto;
 using DTO.GroupDto;
 using DTO.ResultTestDto;
 using Repository.RepositoryResultTest;
@@ -56,7 +57,7 @@ namespace Service.ServiceResultTest
         }
         public long CreatResultAndAttempt(long testId, long studentId)
         {
-            if (repo.CheckingStudentResult(testId, studentId) == null)
+            if (CheckingStudentResult(testId, studentId) == null)
             {
                 return repo.CreatResultAndAttempt(testId, studentId);
             }
@@ -69,10 +70,12 @@ namespace Service.ServiceResultTest
 
         public ReturnAttemptDto? CheckingStudentResult(long testId, long studentId)
         { 
+
          return  repo.CheckingStudentResult(testId, studentId);
         }
             public void UpdateRespones(AddResultTestStudentDto dto)
         {
+           
             repo.UpdateRespones(dto);
         }
 

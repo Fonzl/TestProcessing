@@ -1,4 +1,5 @@
 ﻿
+using Database;
 using DTO.GroupDto;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Repository.RepositoryGroup
         DetailsGroupDto GetGroupDto(long id);
         DetailsGroupDto GetGroupUser(long userId);
         void Update(UpdateGroupDto dto);
-        void Delete(long id);
+        List<User>? Delete(long id);
         void Insert(CreateGroupDto dto);
      
     }
