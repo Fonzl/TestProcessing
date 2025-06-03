@@ -14,7 +14,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Route("all")]
 
-        public IActionResult GetAllDirectionss()
+        public async Task<IActionResult> GetAllDirectionss()
         {
             try
             {
@@ -31,7 +31,7 @@ namespace TestProcessing.Controllers
         // GET api/<ValuesController>/5
         [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
-        public IActionResult GetDirections(int id)
+        public async Task<IActionResult> GetDirections(int id)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("addSchedule")]
-        public IActionResult AddSchedule(CreatShedule dto)
+        public async Task<IActionResult> AddSchedule(CreatShedule dto)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("add")]
-        public IActionResult AddDirections(CreateDirectionDto dto)
+        public async Task<IActionResult> AddDirections(CreateDirectionDto dto)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace TestProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("update")]
-        public IActionResult UpdateDirections(UpdateDirectionDto dto)
+        public async Task<IActionResult> UpdateDirections(UpdateDirectionDto dto)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace TestProcessing.Controllers
         // DELETE api/<ValuesController>/5
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteDirection(int id)
+        public async Task<IActionResult> DeleteDirection(int id)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace TestProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("updateShedule")]
-        public IActionResult AddDirections(UpdateScheduleDirectionDto dto)
+        public async Task<IActionResult> AddDirections(UpdateScheduleDirectionDto dto)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Authorize(Roles = "admin")]
         [Route("GetDirectionsShedule/{directionId}/Cours/{corusId}")]
-        public IActionResult GetDirectionsShedule(int corusId, int directionId)
+        public async Task<IActionResult> GetDirectionsShedule(int corusId, int directionId)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Route("AllListShedules")]
 
-        public IActionResult GetAllShedules()
+        public async Task<IActionResult> GetAllShedules()
         {
             try
             {

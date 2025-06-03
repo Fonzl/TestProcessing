@@ -15,7 +15,7 @@ namespace TestProcessing.Controllers
         [HttpGet]
         [Route("all")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetAllResultTests()
+        public async Task<IActionResult> GetAllResultTests()
         {
             try
             {
@@ -29,7 +29,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpGet]
         [Route("student/{idDiscipline}")]
-        public IActionResult GetResultTest(long idDiscipline)//результаты тестов студента все
+        public async Task<IActionResult> GetResultTest(long idDiscipline)//результаты тестов студента все
         {
             try
             {
@@ -54,7 +54,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpPost]
         [Route("studentPassedTest")]
-        public IActionResult AddResultTest(CreateResultTestDto dto)//Расчёт результата теста
+        public async Task<IActionResult> AddResultTest(CreateResultTestDto dto)//Расчёт результата теста
         {
             try
             {
@@ -71,7 +71,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]//рузуьтаты тестов по  студента для учителя;id - id  студента
         [HttpGet]
         [Route("teacherStudentId/{idStudent}/Discipline/{idDiscipline}")]
-        public IActionResult GetResultTestTeacher(long idStudent, long idDiscipline)
+        public async Task<IActionResult> GetResultTestTeacher(long idStudent, long idDiscipline)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]//статистика по предмету  студента для учителя
         [HttpGet]
         [Route("teacherResultGroup/{idGroup}/Test/{idTest}")]
-        public IActionResult GetTeacherResultGroup(long idGroup,long idTest )
+        public async Task<IActionResult> GetTeacherResultGroup(long idGroup,long idTest )
         {
             try
             {
@@ -107,7 +107,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "teacher,admin")]//статистика по предмету  студента для учителя
         [HttpGet]
         [Route("teacherStatisticResultId/{studentId}/discipline/{disciplineId}")]
-        public IActionResult GetTeacherStatisticResultTest(int disciplineId,long studentId)
+        public async Task<IActionResult> GetTeacherStatisticResultTest(int disciplineId,long studentId)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]//статистика по предмету  студента для студента
         [HttpGet]
         [Route("studentStatisticResultId/{disciploneId}")]
-        public IActionResult GetStudentStatisticResultTest(int disciploneId)
+        public async Task<IActionResult> GetStudentStatisticResultTest(int disciploneId)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         [HttpPatch]
         [Route("update")]
-        public IActionResult UpdateResultTest(UpdateResultTestDto dto)
+        public async Task<IActionResult> UpdateResultTest(UpdateResultTestDto dto)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace TestProcessing.Controllers
         // DELETE api/<ValuesController>/5
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = "admin")]
-        public IActionResult DeleteResultTest(int id)
+        public async Task<IActionResult> DeleteResultTest(int id)
         {
             try
             {
@@ -175,7 +175,7 @@ namespace TestProcessing.Controllers
         [Authorize]
         [HttpGet]
         [Route("resultDetails/{id}")]
-        public IActionResult GetResultTestDetails(long id)
+        public async Task<IActionResult> GetResultTestDetails(long id)
         {
             try
             {
@@ -232,7 +232,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpPost]
         [Route("createAttempt/{idTest}")]
-        public IActionResult CreateAttempt(long idTest)
+        public async Task<IActionResult> CreateAttempt(long idTest)
         {
             try
             {
@@ -253,35 +253,24 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpGet]
         [Route("checkingAttempt/{idTest}")]//проверка на действующие попытки
-        public IActionResult CheckingAttempt(long idTest)
+        public async Task<IActionResult> CheckingAttempt(long idTest)
         {
             try
             {
 
-                IsBoolDto w = new IsBoolDto()
-                {
-                    IsTrue = true,
-                };
-                var studentId = User.FindFirst("id")?.Value;
+               
+                var studentId = User.FindFirst("id")?.Value;// Вытаскиваем Id пользователя из jwt
                 var result = service.CheckingStudentResult(idTest, Convert.ToInt16(studentId));
                 if (result == null)
                 {
-                    return Json(w);
-                }
-                if (result.Second <= 0)
-                {
-                    return Json(service.CreateResultTest(new AddResultTestStudentDto
+                    return Json(new IsBoolDto()//Отправиться если попыток нет
                     {
-                        StudentId = Convert.ToInt16(studentId),
-                        TestId = result.TestId,
-                        UserResponesTest = result.UserResponesTest,
-                        idResult = result.idResult,
-
-                    }));
+                        IsTrue = true,
+                    });
                 }
                 else
                 {
-                    return Json(result);
+                    return Json(result);//Попытка есть
                 }
             }
             catch (Exception ex)
@@ -292,7 +281,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "student")]
         [HttpPatch]
         [Route("Attempt/update")]
-        public IActionResult UpdateAttemptTest(CreateResultTestDto dto)
+        public async Task<IActionResult> UpdateAttemptTest(CreateResultTestDto dto)
         {
             try
             {

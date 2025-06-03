@@ -13,7 +13,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         [Route("all")]
 
-        public IActionResult GetAllRole()
+        public async Task<IActionResult> GetAllRole()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace TestProcessing.Controllers
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetRole(short id)
+        public async Task<IActionResult> GetRole(short id)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("add")]
-        public IActionResult AddRole(CreateRoleDto dto)
+        public async Task<IActionResult> AddRole(CreateRoleDto dto)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace TestProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("update")]
-        public IActionResult UpdateRole(UpdateRoleDto dto)
+        public async Task<IActionResult> UpdateRole(UpdateRoleDto dto)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace TestProcessing.Controllers
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
-        public IActionResult DeleteRole(short id)
+        public async Task<IActionResult> DeleteRole(short id)
         {
             try
             {

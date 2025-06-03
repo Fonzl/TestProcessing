@@ -13,11 +13,13 @@ namespace Repository.RepositoryGroup
 {
     public class RepositoryGroup(ApplicationContext context) : IRepositoryGroup
     {
-        public void Delete(long id)
+        public List<User>? Delete(long id)
         {
-            var group = context.Groups.First(g => g.Id == id);
+            var group = context.Groups.Include(x => x.Users).First(g => g.Id == id);
+            var users = group.Users.Select(x => x).ToList();
             context.Groups.Remove(group);
             context.SaveChanges();
+            return users;
         }
 
         public List<GroupDto> GetDisciplineGroupList(long idDiscipline)
@@ -120,14 +122,16 @@ namespace Repository.RepositoryGroup
 
         public void Insert(CreateGroupDto dto)
         {
+          
             var group = new Group
             {
                 Name = dto.Name,
-                EndOfTraining = dto.EndOfTraining,
-                StartDateOfTraining = dto.StartDateOfTraining,
+                StartDateOfTraining = DateTime.SpecifyKind(dto.StartDateOfTraining, DateTimeKind.Utc),
+                EndOfTraining = DateTime.SpecifyKind(dto.EndOfTraining, DateTimeKind.Utc),
                 Cours = dto.Cours,
                 Direction = context.Directions.First(x => x.Id == dto.Direction),
-                Schedule = context.Schedules.First(x => x.DirectionId == dto.Direction && x.Cours == dto.Cours)
+                Schedule = context.Schedules.First(x => x.DirectionId == dto.Direction && x.Cours == dto.Cours),
+                DirectionId = dto.Direction
 
 
             };

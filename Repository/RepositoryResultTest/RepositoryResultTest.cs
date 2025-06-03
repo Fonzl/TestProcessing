@@ -521,16 +521,16 @@ namespace Repository.RepositoryResultTest
                 .Include(x => x.Responses)
                 .FirstOrDefault(x => x.Test.Id == testId && x.User.Id == studentId);
 
-            if (result == null)
+            if (result == null)//Сценарий при котором попыток не было
             {
                 return null;
             }
             var attempt = result.Responses.FirstOrDefault(x => x.IsFinish == false);
-            if (attempt == null)
+            if (attempt == null)//Сценарий при котором попытки были , но они все закончены.
             {
                 return null;
             }
-            if (null == result.Test.TimeInMinutes)
+            if (null == result.Test.TimeInMinutes)// Проверка на время.У теста время отсуствует.
             {
 
                 return new ReturnAttemptDto
@@ -538,11 +538,13 @@ namespace Repository.RepositoryResultTest
                     idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
-                    Minutes = null
+                    Minutes = null,
+                    Second = null,
 
                 };
             }
-            if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).Seconds <= 0)
+            if ((long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).Seconds <= 0)//Переводим всю разницу
+                // в секунды и проверяем что время закончилось.
             {
 
 
@@ -551,12 +553,12 @@ namespace Repository.RepositoryResultTest
                     idResult = attempt.Id,
                     TestId = testId,
                     UserResponesTest = JsonSerializer.Deserialize<List<UserRespon>>(attempt.ListUserResponses),
-                    Minutes = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).TotalMinutes,
-                    Second = (long)attempt.StartdateTime.AddMinutes((double)result.Test.TimeInMinutes).Subtract(DateTime.Now.ToUniversalTime()).TotalSeconds
+                    Minutes = 0,
+                    Second = 0
 
                 };
             }
-            else
+            else// Время на прохождение осталось.
             {
 
                 return new ReturnAttemptDto

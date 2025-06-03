@@ -129,7 +129,7 @@ namespace Repository.RepositoryTest
 
         //}
 
-        public List<TestDto> GetTestDiscipline(long disciplineId, long IdUsser)//Получаем тесты по всё дисциплине.
+        public List<TestDto> GetTestDiscipline(long disciplineId, long IdUsser)//Получаем тесты по всей дисциплине.
         {
             var user = context.Users.First(x => x.Id == IdUsser);
             var result = context.Results
@@ -143,8 +143,13 @@ namespace Repository.RepositoryTest
                 var List = new List<Test>();
 
                 context.Tests
+                    .Include(x => x.Quests)
              .Where(x => x.Discipline.Id == disciplineId).ToList().ForEach(x =>
              {
+                 if(x.Quests.ToList().Count == 0 || x.Quests == null)
+                 {
+                     return;
+                 }
                  if (x.NumberOfAttempts == null)
                  {
                      List.Add(x);

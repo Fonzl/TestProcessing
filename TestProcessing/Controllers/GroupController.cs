@@ -14,7 +14,7 @@ namespace GroupProcessing.Controllers
         [Authorize(Roles = "admin")]
         [Route("all")]
 
-        public IActionResult GetAllGroups()
+        public async Task<IActionResult> GetAllGroups()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace GroupProcessing.Controllers
         [Authorize(Roles = "admin,teacher")]
         [HttpGet("{id}")]
 
-        public IActionResult GetGroup(int id)
+        public async Task<IActionResult> GetGroup(int id)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace GroupProcessing.Controllers
         }
         [Authorize(Roles = "teacher")]
         [HttpGet("Discipline/{id}")]//Возрает список групп по дисцилине
-        public IActionResult GetDisciplineGroup(int id)
+        public async Task<IActionResult> GetDisciplineGroup(int id)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace GroupProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("add")]
-        public IActionResult AddGroup(CreateGroupDto dto)
+        public async Task<IActionResult> AddGroup(CreateGroupDto dto)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace GroupProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("update")]
-        public IActionResult UpdateGroup(UpdateGroupDto dto)
+        public async Task<IActionResult> UpdateGroup(UpdateGroupDto dto)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace GroupProcessing.Controllers
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
-        public IActionResult DeleteGroup(int id)
+        public async Task<IActionResult> DeleteGroup(int id)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace GroupProcessing.Controllers
         [HttpGet]
         [Route("student")]
         [Authorize(Roles = "student")]
-        public IActionResult GetGroupStudent()
+        public async Task<IActionResult> GetGroupStudent()
         {
             try
             {

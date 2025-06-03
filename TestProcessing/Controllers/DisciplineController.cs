@@ -14,7 +14,7 @@ namespace TestProcessing.Controllers
         [Authorize(Roles = "admin")]
         [Route("all")]
 
-        public IActionResult GetAllDisciplines()
+        public async Task<IActionResult> GetAllDisciplines()
         {
             try
             {
@@ -31,7 +31,7 @@ namespace TestProcessing.Controllers
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetDiscipline(int id)
+        public async Task<IActionResult> GetDiscipline(int id)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace TestProcessing.Controllers
         }
         [HttpGet("teacher")]
         [Authorize(Roles = "teacher")]//обычный выбор дисциплин для учителя
-        public IActionResult GetDisciplineTeacher()
+        public async Task<IActionResult> GetDisciplineTeacher()
         {
             try
             {
@@ -58,7 +58,7 @@ namespace TestProcessing.Controllers
         }
         [HttpGet("student")]
         [Authorize(Roles = "student")]//обычный выбор дисциплин для студента
-        public IActionResult GetDisciplineStudent()
+        public async Task<IActionResult> GetDisciplineStudent()
         {
             try
             {
@@ -72,7 +72,7 @@ namespace TestProcessing.Controllers
         }
         [HttpGet("studentProfilDiscipline")]//Список дисциплин в профиле ученика для статистики
         [Authorize(Roles = "student")]
-        public IActionResult GetDisciplineProfil()
+        public async Task<IActionResult> GetDisciplineProfil()
         {
             try
             {
@@ -86,7 +86,7 @@ namespace TestProcessing.Controllers
         }
         [HttpGet("studentProfilDiscipline/{id}")]//Список дисциплин в профиле ученика для статистики
         [Authorize(Roles = "teacher,admin")]
-        public IActionResult GetDisciplineStudentProfil(long id)
+        public async Task<IActionResult> GetDisciplineStudentProfil(long id)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace TestProcessing.Controllers
         [HttpPost]
         [Authorize(Roles = "admin")]
         [Route("add")]
-        public IActionResult AddDiscipline(CreateDisciplineDto dto)
+        public async Task<IActionResult> AddDiscipline(CreateDisciplineDto dto)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace TestProcessing.Controllers
         [HttpPatch]
         [Authorize(Roles = "admin")]
         [Route("update")]
-        public IActionResult UpdateDiscipline(UpdateDisciplineDto dto)
+        public async Task<IActionResult> UpdateDiscipline(UpdateDisciplineDto dto)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace TestProcessing.Controllers
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
-        public IActionResult DeleteDiscipline(int id)
+        public async Task<IActionResult> DeleteDiscipline(int id)
         {
             try
             {
