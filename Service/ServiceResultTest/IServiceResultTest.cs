@@ -10,12 +10,11 @@ namespace Service.ServiceResultTest
 {
     public interface IServiceResultTest
     {
-        ResultTestDto GetResultTest(int id);
-        List<ResultTestDto> GetAllResultTests();
+      
         decimal GetStatisticsDiscipline(ResultStatisticsDto dto);
         List<ResultOfAttemptsDTO> ResultStudentId(long studentId, long idDiscipline);
-        void DeleteResultTest(int id);
-        void UpdateResultTest(UpdateResultTestDto updateResultTest);
+ 
+        
         ResultOfAttemptsDTO CreateResultTest(AddResultTestStudentDto createResultTest);
         List<DTO.ResultTestDto.VerifiedUserResponesDto> ReturnResultDetailsTrue(long idResultTest);
         long CreatResultAndAttempt(long testId, long studentId);

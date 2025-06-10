@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text.Json;
 using Database;
 using DTO.AnswerDto;
@@ -12,53 +13,53 @@ namespace Repository.RepositoryResultTest
 {
     public class RepositoryResultTest(ApplicationContext context) : IRepositoryResultTest
     {
-        public void Delete(int id)
-        {
-            var result = context.Results.First(r => r.Id == id);
-            context.Results.Remove(result);
-            context.SaveChanges();
-        }
+        //public void Delete(int id)
+        //{
+        //    var result = context.Results.First(r => r.Id == id);
+        //    context.Results.Remove(result);
+        //    context.SaveChanges();
+        //}
 
-        public ResultTestDto GetResult(long id)
-        {
-            var result = context.Results
-                .Include(x => x.User)
-                .Include(x => x.Test)
-                .Include(x => x.Responses)
-                .First(x => x.Id == id);
-            var ListAttempts = new List<ResultOfAttemptsDTO>();
-            result.Responses.ForEach(x =>
-            {
-                ListAttempts.Add(new ResultOfAttemptsDTO
-                {
-                    IdUserRespones = x.Id,
-                    Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
-                    EvaluationName = x.EvaluationName,
-                    Result = (decimal)x.Result,
-                    IsChek = result.Test.IsCheck,
-                    NameTest = result.Test.Name,
-                });
+        //public ResultTestDto GetResult(long id)
+        //{
+        //    var result = context.Results
+        //        .Include(x => x.User)
+        //        .Include(x => x.Test)
+        //        .Include(x => x.Responses)
+        //        .First(x => x.Id == id);
+        //    var ListAttempts = new List<ResultOfAttemptsDTO>();
+        //    result.Responses.ForEach(x =>
+        //    {
+        //        ListAttempts.Add(new ResultOfAttemptsDTO
+        //        {
+        //            IdUserRespones = x.Id,
+        //            Attempts = result.Responses.FindIndex(y => y.Id == x.Id),
+        //            EvaluationName = x.EvaluationName,
+        //            Result = (decimal)x.Result,
+        //            IsChek = result.Test.IsCheck,
+        //            NameTest = result.Test.Name,
+        //        });
 
-            });
-            return (new ResultTestDto
-            {
-                Id = result.Id,
-                Result = ListAttempts,
+        //    });
+        //    return (new ResultTestDto
+        //    {
+        //        Id = result.Id,
+        //        Result = ListAttempts,
 
 
-                Test = new DTO.TestDto.DetailsTestDto
-                {
-                    Id = result.Test.Id,
-                    Name = result.Test.Name,
-                },
-                User = new DTO.UserDto.StudentUserDto
-                {
-                    Id = result.User.Id,
-                    FullName = result.User.FullName,
-                }
+        //        Test = new DTO.TestDto.DetailsTestDto
+        //        {
+        //            Id = result.Test.Id,
+        //            Name = result.Test.Name,
+        //        },
+        //        User = new DTO.UserDto.StudentUserDto
+        //        {
+        //            Id = result.User.Id,
+        //            FullName = result.User.FullName,
+        //        }
 
-            });
-        }
+        //    });
+        //}
         public DTO.GeneralDto.IsBoolDto TestBool(long IdResponse)
         {
             var res = context.UserResponses
@@ -68,36 +69,36 @@ namespace Repository.RepositoryResultTest
         }
 
 
-        public List<ResultTestDto> GetResults()
-        {
-            var results = context.Results
-                 .Include(x => x.User)
-                 .Include(x => x.Test)
-                 .Include(x => x.Responses)
-                 .ToList();
-            var listResults = new List<ResultTestDto>();
-            foreach (var result in results)
-            {
-                listResults.Add(new ResultTestDto
-                {
-                    Id = result.Id,
+    //public List<ResultTestDto> GetResults()
+    //{
+    //    var results = context.Results
+    //            .Include(x => x.User)
+    //            .Include(x => x.Test)
+    //            .Include(x => x.Responses)
+    //            .ToList();
+    //    var listResults = new List<ResultTestDto>();
+    //    foreach (var result in results)
+    //    {
+    //        listResults.Add(new ResultTestDto
+    //        {
+    //            Id = result.Id,
 
 
-                    Test = new DTO.TestDto.DetailsTestDto
-                    {
-                        Id = result.Test.Id,
-                        Name = result.Test.Name,
-                    },
-                    User = new DTO.UserDto.StudentUserDto
-                    {
-                        Id = result.User.Id,
-                        FullName = result.User.FullName,
-                    }
+    //            Test = new DTO.TestDto.DetailsTestDto
+    //            {
+    //                Id = result.Test.Id,
+    //                Name = result.Test.Name,
+    //            },
+    //            User = new DTO.UserDto.StudentUserDto
+    //            {
+    //                Id = result.User.Id,
+    //                FullName = result.User.FullName,
+    //            }
 
-                });
-            }
-            return listResults;
-        }
+    //        });
+    //    }
+    //    return listResults;
+    //}
 
         public decimal GetStatisticsDiscipline(ResultStatisticsDto dto)// тут делаеться расчёт статистики 
         {
@@ -195,7 +196,7 @@ namespace Repository.RepositoryResultTest
                 {
                     switch (Quest.CategoryTasks.Id)
                     {
-                        case 1:// Обработка с моножественным выбором
+                        case 1:// Обработка с одним ответом 
                             bool correctdefault = false;
 
 
@@ -247,7 +248,7 @@ namespace Repository.RepositoryResultTest
                                 }
                             });
                             break;
-                        case 2:// Обработка с одним ответом
+                        case 2:// Обработка с моножественным выбором 
                             bool correctdefault2 = false;
 
 
@@ -298,7 +299,15 @@ namespace Repository.RepositoryResultTest
                                 }
                             else
                             {
-                                if (answerVerfiedUser2.Where(y => y.IsResponeUser == true).All(x => Quest.Answers.Where(x => x.IsCorrectAnswer == true).Select(y => y.Id).Contains(x.Id)))// проверка на правельный ответ
+                            if (Quest.Answers
+                                .Where(x => x.IsCorrectAnswer == true)
+                                .OrderBy(x => x.Id) 
+                                .Select(x => x.Id)
+                                .SequenceEqual(
+                                    answerVerfiedUser2
+                                        .Where(y => y.IsResponeUser == true)
+                                        .OrderBy(y => y.Id) 
+                                        .Select(y => y.Id)))// проверка на правельный ответ
                                 {
                                     correctdefault2 = true;
                                 }
@@ -500,18 +509,18 @@ namespace Repository.RepositoryResultTest
 
         }
 
-        public void Update(UpdateResultTestDto dto)
-        {
+        //public void Update(UpdateResultTestDto dto)
+        //{
 
-            var result = context.Results.First(x => x.Id == dto.Id);
+        //    var result = context.Results.First(x => x.Id == dto.Id);
 
-            result.Id = dto.Id;
+        //    result.Id = dto.Id;
 
-            result.Test = context.Tests.First(x => x.Id == dto.TestId);
-            result.User = context.Users.First(x => x.Id == dto.UserId);
-            context.Results.Update(result);
-            context.SaveChanges();
-        }
+        //    result.Test = context.Tests.First(x => x.Id == dto.TestId);
+        //    result.User = context.Users.First(x => x.Id == dto.UserId);
+        //    context.Results.Update(result);
+        //    context.SaveChanges();
+        //}
 
         public ReturnAttemptDto? CheckingStudentResult(long testId, long studentId)
         {
@@ -572,7 +581,7 @@ namespace Repository.RepositoryResultTest
 
         }
 
-        public long CreatResultAndAttempt(long testId, long studentId)
+        public long CreatResultAndAttempt(long testId, long studentId)//Создание попытки 
         {
 
             if (context.Results.Include(x => x.Test)

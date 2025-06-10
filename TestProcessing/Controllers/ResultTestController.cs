@@ -12,20 +12,7 @@ namespace TestProcessing.Controllers
     [ApiController]
     public class ResultTestController(IServiceResultTest service,IServiceUser serviceUser) : Controller
     {
-        [HttpGet]
-        [Route("all")]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> GetAllResultTests()
-        {
-            try
-            {
-                return Json(service.GetAllResultTests());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
-        }
+
         [Authorize(Roles = "student")]
         [HttpGet]
         [Route("student/{idDiscipline}")]
@@ -59,7 +46,13 @@ namespace TestProcessing.Controllers
             try
             {
                 var id = User.FindFirst("id")?.Value;
-                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() { StudentId = Convert.ToInt16(id), TestId = dto.TestId, UserResponesTest = dto.UserResponesTest, idResult = dto.idResult };
+                AddResultTestStudentDto studentDto = new AddResultTestStudentDto() 
+                {
+                    StudentId = Convert.ToInt16(id), 
+                    TestId = dto.TestId,
+                    UserResponesTest = dto.UserResponesTest,
+                    idResult = dto.idResult 
+                };
 
                 return Json(service.CreateResultTest(studentDto));
             }
@@ -138,39 +131,39 @@ namespace TestProcessing.Controllers
                 return StatusCode(520, ex.Message);
             }
         }
-        [Authorize(Roles = "admin")]
-        [HttpPatch]
-        [Route("update")]
-        public async Task<IActionResult> UpdateResultTest(UpdateResultTestDto dto)
-        {
-            try
-            {
+        //[Authorize(Roles = "admin")]
+        //[HttpPatch]
+        //[Route("update")]
+        //public async Task<IActionResult> UpdateResultTest(UpdateResultTestDto dto)
+        //{
+        //    try
+        //    {
 
-                service.UpdateResultTest(dto);
-                return StatusCode(200, "The content has been changed");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
-        }
+        //        service.UpdateResultTest(dto);
+        //        return StatusCode(200, "The content has been changed");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
+        //}
 
         // DELETE api/<ValuesController>/5
-        [HttpDelete("delete/{id}")]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> DeleteResultTest(int id)
-        {
-            try
-            {
-                service.DeleteResultTest(id);
-                return StatusCode(200, "Deletion was successful");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(520, ex.Message);
-            }
+        //[HttpDelete("delete/{id}")]
+        //[Authorize(Roles = "admin")]
+        //public async Task<IActionResult> DeleteResultTest(int id)
+        //{
+        //    try
+        //    {
+        //        service.DeleteResultTest(id);
+        //        return StatusCode(200, "Deletion was successful");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(520, ex.Message);
+        //    }
 
-        }
+        //}
 
         [Authorize]
         [HttpGet]
@@ -231,7 +224,7 @@ namespace TestProcessing.Controllers
         }
         [Authorize(Roles = "student")]
         [HttpPost]
-        [Route("createAttempt/{idTest}")]
+        [Route("createAttempt/{idTest}")]//Запрос на создание попытки
         public async Task<IActionResult> CreateAttempt(long idTest)
         {
             try
